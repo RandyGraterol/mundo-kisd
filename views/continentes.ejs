@@ -1,0 +1,115 @@
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="/css/mapa-estilos.css" />
+
+<!-- Estilos personalizados para el mapa -->
+<style>
+  #mapa-mundo {
+    height: 500px;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  
+  @media (max-width: 768px) {
+    #mapa-mundo {
+      height: 350px;
+    }
+  }
+  
+  .continente-tooltip {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid #06b6d4 !important;
+    border-radius: 0.5rem !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    color: #0e7490 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .continente-label {
+    background: transparent !important;
+    border: none !important;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    border-radius: 1rem;
+    font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  }
+  
+  .leaflet-control-zoom {
+    border: 2px solid #06b6d4 !important;
+    border-radius: 0.5rem !important;
+  }
+  
+  .leaflet-control-zoom a {
+    color: #0e7490 !important;
+    font-weight: bold !important;
+  }
+</style>
+
+<div class="min-h-screen p-4 py-8">
+  
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Título -->
+    <div class="text-center mb-6">
+      <h2 class="text-5xl font-bold text-white mb-2">
+        🌍 Explora los Continentes
+      </h2>
+      <p class="text-cyan-200 text-xl">Haz clic en el mapa o en los botones para aprender más</p>
+    </div>
+
+    <!-- Contenedor principal con dos columnas -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      
+      <!-- Mapa interactivo (2/3 del espacio en pantallas grandes) -->
+      <div class="lg:col-span-2 bg-white rounded-3xl shadow-2xl p-6 border-4 border-cyan-400">
+        <h3 class="text-2xl font-bold text-cyan-500 mb-4 text-center">
+          🗺️ Mapa Mundial Interactivo
+        </h3>
+        <div id="mapa-mundo"></div>
+        <p class="text-center text-gray-600 text-sm mt-4">
+          💡 Haz clic en cualquier continente del mapa para ver su información
+        </p>
+      </div>
+
+      <!-- Grid de continentes (1/3 del espacio en pantallas grandes) -->
+      <div class="bg-white rounded-3xl shadow-2xl p-6 border-4 border-cyan-400">
+        <h3 class="text-2xl font-bold text-cyan-500 mb-4 text-center">
+          📚 Selección Rápida
+        </h3>
+        <div class="grid grid-cols-2 lg:grid-cols-1 gap-3">
+          
+          <% continentes.forEach(continente => { %>
+            <a href="/continente/<%= continente.id %>" 
+               style="background-color: <%= continente.color %>;"
+               class="block text-white font-bold text-lg py-4 px-3 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center">
+              <div class="text-3xl mb-1"><%= continente.emoji %></div>
+              <div class="text-sm"><%= continente.nombre %></div>
+            </a>
+          <% }); %>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Botón Volver -->
+    <div class="text-center">
+      <a href="/menu" 
+         class="inline-block px-8 py-4 rounded-full text-white font-bold text-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 bg-teal-400 hover:bg-teal-500">
+        🔙 Volver al Menú
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Script del mapa de continentes -->
+<script src="/js/mapa-continentes.js"></script>

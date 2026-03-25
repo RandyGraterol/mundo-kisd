@@ -1,0 +1,10 @@
+<!-- Header común para todas las páginas -->
+<header class="text-center py-4">
+  <div class="flex items-center justify-center gap-3">
+    <span class="text-5xl">🌍</span>
+    <h1 class="text-4xl font-bold text-cyan-400">Mundo Kids</h1>
+  </div>
+  <% if (typeof nombreUsuario !== 'undefined' && nombreUsuario) { %>
+    <p class="text-white text-lg mt-2">¡Hola, <%= nombreUsuario %>! 👋</p>
+  <% } %>
+</header>

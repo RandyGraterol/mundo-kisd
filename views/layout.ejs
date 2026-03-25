@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mundo Kids - Plataforma educativa para aprender geografía jugando">
+  <title>Mundo Kids - Aprende Geografía Jugando</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="/css/estilos-globales.css">
+  
+  <!-- Estilos personalizados -->
+  <style>
+    body {
+      font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
+    }
+    
+    /* Animaciones suaves */
+    .hover-scale {
+      transition: transform 0.2s ease-in-out;
+    }
+    
+    .hover-scale:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Sombras personalizadas */
+    .card-shadow {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 min-h-screen">
+  <!-- Contenido dinámico -->
+  <%- body %>
+</body>
+</html>

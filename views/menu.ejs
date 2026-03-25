@@ -1,0 +1,68 @@
+<div class="min-h-screen flex items-center justify-center p-4">
+  
+  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full border-4 border-cyan-400">
+    
+    <!-- Saludo personalizado -->
+    <div class="text-center mb-6">
+      <h2 class="text-3xl font-bold text-cyan-500 mb-2">
+        ¡Hola, <%= nombreUsuario %>! 👋
+      </h2>
+      <p class="text-gray-600 text-lg">¿Qué aventura eliges hoy?</p>
+    </div>
+
+    <!-- Progreso del estudiante -->
+    <div class="bg-gradient-to-r from-cyan-100 to-blue-100 rounded-2xl p-5 mb-6 shadow-md">
+      <h3 class="text-center text-lg font-bold text-gray-800 mb-3">📊 Tu Progreso</h3>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="text-center bg-white rounded-xl p-3">
+          <p class="text-xs text-gray-600 mb-1">Nivel</p>
+          <p class="text-2xl font-bold text-cyan-600">🏆 <%= progreso.nivel %></p>
+        </div>
+        <div class="text-center bg-white rounded-xl p-3">
+          <p class="text-xs text-gray-600 mb-1">Puntos</p>
+          <p class="text-2xl font-bold text-cyan-600">⭐ <%= progreso.puntosTotal %></p>
+        </div>
+        <div class="text-center bg-white rounded-xl p-3">
+          <p class="text-xs text-gray-600 mb-1">Visitados</p>
+          <p class="text-2xl font-bold text-cyan-600">🌍 <%= progreso.continentesVisitados.length %>/6</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opciones de juego -->
+    <div class="space-y-4 mb-6">
+      
+      <!-- Estudiar Continentes -->
+      <a href="/continentes" 
+         class="block bg-teal-400 hover:bg-teal-500 text-white font-bold text-xl py-5 px-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center">
+        📚 Estudiar Continentes
+      </a>
+
+      <!-- Trivia de Banderas -->
+      <a href="/trivia-banderas" 
+         class="block bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl py-5 px-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center">
+        🎮 Trivia de Banderas
+      </a>
+
+      <!-- Puzzle Sudamérica (placeholder) -->
+      <button 
+         class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold text-xl py-5 px-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 opacity-50 cursor-not-allowed"
+         disabled
+         title="Próximamente">
+        🧩 Puzzle Sudamérica
+        <span class="text-sm block mt-1">(Próximamente)</span>
+      </button>
+
+    </div>
+
+    <!-- Botón Salir -->
+    <div class="text-center mt-6">
+      <a href="/salir" 
+         class="inline-block bg-red-400 hover:bg-red-500 text-white font-bold text-lg py-3 px-8 rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
+        🚪 Salir
+      </a>
+    </div>
+
+  </div>
+
+</div>

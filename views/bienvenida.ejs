@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundo Kids - Bienvenida</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
+    }
+    
+    .avatar-option {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 1rem;
+      border-radius: 1rem;
+      border: 3px solid transparent;
+    }
+    
+    .avatar-option:hover {
+      transform: scale(1.1);
+      background-color: #f0f9ff;
+    }
+    
+    .avatar-option.selected {
+      border-color: #06b6d4;
+      background-color: #e0f2fe;
+      transform: scale(1.05);
+    }
+    
+    .avatar-option input[type="radio"] {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 min-h-screen flex items-center justify-center p-4">
+  
+  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full border-4 border-cyan-400">
+    
+    <!-- Logo y Título -->
+    <div class="text-center mb-6">
+      <div class="flex items-center justify-center gap-3 mb-3">
+        <span class="text-6xl">🌍</span>
+        <h1 class="text-4xl font-bold text-cyan-500">Mundo Kids</h1>
+      </div>
+      <p class="text-gray-600 text-lg">¡Explora el mundo jugando!</p>
+    </div>
+
+    <!-- Formulario -->
+    <form action="/menu" method="POST" class="space-y-6" id="registroForm">
+      
+      <!-- Selección de Género -->
+      <div>
+        <p class="text-center text-gray-700 font-bold mb-3">Selecciona tu avatar:</p>
+        <div class="flex justify-center gap-6">
+          <label class="avatar-option" id="avatar-nino">
+            <input type="radio" name="genero" value="masculino" required>
+            <div class="text-center">
+              <div class="text-6xl mb-2">👦</div>
+              <p class="text-sm text-gray-600 font-semibold">Niño</p>
+            </div>
+          </label>
+          
+          <label class="avatar-option" id="avatar-nina">
+            <input type="radio" name="genero" value="femenino" required>
+            <div class="text-center">
+              <div class="text-6xl mb-2">👧</div>
+              <p class="text-sm text-gray-600 font-semibold">Niña</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Campo de Nombre -->
+      <div>
+        <input 
+          type="text" 
+          name="nombre" 
+          id="nombreInput"
+          placeholder="Tu nombre aquí..." 
+          required
+          minlength="2"
+          maxlength="30"
+          class="w-full px-4 py-3 rounded-full border-2 border-gray-300 focus:border-cyan-400 focus:outline-none text-center text-lg"
+        >
+      </div>
+      
+      <!-- Botón de Entrada -->
+      <button 
+        type="submit"
+        class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl py-4 rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+        id="btnEntrar"
+      >
+        ¡ENTRAR!
+      </button>
+    </form>
+
+  </div>
+
+  <script>
+    // Manejo de selección de avatar
+    const avatarNino = document.getElementById('avatar-nino');
+    const avatarNina = document.getElementById('avatar-nina');
+    const radioNino = avatarNino.querySelector('input[type="radio"]');
+    const radioNina = avatarNina.querySelector('input[type="radio"]');
+
+    avatarNino.addEventListener('click', function() {
+      radioNino.checked = true;
+      avatarNino.classList.add('selected');
+      avatarNina.classList.remove('selected');
+    });
+
+    avatarNina.addEventListener('click', function() {
+      radioNina.checked = true;
+      avatarNina.classList.add('selected');
+      avatarNino.classList.remove('selected');
+    });
+
+    // Validación del formulario
+    const form = document.getElementById('registroForm');
+    const nombreInput = document.getElementById('nombreInput');
+    const btnEntrar = document.getElementById('btnEntrar');
+
+    form.addEventListener('submit', function(e) {
+      const nombre = nombreInput.value.trim();
+      const generoSeleccionado = document.querySelector('input[name="genero"]:checked');
+
+      if (!nombre || nombre.length < 2) {
+        e.preventDefault();
+        alert('Por favor, ingresa tu nombre (mínimo 2 caracteres)');
+        return false;
+      }
+
+      if (!generoSeleccionado) {
+        e.preventDefault();
+        alert('Por favor, selecciona tu avatar (Niño o Niña)');
+        return false;
+      }
+    });
+  </script>
+
+</body>
+</html>

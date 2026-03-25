@@ -1,0 +1,14 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cara -->
+  <circle cx="50" cy="50" r="40" fill="#fbbf24"/>
+  
+  <!-- Ojos -->
+  <circle cx="40" cy="45" r="5" fill="#1f2937"/>
+  <circle cx="60" cy="45" r="5" fill="#1f2937"/>
+  
+  <!-- Sonrisa -->
+  <path d="M 35 60 Q 50 70 65 60" stroke="#1f2937" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Cabello -->
+  <path d="M 20 35 Q 25 15 50 10 Q 75 15 80 35" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+</svg>

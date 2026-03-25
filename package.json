@@ -1,0 +1,31 @@
+{
+  "name": "mundo-kids-frontend",
+  "version": "1.0.0",
+  "description": "Plataforma web educativa gamificada para enseñar geografía a estudiantes de primaria",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "educacion",
+    "geografia",
+    "gamificacion",
+    "primaria"
+  ],
+  "author": "U.E.E. Jacinto Silva",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "fast-check": "^3.15.0"
+  }
+}

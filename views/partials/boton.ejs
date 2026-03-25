@@ -1,0 +1,34 @@
+<!-- 
+  Componente de botón reutilizable
+  Uso: <%- include('partials/boton', { 
+    texto: 'Volver', 
+    color: 'turquesa', 
+    url: '/menu', 
+    emoji: '🔙' 
+  }) %>
+  
+  Colores disponibles: naranja, turquesa, rojo, verde, morado
+-->
+<%
+  let bgColor = 'bg-gray-500';
+  
+  if (color === 'naranja') {
+    bgColor = 'bg-orange-500 hover:bg-orange-600';
+  } else if (color === 'turquesa') {
+    bgColor = 'bg-teal-400 hover:bg-teal-500';
+  } else if (color === 'rojo') {
+    bgColor = 'bg-red-400 hover:bg-red-500';
+  } else if (color === 'verde') {
+    bgColor = 'bg-green-500 hover:bg-green-600';
+  } else if (color === 'morado') {
+    bgColor = 'bg-purple-500 hover:bg-purple-600';
+  }
+%>
+
+<a href="<%= url %>" 
+   class="inline-block px-8 py-4 rounded-full text-white font-bold text-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 <%= bgColor %>">
+  <% if (typeof emoji !== 'undefined' && emoji) { %>
+    <%= emoji %> 
+  <% } %>
+  <%= texto %>
+</a>

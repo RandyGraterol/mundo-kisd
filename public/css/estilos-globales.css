@@ -1,0 +1,139 @@
+/* Estilos globales para Mundo Kids */
+
+/* Fuente principal */
+body {
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
+}
+
+/* Animaciones globales */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Aplicar animación de entrada a elementos principales */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* Estilos para botones consistentes */
+button, .btn, a[class*="bg-"] {
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover, a[class*="bg-"]:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Mejorar legibilidad de texto */
+p, li, span {
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+}
+
+/* Sombras consistentes para cards */
+.card-shadow {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-shadow:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Bordes redondeados consistentes */
+.rounded-card {
+  border-radius: 1.5rem;
+}
+
+/* Efectos de hover para elementos interactivos */
+.interactive {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* Mejorar accesibilidad con focus visible */
+button:focus, a:focus, input:focus {
+  outline: 3px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+/* Responsive: ajustar tamaños de fuente */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Mejorar contraste para accesibilidad */
+.text-high-contrast {
+  color: #1a202c;
+}
+
+/* Estilos para emojis */
+.emoji {
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+
+/* Loader simple para transiciones */
+.loader {
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #06b6d4;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

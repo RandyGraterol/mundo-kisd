@@ -1,0 +1,71 @@
+<div class="min-h-screen flex items-center justify-center p-4 py-12">
+  
+  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-3xl w-full border-4 border-cyan-400">
+    
+    <!-- Título con emoji del continente -->
+    <div class="text-center mb-6">
+      <div class="text-7xl mb-3"><%= continente.emoji %></div>
+      <h2 class="text-4xl font-bold mb-4" style="color: <%= continente.color %>;">
+        <%= continente.nombre %>
+      </h2>
+    </div>
+
+    <!-- Descripción educativa -->
+    <div class="mb-6">
+      <p class="text-gray-700 text-lg leading-relaxed">
+        <%= continente.descripcion %>
+      </p>
+    </div>
+
+    <!-- Sección "¿Sabías qué?" -->
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg mb-6">
+      <h3 class="text-xl font-bold text-yellow-800 mb-2">
+        💡 ¿Sabías qué?
+      </h3>
+      <p class="text-gray-700">
+        <%= continente.datosCuriosos %>
+      </p>
+    </div>
+
+    <!-- Países Principales -->
+    <div class="mb-8">
+      <h3 class="text-2xl font-bold text-cyan-500 mb-4 text-center">
+        📍 Países Principales:
+      </h3>
+      
+      <% if (continente.paisesPrincipales.length > 0) { %>
+        <div class="flex flex-wrap justify-center gap-2">
+          <% continente.paisesPrincipales.forEach(pais => { %>
+            <span class="bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-semibold border-2 border-cyan-300">
+              <%= pais %>
+            </span>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="text-center text-gray-500 italic">
+          Este continente no tiene países, es un territorio internacional dedicado a la investigación científica.
+        </p>
+      <% } %>
+    </div>
+
+    <!-- Botón de Reto -->
+    <% if (continente.preguntas && continente.preguntas.length > 0) { %>
+      <div class="mb-6">
+        <a href="/reto/<%= continente.id %>" 
+           class="block bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-2xl py-5 px-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center">
+          🎯 ¡Hacer el Reto! (<%= continente.preguntas.length %> preguntas)
+        </a>
+      </div>
+    <% } %>
+
+    <!-- Botón Volver -->
+    <div class="text-center">
+      <a href="/continentes" 
+         class="inline-block px-8 py-4 rounded-full text-white font-bold text-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 bg-orange-500 hover:bg-orange-600">
+        🔙 Volver al Mapa
+      </a>
+    </div>
+
+  </div>
+
+</div>
