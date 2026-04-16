@@ -24,7 +24,7 @@ function verificarSesion(req, res, next) {
  * Muestra el formulario para ingresar el nombre del estudiante
  */
 router.get('/', (req, res) => {
-  res.render('bienvenida', { layout: false });
+  res.render('bienvenida');
 });
 
 /**

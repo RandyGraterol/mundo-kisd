@@ -1,68 +1,93 @@
-<div class="min-h-screen flex items-center justify-center p-4">
+<div class="min-h-screen flex flex-col items-center justify-center p-6 animate-fade-in">
   
-  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full border-4 border-cyan-400">
-    
+  <div class="w-full max-w-2xl">
     <!-- Saludo personalizado -->
-    <div class="text-center mb-6">
-      <h2 class="text-3xl font-bold text-cyan-500 mb-2">
-        ¡Hola, <%= nombreUsuario %>! 👋
-      </h2>
-      <p class="text-gray-600 text-lg">¿Qué aventura eliges hoy?</p>
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-3 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/50 soft-shadow mb-6">
+        <span class="text-2xl">👋</span>
+        <h2 class="text-2xl font-bold text-slate-800">
+          ¡Hola, <span class="text-sky-600"><%= nombreUsuario %></span>!
+        </h2>
+      </div>
+      <h1 class="text-5xl font-extrabold text-slate-900 tracking-tight">¿Qué aventura eliges hoy?</h1>
     </div>
 
-    <!-- Progreso del estudiante -->
-    <div class="bg-gradient-to-r from-cyan-100 to-blue-100 rounded-2xl p-5 mb-6 shadow-md">
-      <h3 class="text-center text-lg font-bold text-gray-800 mb-3">📊 Tu Progreso</h3>
-      <div class="grid grid-cols-3 gap-3">
-        <div class="text-center bg-white rounded-xl p-3">
-          <p class="text-xs text-gray-600 mb-1">Nivel</p>
-          <p class="text-2xl font-bold text-cyan-600">🏆 <%= progreso.nivel %></p>
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Columna Izquierda: Progreso -->
+      <div class="space-y-6">
+        <div class="glass-effect rounded-[2rem] p-8 soft-shadow border border-white/60">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-2 bg-sky-100 rounded-lg text-sky-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-3"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800">Tu Progreso</h3>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-white/50 rounded-2xl border border-white/40">
+              <span class="text-slate-600 font-medium">Nivel Actual</span>
+              <span class="text-2xl font-bold text-sky-600">🏆 <%= progreso.nivel %></span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-white/50 rounded-2xl border border-white/40">
+              <span class="text-slate-600 font-medium">Puntos Totales</span>
+              <span class="text-2xl font-bold text-sky-600">⭐ <%= progreso.puntosTotal %></span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-white/50 rounded-2xl border border-white/40">
+              <span class="text-slate-600 font-medium">Continentes</span>
+              <span class="text-2xl font-bold text-sky-600">🌍 <%= progreso.continentesVisitados.length %>/6</span>
+            </div>
+          </div>
         </div>
-        <div class="text-center bg-white rounded-xl p-3">
-          <p class="text-xs text-gray-600 mb-1">Puntos</p>
-          <p class="text-2xl font-bold text-cyan-600">⭐ <%= progreso.puntosTotal %></p>
-        </div>
-        <div class="text-center bg-white rounded-xl p-3">
-          <p class="text-xs text-gray-600 mb-1">Visitados</p>
-          <p class="text-2xl font-bold text-cyan-600">🌍 <%= progreso.continentesVisitados.length %>/6</p>
+
+        <!-- Botón Salir -->
+        <a href="/salir" 
+           class="flex items-center justify-center gap-3 w-full bg-white/40 hover:bg-red-50 hover:text-red-600 text-slate-600 font-bold py-4 rounded-2xl transition-all border border-transparent hover:border-red-100 soft-shadow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          Cerrar Sesión
+        </a>
+      </div>
+
+      <!-- Columna Derecha: Opciones -->
+      <div class="space-y-6">
+        <a href="/continentes" 
+           class="group block glass-effect p-8 rounded-[2rem] soft-shadow border border-white/60 hover:border-sky-200 transition-all hover:-translate-y-1">
+          <div class="flex flex-col gap-4">
+            <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 group-hover:bg-teal-500 group-hover:text-white transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">Estudiar Continentes</h3>
+              <p class="text-slate-500">Aprende sobre la cultura y geografía del mundo.</p>
+            </div>
+          </div>
+        </a>
+
+        <a href="/trivia-banderas" 
+           class="group block glass-effect p-8 rounded-[2rem] soft-shadow border border-white/60 hover:border-orange-200 transition-all hover:-translate-y-1">
+          <div class="flex flex-col gap-4">
+            <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gamepad-2"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x2="22" y2="6" rx="2"/></svg>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">Trivia de Banderas</h3>
+              <p class="text-slate-500">¿Qué tan bien conoces las banderas del mundo?</p>
+            </div>
+          </div>
+        </a>
+
+        <div class="group block bg-slate-100/50 p-8 rounded-[2rem] border border-dashed border-slate-300 opacity-60">
+          <div class="flex flex-col gap-4">
+            <div class="w-16 h-16 bg-slate-200 rounded-2xl flex items-center justify-center text-slate-400">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-puzzle"><path d="M19.439 7.85c0-1.57.551-2.483 1.45-3.045l.333-.208-1.222-1.222-.208.333c-.562.899-1.475 1.45-3.045 1.45a2.986 2.986 0 0 1-2.951-2.478l-.07-.48H12.2l-.07.48A2.986 2.986 0 0 1 9.179 4.808c-1.57 0-2.483-.551-3.045-1.45l-.208-.333-1.222 1.222.333.208c.899.562 1.45 1.475 1.45 3.045a2.986 2.986 0 0 1-2.478 2.951l-.48.07V12.2l.48.07A2.986 2.986 0 0 1 4.808 15.179c0 1.57.551 2.483 1.45 3.045l.333.208 1.222 1.222.208-.333c.562-.899 1.475-1.45 3.045-1.45a2.986 2.986 0 0 1 2.951 2.478l.07.48H12.2l.07-.48a2.986 2.986 0 0 1 2.951-2.478c1.57 0 2.483.551 3.045 1.45l.208.333 1.222-1.222-.333-.208c-.899-.562-1.45-1.475-1.45-3.045a2.986 2.986 0 0 1 2.478-2.951l.48-.07V9.179l-.48-.07a2.986 2.986 0 0 1-2.478-2.951Z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-slate-400 mb-2">Próximamente...</h3>
+              <p class="text-slate-400">Nuevos juegos y aventuras se están preparando.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Opciones de juego -->
-    <div class="space-y-4 mb-6">
-      
-      <!-- Estudiar Continentes -->
-      <a href="/continentes" 
-         class="block bg-teal-400 hover:bg-teal-500 text-white font-bold text-xl py-5 px-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center">
-        📚 Estudiar Continentes
-      </a>
-
-      <!-- Trivia de Banderas -->
-      <a href="/trivia-banderas" 
-         class="block bg-orange-500 hover:bg-orange-600 text-white font-bold text-xl py-5 px-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 text-center">
-        🎮 Trivia de Banderas
-      </a>
-
-      <!-- Puzzle Sudamérica (placeholder) -->
-      <button 
-         class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold text-xl py-5 px-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 opacity-50 cursor-not-allowed"
-         disabled
-         title="Próximamente">
-        🧩 Puzzle Sudamérica
-        <span class="text-sm block mt-1">(Próximamente)</span>
-      </button>
-
-    </div>
-
-    <!-- Botón Salir -->
-    <div class="text-center mt-6">
-      <a href="/salir" 
-         class="inline-block bg-red-400 hover:bg-red-500 text-white font-bold text-lg py-3 px-8 rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
-        🚪 Salir
-      </a>
-    </div>
-
   </div>
 
 </div>

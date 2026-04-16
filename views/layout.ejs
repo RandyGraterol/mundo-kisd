@@ -9,13 +9,18 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
   <!-- Estilos globales -->
   <link rel="stylesheet" href="/css/estilos-globales.css">
   
   <!-- Estilos personalizados -->
   <style>
     body {
-      font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
+      font-family: 'Quicksand', sans-serif;
     }
     
     /* Animaciones suaves */
@@ -27,13 +32,26 @@
       transform: scale(1.05);
     }
     
-    /* Sombras personalizadas */
-    .card-shadow {
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    /* Sombras personalizadas suaves */
+    .soft-shadow {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Fondo degradado suave */
+    .bg-main-gradient {
+      background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);
+      background-attachment: fixed;
+    }
+
+    /* Glassmorphism sutil para unificación */
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 min-h-screen">
+<body class="bg-main-gradient min-h-screen">
   <!-- Contenido dinámico -->
   <%- body %>
 </body>

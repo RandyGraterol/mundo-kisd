@@ -1,40 +1,43 @@
-<div class="min-h-screen flex items-center justify-center p-4 py-12">
+<div class="min-h-screen flex items-center justify-center p-6 py-12 animate-fade-in">
   
-  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-3xl w-full border-4 border-orange-400">
+  <div class="glass-effect rounded-[3rem] soft-shadow p-10 max-w-3xl w-full border border-white/60 relative overflow-hidden">
     
     <!-- Encabezado -->
-    <div class="text-center mb-6">
-      <div class="text-6xl mb-3">🎮🚩</div>
-      <h2 class="text-3xl font-bold text-orange-500 mb-2">
-        Trivia de Banderas
-      </h2>
-      <p class="text-gray-600 text-lg">¡Adivina de qué país es cada bandera!</p>
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-3 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/50 soft-shadow mb-6">
+        <span class="text-2xl">🎮</span>
+        <h2 class="text-xl font-bold text-slate-800">
+          Trivia de Banderas
+        </h2>
+      </div>
+      <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">¿Reconoces estas banderas?</h1>
     </div>
 
     <!-- Información de progreso -->
-    <div class="bg-orange-100 rounded-xl p-4 mb-6 flex justify-between items-center">
-      <div class="text-center">
-        <p class="text-sm text-gray-600">Nivel</p>
-        <p class="text-2xl font-bold text-orange-600">🏆 <%= progreso.nivel %></p>
+    <div class="grid grid-cols-3 gap-4 mb-10">
+      <div class="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/40 text-center soft-shadow">
+        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nivel</p>
+        <p class="text-xl font-black text-orange-600">🏆 <%= progreso.nivel %></p>
       </div>
-      <div class="text-center">
-        <p class="text-sm text-gray-600">Puntos Totales</p>
-        <p class="text-2xl font-bold text-orange-600">⭐ <%= progreso.puntosTotal %></p>
+      <div class="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/40 text-center soft-shadow">
+        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Puntos</p>
+        <p class="text-xl font-black text-orange-600">⭐ <%= progreso.puntosTotal %></p>
       </div>
-      <div class="text-center">
-        <p class="text-sm text-gray-600">Respondidas</p>
-        <p class="text-2xl font-bold text-orange-600">🚩 <%= preguntasRespondidas %>/12</p>
+      <div class="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/40 text-center soft-shadow">
+        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Respondidas</p>
+        <p class="text-xl font-black text-orange-600">🚩 <%= preguntasRespondidas %> / 12</p>
       </div>
     </div>
 
     <% if (pregunta) { %>
       <!-- Pregunta actual -->
-      <div class="mb-8">
-        <div class="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl p-6 mb-6">
-          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4">
-            🚩 Descripción de la Bandera:
-          </h3>
-          <p class="text-xl text-gray-700 text-center leading-relaxed">
+      <div class="mb-10">
+        <div class="bg-slate-900 rounded-[2rem] p-8 mb-8 soft-shadow relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-4 opacity-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-orange-400 mb-3 relative z-10 uppercase tracking-widest">Descripción de la Bandera</h3>
+          <p class="text-2xl font-bold text-white text-center leading-tight relative z-10">
             <%= pregunta.descripcion %>
           </p>
         </div>
@@ -43,43 +46,49 @@
         <form method="POST" action="/trivia-banderas/responder">
           <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
           
-          <div class="space-y-3">
+          <div class="grid gap-4">
             <% pregunta.opciones.forEach((opcion, index) => { %>
-              <label class="block">
+              <label class="group cursor-pointer">
                 <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
-                <div class="bg-white border-4 border-gray-300 rounded-xl p-4 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all peer-checked:border-orange-500 peer-checked:bg-orange-100 peer-checked:shadow-lg">
-                  <p class="text-lg font-semibold text-gray-700">
-                    <span class="inline-block w-8 h-8 bg-orange-400 text-white rounded-full text-center leading-8 mr-3">
-                      <%= String.fromCharCode(65 + index) %>
-                    </span>
+                <div class="flex items-center gap-4 p-5 rounded-2xl bg-white/40 border border-white/60 peer-checked:bg-white peer-checked:border-orange-400 peer-checked:soft-shadow transition-all group-hover:bg-white/80">
+                  <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold peer-checked:bg-orange-500 peer-checked:text-white group-hover:bg-orange-100 group-hover:text-orange-600 transition-colors">
+                    <%= String.fromCharCode(65 + index) %>
+                  </div>
+                  <p class="text-lg font-bold text-slate-700 peer-checked:text-slate-900">
                     <%= opcion %>
                   </p>
+                  <div class="ml-auto opacity-0 peer-checked:opacity-100 text-orange-500 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                  </div>
                 </div>
               </label>
             <% }); %>
           </div>
 
           <!-- Botón enviar -->
-          <div class="text-center mt-8">
+          <div class="text-center mt-12">
             <button type="submit" 
-                    class="bg-green-500 hover:bg-green-600 text-white font-bold text-xl py-4 px-12 rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
-              ✅ Responder
+                    class="inline-flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xl py-5 px-12 rounded-2xl shadow-xl hover:shadow-orange-100 transition-all transform hover:-translate-y-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar Respuesta
             </button>
           </div>
         </form>
       </div>
     <% } else { %>
       <!-- Trivia completada -->
-      <div class="text-center mb-8">
-        <div class="text-8xl mb-4">🎊</div>
-        <h3 class="text-3xl font-bold text-green-500 mb-4">
-          ¡Completaste la Trivia!
+      <div class="text-center mb-10 py-10">
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-green-100 text-green-600 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        </div>
+        <h3 class="text-4xl font-black text-slate-900 mb-4">
+          ¡Trivia Completada!
         </h3>
-        <p class="text-xl text-gray-700 mb-6">
-          Respondiste todas las preguntas de banderas. ¡Excelente trabajo!
+        <p class="text-xl text-slate-500 mb-8 max-w-md mx-auto">
+          Has demostrado ser un experto en las banderas del mundo. ¡Excelente trabajo!
         </p>
-        <div class="bg-green-100 border-4 border-green-400 rounded-2xl p-6 mb-6">
-          <p class="text-2xl font-bold text-green-800">
+        <div class="inline-block bg-white soft-shadow rounded-2xl px-8 py-4 border border-slate-100">
+          <p class="text-2xl font-black text-slate-800">
             🏆 Nivel <%= progreso.nivel %> | ⭐ <%= progreso.puntosTotal %> puntos
           </p>
         </div>
@@ -87,10 +96,11 @@
     <% } %>
 
     <!-- Botón volver -->
-    <div class="text-center mt-6">
+    <div class="text-center pt-6 border-t border-slate-100">
       <a href="/menu" 
-         class="inline-block bg-purple-500 hover:bg-purple-600 text-white font-bold text-xl py-4 px-8 rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-105">
-        🏠 Volver al Menú
+         class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Volver al Menú
       </a>
     </div>
 

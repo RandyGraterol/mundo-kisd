@@ -1,14 +1,9 @@
-// Coordenadas de los límites aproximados de cada continente
-// Formato: [longitud, latitud] para GeoJSON
-
+// Coordenadas de los límites aproximados de cada continente para interacción
 const continentesGeoJSON = {
   america: {
     type: "Feature",
-    properties: {
-      name: "América",
-      color: "#ec4899",
-      center: [-90, 20]
-    },
+    id: "america",
+    properties: { name: "América", color: "rgba(236, 72, 153, 0.4)" }, // Rosa transparente
     geometry: {
       type: "Polygon",
       coordinates: [[
@@ -24,11 +19,8 @@ const continentesGeoJSON = {
   },
   europa: {
     type: "Feature",
-    properties: {
-      name: "Europa",
-      color: "#3b82f6",
-      center: [25, 54]
-    },
+    id: "europa",
+    properties: { name: "Europa", color: "rgba(59, 130, 246, 0.4)" }, // Azul transparente
     geometry: {
       type: "Polygon",
       coordinates: [[
@@ -41,11 +33,8 @@ const continentesGeoJSON = {
   },
   asia: {
     type: "Feature",
-    properties: {
-      name: "Asia",
-      color: "#fbbf24",
-      center: [100, 45]
-    },
+    id: "asia",
+    properties: { name: "Asia", color: "rgba(251, 191, 36, 0.4)" }, // Amarillo transparente
     geometry: {
       type: "Polygon",
       coordinates: [[
@@ -59,11 +48,8 @@ const continentesGeoJSON = {
   },
   africa: {
     type: "Feature",
-    properties: {
-      name: "África",
-      color: "#10b981",
-      center: [20, 5]
-    },
+    id: "africa",
+    properties: { name: "África", color: "rgba(16, 185, 129, 0.4)" }, // Verde transparente
     geometry: {
       type: "Polygon",
       coordinates: [[
@@ -77,11 +63,8 @@ const continentesGeoJSON = {
   },
   oceania: {
     type: "Feature",
-    properties: {
-      name: "Oceanía",
-      color: "#8b5cf6",
-      center: [135, -25]
-    },
+    id: "oceania",
+    properties: { name: "Oceanía", color: "rgba(139, 92, 246, 0.4)" }, // Violeta transparente
     geometry: {
       type: "Polygon",
       coordinates: [[
@@ -93,11 +76,8 @@ const continentesGeoJSON = {
   },
   antartida: {
     type: "Feature",
-    properties: {
-      name: "Antártida",
-      color: "#6b7280",
-      center: [0, -75]
-    },
+    id: "antartida",
+    properties: { name: "Antártida", color: "rgba(107, 114, 128, 0.4)" }, // Gris transparente
     geometry: {
       type: "Polygon",
       coordinates: [[
@@ -108,80 +88,86 @@ const continentesGeoJSON = {
   }
 };
 
-// Inicializar el mapa cuando el DOM esté listo
+const features = Object.values(continentesGeoJSON);
+
+// URLs de texturas de alta calidad para el globo (NASA Blue Marble)
+const EARTH_TEXTURE = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
+const EARTH_BUMP = 'https://unpkg.com/three-globe/example/img/earth-topology.png';
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Crear el mapa centrado en el mundo
-  const map = L.map('mapa-mundo', {
-    center: [20, 0],
-    zoom: 2,
-    minZoom: 2,
-    maxZoom: 5,
-    worldCopyJump: true,
-    zoomControl: true
-  });
+  const container = document.getElementById('mapa-mundo');
+  if (!container) return;
 
-  // Agregar capa de mapa base (OpenStreetMap)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap',
-    noWrap: false
-  }).addTo(map);
-
-  // Agregar cada continente al mapa
-  Object.keys(continentesGeoJSON).forEach(function(continenteId) {
-    const continente = continentesGeoJSON[continenteId];
-    
-    // Crear polígono para el continente
-    const polygon = L.geoJSON(continente, {
-      style: {
-        fillColor: continente.properties.color,
-        fillOpacity: 0.4,
-        color: continente.properties.color,
-        weight: 3,
-        opacity: 0.9
-      }
-    }).addTo(map);
-
-    // Agregar interactividad
-    polygon.on('mouseover', function(e) {
-      e.target.setStyle({
-        fillOpacity: 0.6,
-        weight: 5
-      });
-    });
-
-    polygon.on('mouseout', function(e) {
-      e.target.setStyle({
-        fillOpacity: 0.4,
-        weight: 3
-      });
-    });
-
-    polygon.on('click', function() {
-      window.location.href = '/continente/' + continenteId;
-    });
-
-    // Agregar tooltip con el nombre del continente
-    polygon.bindTooltip(continente.properties.name, {
-      permanent: false,
-      direction: 'center',
-      className: 'continente-tooltip'
-    });
-
-    // Agregar etiqueta permanente con el nombre del continente
-    if (continente.properties.center) {
-      const marker = L.marker(continente.properties.center, {
-        icon: L.divIcon({
-          className: 'continente-label',
-          html: '<div style="background-color: ' + continente.properties.color + '; color: white; padding: 4px 12px; border-radius: 12px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); white-space: nowrap; cursor: pointer;">' + continente.properties.name + '</div>',
-          iconSize: null
-        }),
-        interactive: true
-      }).addTo(map);
-
-      // Hacer que la etiqueta también sea clickeable
-      marker.on('click', function() {
-        window.location.href = '/continente/' + continenteId;
-      });
+  // Pequeña pausa para asegurar que Globe esté disponible
+  setTimeout(() => {
+    if (typeof Globe === 'undefined') {
+      container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-500">Error: Librería 3D no disponible</div>';
+      return;
     }
-  });
+
+    try {
+      const world = Globe()(container);
+      
+      // CONFIGURACIÓN VISUAL ESTILO GOOGLE EARTH
+      world.width(container.clientWidth);
+      world.height(container.clientHeight);
+      world.backgroundColor('rgba(0,0,0,0)'); // Fondo transparente para usar el gradiente de la página
+      
+      // Capas del Globo
+      world.globeImageUrl(EARTH_TEXTURE); // Textura real de la Tierra (Océanos azules, tierra verde/marrón)
+      world.bumpImageUrl(EARTH_BUMP);     // Relieve de las montañas
+      
+      // Atmósfera
+      world.showAtmosphere(true);
+      world.atmosphereColor('#3b82f6'); // Azul brillante
+      
+      // Polígonos Interactivos (Transparentes sobre la textura)
+      world.polygonsData(features);
+      world.polygonCapColor(d => d.properties.color);
+      world.polygonSideColor(() => 'rgba(255, 255, 255, 0.05)');
+      world.polygonStrokeColor(() => 'rgba(255, 255, 255, 0.3)');
+      world.polygonAltitude(0.005); // Muy cerca de la superficie
+      
+      // Tooltips
+      world.polygonLabel(d => `
+        <div class="globe-tooltip">
+          ${d.properties.name}
+        </div>
+      `);
+      
+      // Eventos
+      world.onPolygonClick(d => {
+        window.location.href = '/continente/' + d.id;
+      });
+      
+      world.onPolygonHover(hoverD => {
+        // Resaltar continente al pasar el ratón
+        world.polygonCapColor(d => d === hoverD ? 'rgba(255, 255, 255, 0.3)' : d.properties.color);
+        world.polygonAltitude(d => d === hoverD ? 0.05 : 0.005);
+      });
+
+      // Posición inicial (Centrado en el Atlántico para ver América, Europa y África)
+      world.pointOfView({ lat: 20, lng: -30, altitude: 2.5 });
+      
+      // Rotación suave automática
+      const controls = world.controls();
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+      }
+
+      window.addEventListener('resize', () => {
+        world.width(container.clientWidth);
+        world.height(container.clientHeight);
+      });
+
+      console.log('✅ Globo Terráqueo con textura real iniciado.');
+
+    } catch (err) {
+      console.error('❌ Error al crear el globo:', err);
+      container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-500">Error al iniciar el globo 3D</div>';
+    }
+  }, 150);
 });
