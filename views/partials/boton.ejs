@@ -3,9 +3,11 @@
   Uso: <%- include('partials/boton', { 
     texto: 'Volver', 
     color: 'turquesa', 
-    url: '/menu', 
-    emoji: '🔙' 
+    url: '/menu',
+    icono: 'flecha-izquierda'
   }) %>
+  
+  Iconos disponibles: ver ICONOS en /js/iconos.js
   
   Colores disponibles: naranja, turquesa, rojo, verde, morado
 -->
@@ -27,8 +29,8 @@
 
 <a href="<%= url %>" 
    class="inline-block px-8 py-4 rounded-full text-white font-bold text-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 <%= bgColor %>">
-  <% if (typeof emoji !== 'undefined' && emoji) { %>
-    <%= emoji %> 
+  <% if (typeof icono !== 'undefined' && icono) { %>
+    <%- icono(icono, 'w-5 h-5 inline mr-2') %>
   <% } %>
   <%= texto %>
 </a>

@@ -1,0 +1,11 @@
+<!-- Sistema de Sonidos - Mundo Kids -->
+<script src="/js/sonidos.js"></script>
+<script>
+  // Inicializar sonidos al hacer clic en cualquier parte (requiere interacción del usuario)
+  document.addEventListener('click', function iniciarAudio() {
+    if (typeof SonidosMundoKids !== 'undefined') {
+      SonidosMundoKids.inicializar();
+    }
+    document.removeEventListener('click', iniciarAudio);
+  }, { once: true });
+</script>

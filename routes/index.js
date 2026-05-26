@@ -3,52 +3,75 @@ const express = require('express');
 const router = express.Router();
 const { obtenerContinentes, obtenerContinentePorId } = require('../data/continentes');
 const { obtenerPreguntaAleatoria, obtenerPreguntaPorId } = require('../data/banderas');
+const { mezclarArray, mezclarOpciones } = require('../helpers/aleatorizacion');
+const { 
+  actualizarProgresoContinente, 
+  actualizarPuntosYNivel,
+  obtenerTodoProgreso,
+  registrarActividad,
+  obtenerPreguntasPersonalizadas,
+  obtenerRanking,
+  obtenerPosicionUsuario,
+  obtenerTotalAlumnosRanking,
+  buscarUsuarioPorId,
+  contarLogrosDesbloqueados,
+  contarLogrosTotales
+} = require('../database/db');
+const { verificarSesion: verificarSesionBD } = require('../middleware/auth');
+const { verificarYDesbloquearLogros } = require('../helpers/logros');
 
 /**
- * Middleware para verificar que el usuario tiene sesión activa
- * Redirige a la pantalla de bienvenida si no hay sesión
+ * Middleware para verificar sesión
+ * Soporta tanto sesiones de BD (autenticación real) como sesiones anónimas (quick play)
  */
 function verificarSesion(req, res, next) {
+  // Si tiene sesión de BD, usar ese middleware
+  if (req.session.usuarioId) {
+    return verificarSesionBD(req, res, next);
+  }
+  
+  // Fallback: sesión anónima (quick play sin registro)
   if (!req.session.nombreUsuario) {
     return res.redirect('/');
   }
-  // Hacer el nombre, género y progreso disponibles en todas las vistas
+  
   res.locals.nombreUsuario = req.session.nombreUsuario;
   res.locals.genero = req.session.genero || 'masculino';
   res.locals.progreso = req.session.progreso || { nivel: 1, puntosTotal: 0 };
+  res.locals.sesionAnonima = true;
   next();
 }
 
 /**
  * GET / - Pantalla de Bienvenida
- * Muestra el formulario para ingresar el nombre del estudiante
+ * Si ya hay sesión activa, redirige al menú
  */
 router.get('/', (req, res) => {
+  if (req.session.usuarioId) {
+    return res.redirect('/menu');
+  }
   res.render('bienvenida');
 });
 
 /**
- * POST /menu - Crear sesión con nombre de usuario y género
- * Valida el nombre y género, crea la sesión, luego redirige al menú principal
+ * POST /menu - Crear sesión anónima (quick play)
+ * Valida el nombre y género, crea la sesión en memoria, redirige al menú
  */
 router.post('/menu', (req, res) => {
   const { nombre, genero } = req.body;
   
-  // Validar que el nombre no esté vacío
   if (!nombre || !nombre.trim()) {
     return res.redirect('/');
   }
   
-  // Validar que el género esté seleccionado
   if (!genero || (genero !== 'masculino' && genero !== 'femenino')) {
     return res.redirect('/');
   }
   
-  // Crear sesión con el nombre y género del usuario
   req.session.nombreUsuario = nombre.trim();
   req.session.genero = genero;
+  req.session.esAnonimo = true;
   
-  // Inicializar progreso del estudiante
   req.session.progreso = {
     nivel: 1,
     puntosTotal: 0,
@@ -65,6 +88,11 @@ router.post('/menu', (req, res) => {
  * Muestra las opciones de juego disponibles (requiere sesión)
  */
 router.get('/menu', verificarSesion, (req, res) => {
+  // Si el usuario está autenticado en BD, cargar progreso real
+  if (req.session.usuarioId) {
+    const progresoContinentes = obtenerTodoProgreso(req.session.usuarioId);
+    res.locals.progresoContinentes = progresoContinentes;
+  }
   res.render('menu');
 });
 
@@ -114,21 +142,68 @@ router.get('/reto/:id', verificarSesion, (req, res) => {
     return res.redirect(`/continente/${req.params.id}`);
   }
   
+  // Mezclar preguntas si es la primera visita al reto
+  if (!req.session.preguntasMezcladas) {
+    req.session.preguntasMezcladas = {};
+  }
+  
+  const claveReto = `reto-${req.params.id}`;
+  
+  // Si no hay preguntas mezcladas para este reto, generarlas
+  if (!req.session.preguntasMezcladas[claveReto]) {
+    // Combinar preguntas del continente con preguntas personalizadas del profesor
+    let todasLasPreguntas = [...continente.preguntas];
+    
+    // Agregar preguntas personalizadas del profesor (si existen en BD)
+    if (req.session.usuarioId) {
+      try {
+        const preguntasPersonalizadas = obtenerPreguntasPersonalizadas('reto', req.params.id);
+        if (preguntasPersonalizadas && preguntasPersonalizadas.length > 0) {
+          const preguntasMapeadas = preguntasPersonalizadas.map(p => ({
+            id: `personalizada-${p.id}`,
+            pregunta: p.pregunta,
+            opciones: typeof p.opciones === 'string' ? JSON.parse(p.opciones) : p.opciones,
+            respuestaCorrecta: p.respuesta_correcta,
+            puntos: p.puntos || 10
+          }));
+          todasLasPreguntas = [...todasLasPreguntas, ...preguntasMapeadas];
+        }
+      } catch (e) {
+        console.error('Error cargando preguntas personalizadas:', e.message);
+      }
+    }
+    
+    // Mezclar las preguntas
+    const preguntasMezcladas = mezclarArray(todasLasPreguntas);
+    // Mezclar opciones de cada pregunta y guardar nuevo índice correcto
+    const preguntasConOpcionesMezcladas = preguntasMezcladas.map(p => {
+      const { opciones, nuevoIndiceCorrecto } = mezclarOpciones(p.opciones, p.respuestaCorrecta);
+      return {
+        ...p,
+        opciones,
+        respuestaCorrecta: nuevoIndiceCorrecto
+      };
+    });
+    req.session.preguntasMezcladas[claveReto] = preguntasConOpcionesMezcladas;
+  }
+  
+  const preguntasActuales = req.session.preguntasMezcladas[claveReto];
+  
   // Obtener índice de pregunta actual (por defecto 0)
   const preguntaActual = parseInt(req.query.pregunta) || 0;
   
   // Si el índice está fuera de rango, redirigir a la primera pregunta
-  if (preguntaActual < 0 || preguntaActual >= continente.preguntas.length) {
+  if (preguntaActual < 0 || preguntaActual >= preguntasActuales.length) {
     return res.redirect(`/reto/${req.params.id}?pregunta=0`);
   }
   
-  const pregunta = continente.preguntas[preguntaActual];
+  const pregunta = preguntasActuales[preguntaActual];
   
   res.render('reto', {
     continente,
     pregunta,
     preguntaActual,
-    totalPreguntas: continente.preguntas.length
+    totalPreguntas: preguntasActuales.length
   });
 });
 
@@ -148,12 +223,14 @@ router.post('/reto/:id/responder', verificarSesion, (req, res) => {
   const respuestaUsuario = parseInt(req.body.respuesta);
   const preguntaId = req.body.preguntaId;
   
-  // Validar que la pregunta existe
-  if (preguntaIndex < 0 || preguntaIndex >= continente.preguntas.length) {
+  // Obtener preguntas mezcladas de la sesión
+  const preguntasActuales = req.session.preguntasMezcladas?.[`reto-${req.params.id}`] || continente.preguntas;
+  
+  // Validar que la pregunta existe (usar preguntasActuales que incluye personalizadas)
+  if (preguntaIndex < 0 || preguntaIndex >= preguntasActuales.length) {
     return res.redirect(`/reto/${req.params.id}`);
   }
-  
-  const pregunta = continente.preguntas[preguntaIndex];
+  const pregunta = preguntasActuales[preguntaIndex];
   
   // Verificar si la respuesta es correcta
   const esCorrecta = respuestaUsuario === pregunta.respuestaCorrecta;
@@ -176,17 +253,38 @@ router.post('/reto/:id/responder', verificarSesion, (req, res) => {
     }
   }
   
-  // Determinar si hay más preguntas
-  const hayMasPreguntas = preguntaIndex + 1 < continente.preguntas.length;
-  const siguientePregunta = preguntaIndex + 1;
+  // Registrar actividad en BD si el usuario está autenticado
+  if (req.session.usuarioId) {
+    registrarActividad({
+      usuarioId: req.session.usuarioId,
+      tipoActividad: 'reto',
+      puntajeObtenido: puntosGanados,
+      respuestasCorrectas: esCorrecta ? 1 : 0,
+      respuestasTotales: 1,
+      tiempoSegundos: parseInt(req.body.tiempo) || null
+    });
+    
+    // Persistir puntos y nivel en BD
+    if (puntosGanados > 0) {
+      actualizarPuntosYNivel(req.session.usuarioId, puntosGanados);
+      actualizarProgresoContinente(req.session.usuarioId, req.params.id, puntosGanados);
+    }
+    
+    // Verificar logros después de la actividad
+    try {
+      verificarYDesbloquearLogros(req.session.usuarioId);
+    } catch (e) {
+      console.error('Error verificando logros:', e.message);
+    }
+  }
   
   res.render('resultado-reto', {
     continente,
     esCorrecta,
     puntosGanados,
     respuestaCorrecta: pregunta.opciones[pregunta.respuestaCorrecta],
-    hayMasPreguntas,
-    siguientePregunta,
+    hayMasPreguntas: preguntaIndex + 1 < preguntasActuales.length,
+    siguientePregunta: preguntaIndex + 1,
     subisteNivel
   });
 });
@@ -202,7 +300,47 @@ router.get('/trivia-banderas', verificarSesion, (req, res) => {
   }
   
   // Obtener pregunta aleatoria que no haya sido respondida
-  const pregunta = obtenerPreguntaAleatoria(req.session.banderasRespondidas);
+  let pregunta = obtenerPreguntaAleatoria(req.session.banderasRespondidas);
+  
+  // Agregar preguntas personalizadas de banderas (del profesor) si existen
+  if (!req.session.banderasPersonalizadas && req.session.usuarioId) {
+    try {
+      const banderasPersonalizadas = obtenerPreguntasPersonalizadas('banderas');
+      if (banderasPersonalizadas && banderasPersonalizadas.length > 0) {
+        const mapeadas = banderasPersonalizadas.map(p => ({
+          id: `personalizada-bandera-${p.id}`,
+          descripcion: p.pregunta,
+          pais: (typeof p.opciones === 'string' ? JSON.parse(p.opciones) : p.opciones)[p.respuesta_correcta],
+          opciones: typeof p.opciones === 'string' ? JSON.parse(p.opciones) : p.opciones,
+          respuestaCorrecta: p.respuesta_correcta,
+          puntos: p.puntos || 15,
+          continente: p.continente_id || 'global'
+        }));
+        req.session.banderasPersonalizadas = mapeadas;
+      }
+    } catch (e) {
+      console.error('Error cargando banderas personalizadas:', e.message);
+    }
+  }
+  
+  // Si hay preguntas personalizadas, combinarlas con las originales para la selección aleatoria
+  if (req.session.banderasPersonalizadas && req.session.banderasPersonalizadas.length > 0) {
+    const todasBanderas = [...require('../data/banderas').obtenerPreguntasBanderas(), ...req.session.banderasPersonalizadas];
+    const disponibles = todasBanderas.filter(p => !req.session.banderasRespondidas.includes(p.id));
+    if (disponibles.length > 0) {
+      pregunta = disponibles[Math.floor(Math.random() * disponibles.length)];
+    }
+  }
+  
+  if (pregunta) {
+    // Mezclar opciones para que la respuesta no esté siempre en el mismo índice
+    const { opciones, nuevoIndiceCorrecto } = mezclarOpciones(pregunta.opciones, pregunta.respuestaCorrecta);
+    pregunta = {
+      ...pregunta,
+      opciones,
+      respuestaCorrecta: nuevoIndiceCorrecto
+    };
+  }
   
   res.render('trivia-banderas', {
     pregunta,
@@ -225,8 +363,20 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
     return res.redirect('/trivia-banderas');
   }
   
+  // Buscar la pregunta (puede ser de las originales o personalizadas)
+  let preguntaReal = pregunta;
+  if (!preguntaReal && preguntaId && preguntaId.startsWith('personalizada-bandera-')) {
+    // Buscar en las preguntas personalizadas de la sesión
+    const personalizadas = req.session.banderasPersonalizadas || [];
+    preguntaReal = personalizadas.find(p => p.id === preguntaId);
+  }
+  
+  if (!preguntaReal) {
+    return res.redirect('/trivia-banderas');
+  }
+  
   // Verificar si la respuesta es correcta
-  const esCorrecta = respuestaUsuario === pregunta.respuestaCorrecta;
+  const esCorrecta = respuestaUsuario === preguntaReal.respuestaCorrecta;
   let puntosGanados = 0;
   let subisteNivel = false;
   
@@ -237,7 +387,7 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
   
   // Si es correcta y no ha sido respondida antes, dar puntos
   if (esCorrecta && !req.session.banderasRespondidas.includes(preguntaId)) {
-    puntosGanados = pregunta.puntos;
+    puntosGanados = preguntaReal.puntos;
     req.session.progreso.puntosTotal += puntosGanados;
     
     // Sistema de niveles: cada 30 puntos = 1 nivel
@@ -255,13 +405,37 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
     req.session.banderasRespondidas.push(preguntaId);
   }
   
+  // Registrar actividad en BD si el usuario está autenticado
+  if (req.session.usuarioId) {
+    registrarActividad({
+      usuarioId: req.session.usuarioId,
+      tipoActividad: 'trivia',
+      puntajeObtenido: puntosGanados,
+      respuestasCorrectas: esCorrecta ? 1 : 0,
+      respuestasTotales: 1,
+      tiempoSegundos: parseInt(req.body.tiempo) || null
+    });
+    
+    // Persistir puntos y nivel en BD
+    if (puntosGanados > 0) {
+      actualizarPuntosYNivel(req.session.usuarioId, puntosGanados);
+    }
+    
+    // Verificar logros después de la actividad
+    try {
+      verificarYDesbloquearLogros(req.session.usuarioId);
+    } catch (e) {
+      console.error('Error verificando logros:', e.message);
+    }
+  }
+  
   // Determinar si hay más preguntas
   const hayMasPreguntas = req.session.banderasRespondidas.length < 12;
   
   res.render('resultado-trivia', {
     esCorrecta,
     puntosGanados,
-    paisCorrecto: pregunta.pais,
+    paisCorrecto: preguntaReal.pais,
     hayMasPreguntas,
     subisteNivel
   });
@@ -277,6 +451,132 @@ router.get('/salir', (req, res) => {
       console.error('Error al cerrar sesión:', err);
     }
     res.redirect('/');
+  });
+});
+
+/**
+ * GET /reto/:id/reiniciar - Reiniciar orden de preguntas de un reto
+ */
+router.get('/reto/:id/reiniciar', verificarSesion, (req, res) => {
+  if (req.session.preguntasMezcladas) {
+    delete req.session.preguntasMezcladas[`reto-${req.params.id}`];
+  }
+  res.redirect(`/reto/${req.params.id}?pregunta=0`);
+});
+
+/**
+ * GET /clasificacion - Tabla de clasificación
+ */
+router.get('/clasificacion', verificarSesion, (req, res) => {
+  // Solo usuarios autenticados en BD pueden ver el ranking
+  if (!req.session.usuarioId) {
+    return res.redirect('/menu');
+  }
+
+  const pagina = parseInt(req.query.pagina) || 1;
+  const ranking = obtenerRanking(50, pagina);
+  const posicionUsuario = obtenerPosicionUsuario(req.session.usuarioId);
+  const totalAlumnos = obtenerTotalAlumnosRanking();
+
+  res.render('clasificacion', {
+    ranking,
+    posicionUsuario,
+    totalAlumnos
+  });
+});
+
+/**
+ * GET /perfil - Perfil del alumno
+ */
+router.get('/perfil', verificarSesion, (req, res) => {
+  // Solo usuarios autenticados en BD pueden ver el perfil
+  if (!req.session.usuarioId) {
+    return res.redirect('/menu');
+  }
+
+  const alumno = buscarUsuarioPorId(req.session.usuarioId);
+  if (!alumno) {
+    return res.redirect('/menu');
+  }
+
+  const historial = require('../database/db').obtenerHistorialCompleto(req.session.usuarioId);
+  const progreso = require('../database/db').obtenerTodoProgreso(req.session.usuarioId);
+  const logrosRecientes = require('../database/db').obtenerLogrosUsuario(req.session.usuarioId);
+  const logrosDesbloqueados = contarLogrosDesbloqueados(req.session.usuarioId);
+  const logrosTotales = contarLogrosTotales();
+
+  // Obtener continentes para mostrar nombres
+  const { obtenerContinentes } = require('../data/continentes');
+  const continentes = obtenerContinentes();
+
+  // Progreso con nombres de continentes
+  const progresoConNombres = progreso.map(p => {
+    const continente = continentes.find(c => c.id === p.continente_id);
+    return {
+      ...p,
+      nombreContinente: continente ? continente.nombre : p.continente_id,
+      svgIconContinente: continente ? continente.svgIcon : 'mundo'
+    };
+  });
+
+  // Estadísticas
+  const totalActividades = historial.length;
+  const totalCorrectas = historial.reduce((sum, h) => sum + h.respuestas_correctas, 0);
+  const totalRespuestas = historial.reduce((sum, h) => sum + h.respuestas_totales, 0);
+  const porcentajeAciertos = totalRespuestas > 0
+    ? Math.round((totalCorrectas / totalRespuestas) * 100)
+    : 0;
+
+  // Actividades por tipo
+  const actividadesPorTipo = {};
+  for (const h of historial) {
+    if (!actividadesPorTipo[h.tipo_actividad]) {
+      actividadesPorTipo[h.tipo_actividad] = 0;
+    }
+    actividadesPorTipo[h.tipo_actividad]++;
+  }
+
+  res.render('perfil', {
+    alumno,
+    historial,
+    progreso: progresoConNombres,
+    logrosRecientes,
+    logrosDesbloqueados,
+    logrosTotales,
+    totalActividades,
+    totalCorrectas,
+    totalRespuestas,
+    porcentajeAciertos,
+    actividadesPorTipo
+  });
+});
+
+/**
+ * GET /globo-test - Página de prueba para el globo 3D mínimo
+ * Útil para aislar problemas de renderizado del globo terráqueo
+ */
+router.get('/globo-test', (req, res) => {
+  res.render('globo-test');
+});
+
+/**
+ * GET /logros - Galería de logros/insignias
+ */
+router.get('/logros', verificarSesion, (req, res) => {
+  // Solo usuarios autenticados en BD pueden ver logros
+  if (!req.session.usuarioId) {
+    return res.redirect('/menu');
+  }
+
+  const { obtenerLogrosConEstado, obtenerCategoriasLogros } = require('../helpers/logros');
+  const logros = obtenerLogrosConEstado(req.session.usuarioId);
+  const logrosDesbloqueados = contarLogrosDesbloqueados(req.session.usuarioId);
+  const logrosTotales = contarLogrosTotales();
+
+  res.render('logros', {
+    logros,
+    logrosDesbloqueados,
+    logrosTotales
   });
 });
 

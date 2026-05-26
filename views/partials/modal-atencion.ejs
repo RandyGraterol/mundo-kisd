@@ -1,0 +1,113 @@
+<!-- Modal de Atención: Aparece antes de iniciar trivias/retos -->
+<div id="modal-atencion" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+  <!-- Overlay -->
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="cerrarAtencion()"></div>
+  
+  <!-- Contenido del modal -->
+  <div class="relative bg-white rounded-[2.5rem] shadow-2xl max-w-lg w-full p-10 text-center animate-modal-bounce border border-slate-100" id="modal-contenido">
+    <!-- Icono de alerta -->
+    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    
+    <h2 class="text-3xl font-extrabold text-slate-900 mb-3"><%- icono('reloj', 'w-6 h-6 inline text-amber-600') %> Atencion!</h2>
+    
+    <div class="bg-amber-50 rounded-2xl p-6 mb-6 border border-amber-100">
+      <p class="text-lg font-bold text-amber-800 mb-2">
+        Esta actividad tiene un <span class="underline decoration-wavy decoration-amber-400">limite de tiempo</span>
+      </p>
+      <p class="text-amber-700">
+        Debes responder cada pregunta dentro del tiempo establecido. 
+        Si el tiempo se agota, la respuesta se enviara automaticamente.
+      </p>
+    </div>
+    
+    <div class="flex items-center gap-3 bg-sky-50 rounded-xl p-4 mb-8 border border-sky-100">
+      <%- icono('luz', 'w-7 h-7 text-sky-600 shrink-0') %>
+      <p class="text-sky-700 text-sm font-medium">
+        Lee bien cada pregunta antes de responder. Concentrate y da lo mejor de ti!
+      </p>
+    </div>
+    
+    <button onclick="iniciarActividad()" 
+            class="w-full py-4 px-8 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-xl rounded-2xl hover:from-sky-600 hover:to-blue-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+      <%- icono('jugar', 'w-5 h-5') %>
+      Comenzar Ahora!
+    </button>
+  </div>
+</div>
+
+<style>
+  @keyframes modalBounceIn {
+    0% { opacity: 0; transform: scale(0.7) translateY(40px); }
+    60% { transform: scale(1.03) translateY(-4px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .animate-modal-bounce {
+    animation: modalBounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes pulseSoft {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  .animate-pulse-soft {
+    animation: pulseSoft 2s ease-in-out infinite;
+  }
+</style>
+
+<script>
+  // Funcion global para mostrar el modal
+  function mostrarAtencion() {
+    const modal = document.getElementById('modal-atencion');
+    if (modal) {
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Funcion para cerrar el modal (sin iniciar)
+  function cerrarAtencion() {
+    const modal = document.getElementById('modal-atencion');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Funcion para iniciar la actividad (se sobreescribe en cada pagina)
+  function iniciarActividad() {
+    cerrarAtencion();
+    const contenido = document.getElementById('contenido-actividad');
+    if (contenido) {
+      contenido.style.display = 'block';
+      contenido.classList.add('animate-fade-in');
+    }
+    if (typeof iniciarCronometro === 'function') {
+      iniciarCronometro();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const estadoActividad = sessionStorage.getItem('actividad_iniciada');
+    if (!estadoActividad) {
+      setTimeout(mostrarAtencion, 300);
+    } else {
+      const contenido = document.getElementById('contenido-actividad');
+      if (contenido) contenido.style.display = 'block';
+    }
+  });
+
+  function marcarIniciada() {
+    sessionStorage.setItem('actividad_iniciada', 'true');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const btnComenzar = document.querySelector('#modal-contenido button');
+    if (btnComenzar) {
+      btnComenzar.addEventListener('click', marcarIniciada);
+    }
+  });
+</script>

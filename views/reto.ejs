@@ -1,78 +1,100 @@
-<div class="min-h-screen flex items-center justify-center p-6 py-12 animate-fade-in">
+<% 
+  // Tiempo límite predeterminado (30s)
+  var tiempoLimite = 30;
+  if (typeof pregunta !== 'undefined' && pregunta.tiempo_limite) {
+    tiempoLimite = parseInt(pregunta.tiempo_limite);
+  }
+%>
+
+<%- include('partials/modal-atencion') %>
+<%- include('partials/cronometro') %>
+
+<div class="min-h-screen flex items-center justify-center p-responsive-main animate-fade-in">
   
-  <div class="glass-effect rounded-[3rem] soft-shadow p-10 max-w-3xl w-full border border-white/60 relative overflow-hidden">
+  <div class="bg-white rounded-[3rem] shadow-xl p-responsive card-padding-md max-w-3xl w-full border border-slate-100 relative overflow-hidden md:rounded-[3.5rem]">
     
     <!-- Encabezado con emoji del continente -->
     <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-3 bg-white/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/50 soft-shadow mb-6">
-        <span class="text-2xl"><%= continente.emoji %></span>
+      <div class="inline-flex items-center gap-3 bg-sky-50 backdrop-blur-md px-6 py-2 rounded-full border border-sky-100 shadow-sm mb-6">
+        <svg class="w-7 h-7 text-sky-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>
         <h2 class="text-xl font-bold text-slate-800">
           Reto: <%= continente.nombre %>
         </h2>
       </div>
-      <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">¡Demuestra lo que sabes!</h1>
+      <h1 class="text-responsive-4xl font-extrabold text-slate-900 tracking-tight">¡Demuestra lo que sabes!</h1>
     </div>
 
     <!-- Información de progreso -->
-    <div class="grid grid-cols-3 gap-4 mb-10">
-      <div class="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/40 text-center soft-shadow">
+    <div class="grid grid-cols-3 gap-responsive gap-responsive-desk mb-8 md:mb-12">
+      <div class="bg-sky-50/60 rounded-2xl p-4 border border-sky-100/60 text-center shadow-sm">
         <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nivel</p>
-        <p class="text-xl font-black text-sky-600">🏆 <%= progreso.nivel %></p>
+        <p class="text-xl font-black text-sky-600 flex items-center justify-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
+          <%= progreso.nivel %>
+        </p>
       </div>
-      <div class="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/40 text-center soft-shadow">
+      <div class="bg-sky-50/60 rounded-2xl p-4 border border-sky-100/60 text-center shadow-sm">
         <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Puntos</p>
-        <p class="text-xl font-black text-sky-600">⭐ <%= progreso.puntosTotal %></p>
+        <p class="text-xl font-black text-sky-600 flex items-center justify-center gap-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <%= progreso.puntosTotal %>
+        </p>
       </div>
-      <div class="bg-white/50 backdrop-blur-sm rounded-2xl p-4 border border-white/40 text-center soft-shadow">
+      <div class="bg-sky-50/60 rounded-2xl p-4 border border-sky-100/60 text-center shadow-sm">
         <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Pregunta</p>
         <p class="text-xl font-black text-sky-600"><%= preguntaActual + 1 %> / <%= totalPreguntas %></p>
       </div>
     </div>
 
-    <!-- Pregunta actual -->
-    <div class="mb-10">
-      <div class="bg-slate-900 rounded-[2rem] p-8 mb-8 soft-shadow relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-4 opacity-10">
-          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+    <!-- Contenido de la actividad (oculto hasta que se confirme el modal) -->
+    <div id="contenido-actividad" style="display: none;">
+
+      <!-- Pregunta actual -->
+      <div class="mb-10">
+        <div class="bg-slate-900 rounded-[2rem] p-6 sm:p-8 md:p-10 mb-6 md:mb-10 shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-4 opacity-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white text-center leading-tight relative z-10">
+            <%= pregunta.pregunta %>
+          </h3>
         </div>
-        <h3 class="text-2xl font-bold text-white text-center leading-tight relative z-10">
-          <%= pregunta.pregunta %>
-        </h3>
+
+        <!-- Opciones de respuesta -->
+        <form method="POST" action="/reto/<%= continente.id %>/responder" id="form-actividad" onsubmit="detenerCronometro()">
+          <input type="hidden" name="preguntaIndex" value="<%= preguntaActual %>">
+          <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
+          
+          <div class="grid gap-4 md:gap-5">
+            <% pregunta.opciones.forEach((opcion, index) => { %>
+              <label class="group cursor-pointer">
+                <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
+                <div class="flex items-center gap-4 p-responsive-card rounded-2xl bg-white border border-slate-200 peer-checked:border-sky-400 peer-checked:shadow-md peer-checked:bg-sky-50 transition-all group-hover:border-sky-200 group-hover:bg-sky-50/50">
+                  <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold peer-checked:bg-sky-500 peer-checked:text-white group-hover:bg-sky-100 group-hover:text-sky-600 transition-colors">
+                    <%= String.fromCharCode(65 + index) %>
+                  </div>
+                  <p class="text-lg font-bold text-slate-700 peer-checked:text-slate-900">
+                    <%= opcion %>
+                  </p>
+                  <div class="ml-auto opacity-0 peer-checked:opacity-100 text-sky-500 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                  </div>
+                </div>
+              </label>
+            <% }); %>
+          </div>
+
+          <!-- Botón enviar -->
+          <div class="text-center mt-12">
+            <button type="submit" 
+                    class="inline-flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-responsive-subtitle py-4 sm:py-5 md:py-6 px-8 sm:px-12 md:px-16 rounded-2xl shadow-xl hover:shadow-sky-100 transition-all transform hover:-translate-y-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar Respuesta
+            </button>
+          </div>
+        </form>
       </div>
 
-      <!-- Opciones de respuesta -->
-      <form method="POST" action="/reto/<%= continente.id %>/responder">
-        <input type="hidden" name="preguntaIndex" value="<%= preguntaActual %>">
-        <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
-        
-        <div class="grid gap-4">
-          <% pregunta.opciones.forEach((opcion, index) => { %>
-            <label class="group cursor-pointer">
-              <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
-              <div class="flex items-center gap-4 p-5 rounded-2xl bg-white/40 border border-white/60 peer-checked:bg-white peer-checked:border-sky-400 peer-checked:soft-shadow transition-all group-hover:bg-white/80">
-                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold peer-checked:bg-sky-500 peer-checked:text-white group-hover:bg-sky-100 group-hover:text-sky-600 transition-colors">
-                  <%= String.fromCharCode(65 + index) %>
-                </div>
-                <p class="text-lg font-bold text-slate-700 peer-checked:text-slate-900">
-                  <%= opcion %>
-                </p>
-                <div class="ml-auto opacity-0 peer-checked:opacity-100 text-sky-500 transition-opacity">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                </div>
-              </div>
-            </label>
-          <% }); %>
-        </div>
-
-        <!-- Botón enviar -->
-        <div class="text-center mt-12">
-          <button type="submit" 
-                  class="inline-flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xl py-5 px-12 rounded-2xl shadow-xl hover:shadow-sky-100 transition-all transform hover:-translate-y-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Enviar Respuesta
-          </button>
-        </div>
-      </form>
     </div>
 
     <!-- Botón volver -->
@@ -87,3 +109,8 @@
   </div>
 
 </div>
+
+<script>
+  // Limpiar flag de sesión al cargar página nueva de reto (para que el modal aparezca)
+  sessionStorage.removeItem('actividad_iniciada');
+</script>

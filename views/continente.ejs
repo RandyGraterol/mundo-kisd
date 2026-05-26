@@ -1,95 +1,117 @@
-<div class="min-h-screen flex items-center justify-center p-6 py-12 animate-fade-in">
+<div class="min-h-screen p-6 py-12 animate-fade-in" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);">
   
-  <div class="glass-effect rounded-[3rem] soft-shadow p-12 max-w-4xl w-full border border-white/60 relative overflow-hidden">
-    <!-- Decoración de fondo -->
-    <div class="absolute -top-24 -right-24 w-64 h-64 bg-sky-100 rounded-full blur-3xl opacity-50"></div>
-    <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-teal-50 rounded-full blur-3xl opacity-50"></div>
+  <div class="max-w-7xl mx-auto">
 
-    <!-- Título con emoji del continente -->
-    <div class="text-center mb-10 relative">
-      <div class="inline-flex items-center justify-center w-32 h-32 rounded-[2.5rem] bg-white soft-shadow text-7xl mb-6 transform hover:rotate-6 transition-transform">
-        <%= continente.emoji %>
+    <!-- Encabezado con icono y nombre -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-28 h-28 rounded-[2.5rem] bg-white shadow-lg mb-6 transform hover:rotate-6 transition-transform duration-300 border border-slate-100">
+        <span class="icono-render" data-icono="<%= continente.svgIcon %>" data-clases="w-14 h-14" data-titulo="<%= continente.nombre %>"></span>
       </div>
-      <h2 class="text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-3">
         <%= continente.nombre %>
-      </h2>
-      <div class="h-1.5 w-24 bg-sky-400 mx-auto rounded-full"></div>
+      </h1>
+      <div class="h-1.5 w-20 bg-sky-400 mx-auto rounded-full"></div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-12 mb-12 relative">
-      <!-- Columna Izquierda: Información -->
-      <div class="space-y-8">
-        <div class="space-y-4">
-          <div class="flex items-center gap-3 text-sky-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-check"><path d="M8 3H2v15h7c1.7 0 3 1.3 3 3V7c0-2.2-1.8-4-4-4Z"/><path d="m16 12 2 2 4-4"/><path d="M22 6V3h-6c-2.2 0-4 1.8-4 4v14c0-1.7 1.3-3 3-3h7v-3"/></svg>
-            <h3 class="text-xl font-bold text-slate-800">Sobre este continente</h3>
+    <!-- Contenido principal en columnas -->
+    <div class="grid lg:grid-cols-5 gap-8 mb-12">
+      
+      <!-- Columna Izquierda: Información (3/5 del espacio) -->
+      <div class="lg:col-span-3 space-y-8">
+        
+        <!-- Card: Sobre este continente -->
+        <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-200/60 p-8 sm:p-10 relative overflow-hidden">
+          <!-- Decoración -->
+          <div class="absolute -top-16 -right-16 w-48 h-48 bg-sky-50 rounded-full blur-3xl opacity-60"></div>
+          
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-2.5 bg-sky-100 rounded-xl text-sky-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open-check"><path d="M8 3H2v15h7c1.7 0 3 1.3 3 3V7c0-2.2-1.8-4-4-4Z"/><path d="m16 12 2 2 4-4"/><path d="M22 6V3h-6c-2.2 0-4 1.8-4 4v14c0-1.7 1.3-3 3-3h7v-3"/></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800">Sobre este continente</h2>
           </div>
-          <p class="text-slate-600 text-lg leading-relaxed font-medium">
+          
+          <p class="text-slate-600 text-lg sm:text-xl leading-relaxed font-medium">
             <%= continente.descripcion %>
           </p>
         </div>
 
-        <div class="bg-amber-50/50 backdrop-blur-sm border border-amber-100 p-6 rounded-[2rem] soft-shadow">
-          <div class="flex items-center gap-3 text-amber-600 mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
-            <h3 class="text-lg font-bold">¿Sabías qué?</h3>
+        <!-- Card: ¿Sabías qué? -->
+        <div class="bg-amber-50/80 rounded-[2.5rem] border border-amber-200/60 p-8 sm:p-10 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-2xl"></div>
+          
+          <div class="flex items-start gap-5 relative">
+            <div class="p-3 bg-amber-100 rounded-xl text-amber-600 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="m12 3 1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-xl font-bold text-amber-800 mb-3">¿Sabías qué?</h3>
+              <p class="text-amber-900/80 text-lg leading-relaxed italic">
+                "<%= continente.datosCuriosos %>"
+              </p>
+            </div>
           </div>
-          <p class="text-slate-700 leading-relaxed italic">
-            "<%= continente.datosCuriosos %>"
-          </p>
         </div>
+
       </div>
 
-      <!-- Columna Derecha: Países -->
-      <div class="space-y-8">
-        <div class="space-y-6">
-          <div class="flex items-center gap-3 text-teal-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-            <h3 class="text-xl font-bold text-slate-800">Países Principales</h3>
+      <!-- Columna Derecha: Países y Reto (2/5 del espacio) -->
+      <div class="lg:col-span-2 space-y-8">
+        
+        <!-- Card: Países Principales -->
+        <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-200/60 p-8 sm:p-10 relative overflow-hidden">
+          <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-teal-50 rounded-full blur-3xl opacity-50"></div>
+          
+          <div class="flex items-center gap-3 mb-6">
+            <div class="p-2.5 bg-teal-100 rounded-xl text-teal-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800">Países Principales</h2>
           </div>
           
           <div class="flex flex-wrap gap-3">
             <% if (continente.paisesPrincipales.length > 0) { %>
               <% continente.paisesPrincipales.forEach(pais => { %>
-                <div class="px-5 py-2.5 rounded-xl bg-white border border-slate-100 text-slate-700 font-bold soft-shadow hover:border-teal-200 transition-colors">
+                <span class="px-5 py-2.5 rounded-xl bg-gradient-to-br from-slate-50 to-white border border-slate-200 text-slate-700 font-bold shadow-sm hover:border-teal-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-default">
                   <%= pais %>
-                </div>
+                </span>
               <% }); %>
             <% } else { %>
-              <div class="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-500 italic w-full">
+              <div class="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-300 text-slate-500 italic w-full text-center">
                 Este territorio es un espacio internacional dedicado a la ciencia.
               </div>
             <% } %>
           </div>
         </div>
 
-        <!-- Botón de Reto -->
+        <!-- Card: Botón de Reto -->
         <% if (continente.preguntas && continente.preguntas.length > 0) { %>
           <a href="/reto/<%= continente.id %>" 
-             class="group block p-1 rounded-2xl bg-gradient-to-br from-sky-400 to-teal-500 hover:from-sky-500 hover:to-teal-600 transition-all soft-shadow hover:-translate-y-1">
-            <div class="bg-white/10 group-hover:bg-transparent px-8 py-6 rounded-xl flex items-center justify-between text-white">
-              <div class="flex items-center gap-4">
-                <div class="p-3 bg-white/20 rounded-xl">
+             class="group block p-1 rounded-[2.5rem] bg-gradient-to-br from-sky-400 to-teal-500 hover:from-sky-500 hover:to-teal-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 overflow-hidden">
+            <div class="bg-white/10 group-hover:bg-transparent px-8 py-8 rounded-[2.25rem] flex items-center justify-between text-white gap-4">
+              <div class="flex items-center gap-5">
+                <div class="p-3 bg-white/20 rounded-xl shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
                 </div>
                 <div>
-                  <h4 class="text-2xl font-black">¡ACEPTA EL RETO!</h4>
-                  <p class="text-sky-50 opacity-90 font-medium"><%= continente.preguntas.length %> preguntas de geografía</p>
+                  <h4 class="text-2xl font-black leading-tight">¡ACEPTA EL RETO!</h4>
+                  <p class="text-white/80 font-medium mt-1"><%= continente.preguntas.length %> preguntas de geografía</p>
                 </div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="m9 18 6-6-6-6"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right shrink-0 group-hover:translate-x-1 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
             </div>
           </a>
         <% } %>
+
       </div>
     </div>
 
     <!-- Botón Volver -->
-    <div class="text-center pt-6 border-t border-slate-100">
+    <div class="text-center">
       <a href="/continentes" 
-         class="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-slate-500 hover:text-slate-800 font-bold text-lg transition-all hover:bg-slate-50">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-        Volver al Mapa
+         class="inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xl shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Volver al Mapa Interactivo
       </a>
     </div>
 

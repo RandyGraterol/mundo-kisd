@@ -5,7 +5,7 @@ const continentes = [
   {
     id: 'america',
     nombre: 'América',
-    emoji: '🌎',
+    svgIcon: 'america',
     color: '#ec4899', // Rosa/Fucsia
     descripcion: 'América es el segundo continente más grande del mundo, dividido en América del Norte, Central y del Sur. Tiene una gran diversidad de climas, desde el frío ártico hasta las selvas tropicales. Es hogar de culturas milenarias como los mayas, aztecas e incas.',
     datosCuriosos: 'El río Amazonas, que atraviesa América del Sur, es el más caudaloso del mundo y su selva produce el 20% del oxígeno de la Tierra.',
@@ -37,7 +37,7 @@ const continentes = [
   {
     id: 'europa',
     nombre: 'Europa',
-    emoji: '🏰',
+    svgIcon: 'europa',
     color: '#3b82f6', // Azul
     descripcion: 'Europa es un continente con una rica historia y cultura. Aunque es el segundo continente más pequeño, tiene una gran densidad de población. Es conocido por sus monumentos históricos, arte y arquitectura. Aquí nacieron grandes civilizaciones como la griega y la romana.',
     datosCuriosos: 'Europa tiene más de 200 idiomas diferentes y es el continente con mayor número de países pequeños. El Vaticano, el país más pequeño del mundo, está en Europa.',
@@ -69,7 +69,7 @@ const continentes = [
   {
     id: 'asia',
     nombre: 'Asia',
-    emoji: '🏯',
+    svgIcon: 'asia',
     color: '#fbbf24', // Amarillo
     descripcion: 'Asia es el continente más grande y poblado del mundo. Tiene una increíble diversidad de paisajes, desde las montañas más altas (el Himalaya) hasta desiertos y selvas tropicales. Es la cuna de grandes civilizaciones antiguas como China, India y Mesopotamia.',
     datosCuriosos: 'El Monte Everest, la montaña más alta del mundo con 8,848 metros, está en Asia. Además, más de la mitad de la población mundial vive en este continente.',
@@ -101,7 +101,7 @@ const continentes = [
   {
     id: 'africa',
     nombre: 'África',
-    emoji: '🦁',
+    svgIcon: 'africa',
     color: '#10b981', // Verde
     descripcion: 'África es el tercer continente más grande del mundo y es conocido como la cuna de la humanidad. Tiene una increíble diversidad de vida salvaje, con animales como leones, elefantes y jirafas. El desierto del Sahara, el más grande del mundo, está en África.',
     datosCuriosos: 'El río Nilo, que atraviesa África, es el río más largo del mundo con 6,650 kilómetros. África tiene más de 3,000 grupos étnicos diferentes y más de 2,000 idiomas.',
@@ -133,7 +133,7 @@ const continentes = [
   {
     id: 'oceania',
     nombre: 'Oceanía',
-    emoji: '🦘',
+    svgIcon: 'oceania',
     color: '#8b5cf6', // Morado
     descripcion: 'Oceanía es el continente más pequeño, formado por miles de islas en el océano Pacífico. Australia es el país más grande de este continente. Tiene animales únicos que no se encuentran en ningún otro lugar, como los canguros y los koalas.',
     datosCuriosos: 'Hay más ovejas y canguros que personas en gran parte de este continente. La Gran Barrera de Coral, el arrecife de coral más grande del mundo, está en Australia.',
@@ -165,7 +165,7 @@ const continentes = [
   {
     id: 'antartida',
     nombre: 'Antártida',
-    emoji: '🐧',
+    svgIcon: 'antartida',
     color: '#6b7280', // Gris
     descripcion: 'La Antártida es el continente más frío, seco y ventoso de la Tierra. Está cubierto casi completamente de hielo y nieve. No tiene población permanente, solo científicos que viven temporalmente en estaciones de investigación. Es el hogar de pingüinos, focas y ballenas.',
     datosCuriosos: 'La Antártida contiene el 90% del hielo del mundo y el 70% del agua dulce del planeta. La temperatura más baja registrada en la Tierra fue aquí: -89.2°C.',

@@ -1,0 +1,128 @@
+<!-- Sistema de Confetti - Sin dependencias externas -->
+<style>
+  .confetti-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    border-radius: 2px;
+  }
+  
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+  
+  @keyframes confettiSide {
+    0% { transform: translateX(0) translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateX(var(--drift)) translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+
+<script>
+  // Colores vibrantes para el confeti
+  const CONFETTI_COLORES = [
+    '#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6b9d',
+    '#c084fc', '#fb923c', '#34d399', '#38bdf8', '#f472b6',
+    '#a78bfa', '#fbbf24', '#60a5fa', '#34d399', '#f87171'
+  ];
+
+  /**
+   * Lanza confetti en posiciones aleatorias
+   * @param {number} cantidad - Numero de particulas (default: 80)
+   * @param {boolean} usarEmojis - Incluir emojis entre las particulas (default: false)
+   */
+  function lanzarConfetti(cantidad, usarEmojis) {
+    cantidad = cantidad || 80;
+    usarEmojis = usarEmojis || false;
+    
+    // Explosion central
+    for (var i = 0; i < cantidad; i++) {
+      crearParticula(
+        window.innerWidth / 2 + (Math.random() - 0.5) * 200,
+        window.innerHeight / 3 + (Math.random() - 0.5) * 100,
+        usarEmojis && Math.random() < 0.2
+      );
+    }
+    
+    // Explosiones laterales (extra)
+    if (cantidad >= 50) {
+      setTimeout(function() {
+        for (var i = 0; i < cantidad / 3; i++) {
+          crearParticula(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight * 0.5,
+            usarEmojis && Math.random() < 0.15
+          );
+        }
+      }, 200);
+      
+      setTimeout(function() {
+        for (var i = 0; i < cantidad / 4; i++) {
+          crearParticula(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight * 0.4,
+            usarEmojis && Math.random() < 0.1
+          );
+        }
+      }, 400);
+    }
+  }
+
+  function crearParticula(x, y, esEmoji) {
+    var particula = document.createElement('div');
+    var color = CONFETTI_COLORES[Math.floor(Math.random() * CONFETTI_COLORES.length)];
+    var size = 6 + Math.random() * 10;
+    var duracion = 1.5 + Math.random() * 2;
+    var drift = (Math.random() - 0.5) * 300;
+    
+    particula.className = 'confetti-particle';
+    
+    if (esEmoji) {
+      particula.textContent = '✦';
+      particula.style.fontSize = (14 + Math.random() * 20) + 'px';
+      particula.style.color = color;
+      particula.style.background = 'transparent';
+    } else {
+      particula.style.width = size + 'px';
+      particula.style.height = size + 'px';
+      particula.style.background = color;
+      particula.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      particula.style.boxShadow = '0 0 6px ' + color + '80';
+    }
+    
+    particula.style.left = x + 'px';
+    particula.style.top = y + 'px';
+    particula.style.setProperty('--drift', drift + 'px');
+    particula.style.animation = 'confettiSide ' + duracion + 's cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+    particula.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+    
+    document.body.appendChild(particula);
+    
+    // Limpiar despues de la animacion
+    setTimeout(function() {
+      if (particula.parentNode) {
+        particula.parentNode.removeChild(particula);
+      }
+    }, duracion * 1000 + 500);
+  }
+
+  /**
+   * Lanza fuegos artificiales (confetti en rafagas)
+   * @param {number} rondas - Numero de rondas (default: 3)
+   */
+  function lanzarFuegosArtificiales(rondas) {
+    rondas = rondas || 3;
+    for (var r = 0; r < rondas; r++) {
+      setTimeout(function() {
+        var cantidad = 30 + Math.floor(Math.random() * 40);
+        for (var i = 0; i < cantidad; i++) {
+          crearParticula(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight * 0.6,
+            Math.random() < 0.25
+          );
+        }
+      }, r * 600);
+    }
+  }
+</script>

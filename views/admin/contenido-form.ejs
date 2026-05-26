@@ -1,0 +1,134 @@
+<div class="min-h-screen p-responsive-main animate-fade-in">
+  <div class="max-w-3xl mx-auto">
+
+    <!-- Header -->
+    <div class="mb-6 sm:mb-8 md:mb-10">
+      <div class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+        Gestor de Contenido
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">
+        <%= pregunta ? 'Editar Pregunta' : 'Nueva Pregunta' %>
+      </h1>
+      <p class="text-slate-500 mt-1 text-sm sm:text-base">
+        <%= pregunta ? 'Modifica los datos de la pregunta personalizada.' : 'Crea una nueva pregunta para tus actividades educativas.' %>
+      </p>
+    </div>
+
+    <!-- Mensaje de error -->
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4 mb-6 flex items-center gap-3">
+        <svg class="w-6 h-6 text-red-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="font-medium"><%= error %></span>
+      </div>
+    <% } %>
+
+    <!-- Formulario -->
+    <form action="<%= pregunta ? '/admin/contenido/editar/' + pregunta.id : '/admin/contenido/nueva' %>" method="POST"
+          class="bg-white rounded-2xl p-4 sm:p-6 lg:p-8 md:space-y-8 soft-shadow border border-slate-100 space-y-6">
+
+      <!-- Tipo de Pregunta -->
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">Tipo de Pregunta</label>
+        <select name="tipo" id="tipoSelect" required
+                class="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all text-lg font-medium"
+                onchange="toggleContinente()">
+          <% tipos.forEach(function(t) { %>
+            <option value="<%= t.valor %>" <%= pregunta && pregunta.tipo === t.valor ? 'selected' : '' %>>
+              <%= t.etiqueta %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+
+      <!-- Continente (solo para tipo 'continente') -->
+      <div id="continenteGroup" class="<%= pregunta && pregunta.tipo === 'continente' ? '' : 'hidden' %>">
+        <label class="block text-sm font-bold text-slate-700 mb-2">Continente</label>
+        <select name="continenteId"
+                class="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all text-lg font-medium">
+          <option value="">Seleccionar continente...</option>
+          <% continentes.forEach(function(c) { %>
+            <option value="<%= c.id %>" <%= pregunta && pregunta.continente_id === c.id ? 'selected' : '' %>>
+              <%= c.nombre %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+
+      <!-- Pregunta -->
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-2">Pregunta</label>
+        <textarea name="pregunta" rows="2" required
+                  class="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all text-lg resize-none"
+                  placeholder="Escribe la pregunta aquí..."><%= pregunta ? pregunta.pregunta : '' %></textarea>
+      </div>
+
+      <!-- Opciones -->
+      <div>
+        <label class="block text-sm font-bold text-slate-700 mb-3">Opciones de Respuesta</label>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-responsive-main">
+          <% for (var i = 0; i < 4; i++) { %>
+            <div class="flex items-center gap-3 p-3 rounded-xl border <%= pregunta && pregunta.respuesta_correcta === i ? 'border-emerald-300 bg-emerald-50/50' : 'border-slate-200' %>">
+              <input type="radio" name="respuestaCorrecta" value="<%= i %>" required
+                     <%= pregunta && pregunta.respuesta_correcta === i ? 'checked' : i === 0 && !pregunta ? 'checked' : '' %>
+                     class="w-5 h-5 text-emerald-500 focus:ring-emerald-400 flex-shrink-0">
+              <input type="text" name="opcion<%= i+1 %>" required
+                     value="<%= pregunta ? pregunta.opciones[i] : '' %>"
+                     placeholder="Opción <%= i+1 %>"
+                     class="flex-1 p-2.5 rounded-lg border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all"
+                     <%= i === 0 && !pregunta ? 'autofocus' : '' %>>
+            </div>
+          <% } %>
+        </div>
+        <p class="text-xs text-slate-400 mt-2 flex items-center gap-1">
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+          Selecciona el círculo de la opción correcta.
+        </p>
+      </div>
+
+      <!-- Configuración avanzada -->
+      <div class="border-t border-slate-100 pt-6">
+        <h3 class="text-lg font-bold text-slate-700 mb-4">Configuración Avanzada</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-responsive-fluid">
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">Puntos</label>
+            <input type="number" name="puntos" value="<%= pregunta ? pregunta.puntos : 10 %>" min="1" max="100"
+                   class="w-full p-3 rounded-xl border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-slate-700 mb-2">Tiempo Límite (seg)</label>
+            <input type="number" name="tiempoLimite" value="<%= pregunta ? pregunta.tiempo_limite : 30 %>" min="5" max="300"
+                   class="w-full p-3 rounded-xl border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+          </div>
+          <% if (pregunta) { %>
+            <div class="flex items-center gap-2 pt-6">
+              <input type="checkbox" name="activa" id="activa" <%= pregunta.activa == 1 ? 'checked' : '' %>
+                     class="w-5 h-5 text-indigo-500 focus:ring-indigo-400 rounded">
+              <label for="activa" class="text-sm font-medium text-slate-700">Pregunta Activa</label>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between pt-2 border-t border-slate-100 gap-3">
+        <a href="/admin/contenido"
+           class="bg-white hover:bg-slate-50 text-slate-600 font-bold py-3 px-6 rounded-xl border border-slate-200 transition-all text-center sm:text-left">
+          ← Cancelar
+        </a>
+        <button type="submit"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl transition-all soft-shadow flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <%= pregunta ? 'Guardar Cambios' : 'Crear Pregunta' %>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleContinente() {
+  var tipo = document.getElementById('tipoSelect').value;
+  document.getElementById('continenteGroup').classList.toggle('hidden', tipo !== 'continente');
+}
+</script>

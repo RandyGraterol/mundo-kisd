@@ -28,3 +28,12 @@ coverage/
 # Archivos temporales
 *.tmp
 *.temp
+
+# Nombre reservado de Windows (nul es un dispositivo del sistema)
+nul
+
+# Base de datos SQLite
+database/*.db
+database/*.db-wal
+database/*.db-shm
+database/*.db-journal

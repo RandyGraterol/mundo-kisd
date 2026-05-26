@@ -1,0 +1,37 @@
+<!-- Sistema de Iconos SVG Profesionales -->
+<!-- Incluir en layout.ejs para disponer de icono() en todas las vistas -->
+<script src="/js/iconos.js"></script>
+<script>
+window.icono = function(nombre, clase) {
+  var svg = ICONOS[nombre] || '';
+  if (!svg) return '<span class="' + (clase || '') + '"></span>';
+  if (clase) svg = svg.replace('<svg ', '<svg class="' + clase + '" ');
+  return svg;
+};
+
+// Auto-render: reemplaza <span class="icono-render" data-icono="trofeo">
+// con el SVG real de ICONOS al cargar la página
+// Soporta: data-icono (nombre del icono), data-clases (clases CSS), data-titulo (tooltip accesible)
+function renderizarIconos() {
+  document.querySelectorAll('.icono-render').forEach(function(el) {
+    var nombre = el.getAttribute('data-icono');
+    var clases = el.getAttribute('data-clases') || '';
+    var titulo = el.getAttribute('data-titulo');
+    if (nombre && ICONOS[nombre]) {
+      var svg = window.icono(nombre, clases);
+      // Si hay data-titulo, inyectar elemento <title> para accesibilidad
+      if (titulo && svg.indexOf('<svg ') === 0) {
+        svg = svg.replace('<svg ', '<svg role="img" aria-label="' + titulo.replace(/"/g, '&quot;') + '" ');
+        svg = svg.replace('>', '><title>' + titulo.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</title>');
+      }
+      el.outerHTML = svg;
+    }
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderizarIconos);
+} else {
+  renderizarIconos();
+}
+</script>

@@ -1,0 +1,155 @@
+<!-- Cronómetro Visual: Timer circular + barra de progreso -->
+<div id="cronometro-container" class="mb-6" style="display: none;">
+  <div class="flex items-center justify-center gap-8">
+    <!-- Círculo del cronómetro -->
+    <div class="relative w-24 h-24 flex-shrink-0" id="timer-circle">
+      <svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+        <!-- Círculo de fondo -->
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#e2e8f0" stroke-width="8"/>
+        <!-- Círculo de progreso -->
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="8" 
+                stroke-linecap="round" stroke-dasharray="263.89" stroke-dashoffset="0"
+                id="timer-progress"/>
+      </svg>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span id="timer-texto" class="text-3xl font-black text-slate-800">30</span>
+      </div>
+    </div>
+
+    <!-- Barra de progreso horizontal -->
+    <div class="flex-1">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Tiempo restante</span>
+        <span id="timer-bar-texto" class="text-sm font-bold text-slate-600">30s</span>
+      </div>
+      <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+        <div id="timer-barra" class="h-full rounded-full transition-all duration-300 ease-linear" 
+             style="width: 100%; background: linear-gradient(90deg, #3b82f6, #60a5fa);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #timer-circle {
+    filter: drop-shadow(0 4px 6px -1px rgba(0,0,0,0.1));
+  }
+  
+  /* Animación de pulso cuando está por acabarse */
+  @keyframes timerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  
+  .timer-critical #timer-texto {
+    animation: timerPulse 0.8s ease-in-out infinite;
+  }
+  
+  /* Transición suave del color */
+  #timer-barra {
+    transition: width 0.3s ease-linear, background 0.5s ease;
+  }
+  
+  #timer-progress {
+    transition: stroke-dashoffset 0.3s ease-linear, stroke 0.5s ease;
+  }
+</style>
+
+<script>
+  // Variables del cronómetro
+  let tiempoRestante = <%= typeof tiempoLimite !== 'undefined' ? tiempoLimite : 30 %>;
+  let tiempoTotal = tiempoRestante;
+  let intervalo = null;
+  let cronometroActivo = false;
+  const CIRCUNFERENCIA = 263.89; // 2 * PI * 42
+
+  // Inicializar cronómetro (llamado por el modal)
+  function iniciarCronometro() {
+    if (cronometroActivo) return;
+    cronometroActivo = true;
+    
+    const container = document.getElementById('cronometro-container');
+    const texto = document.getElementById('timer-texto');
+    const barra = document.getElementById('timer-barra');
+    const barraTexto = document.getElementById('timer-bar-texto');
+    const progress = document.getElementById('timer-progress');
+    
+    if (container) container.style.display = 'block';
+    
+    actualizarDisplay(texto, barra, barraTexto, progress);
+    
+    intervalo = setInterval(function() {
+      tiempoRestante--;
+      actualizarDisplay(texto, barra, barraTexto, progress);
+      
+      if (tiempoRestante <= 0) {
+        clearInterval(intervalo);
+        cronometroActivo = false;
+        // Sonido de tiempo agotado
+        if (typeof SonidosMundoKids !== 'undefined') {
+          SonidosMundoKids.tiempoAgotado();
+        }
+        // Auto-enviar formulario
+        const form = document.getElementById('form-actividad');
+        if (form) {
+          form.submit();
+        }
+      }
+    }, 1000);
+  }
+
+  function actualizarDisplay(texto, barra, barraTexto, progress) {
+    const porcentaje = (tiempoRestante / tiempoTotal) * 100;
+    const circle = document.getElementById('timer-circle');
+    
+    // Actualizar números
+    texto.textContent = tiempoRestante;
+    if (barraTexto) barraTexto.textContent = tiempoRestante + 's';
+    
+    // Actualizar barra
+    if (barra) barra.style.width = porcentaje + '%';
+    
+    // Actualizar círculo SVG
+    if (progress) {
+      const offset = CIRCUNFERENCIA - (CIRCUNFERENCIA * tiempoRestante / tiempoTotal);
+      progress.style.strokeDashoffset = offset;
+    }
+    
+    // Cambiar colores según tiempo restante
+    if (circle) {
+      circle.classList.remove('timer-critical');
+    }
+    
+    if (porcentaje <= 25) {
+      // Rojo - crítico
+      if (barra) barra.style.background = 'linear-gradient(90deg, #ef4444, #f87171)';
+      if (progress) progress.style.stroke = '#ef4444';
+      if (texto) texto.className = 'text-3xl font-black text-red-600';
+      if (circle) circle.classList.add('timer-critical');
+    } else if (porcentaje <= 50) {
+      // Amarillo - advertencia
+      if (barra) barra.style.background = 'linear-gradient(90deg, #f59e0b, #fbbf24)';
+      if (progress) progress.style.stroke = '#f59e0b';
+      if (texto) texto.className = 'text-3xl font-black text-amber-600';
+    } else {
+      // Azul - normal
+      if (barra) barra.style.background = 'linear-gradient(90deg, #3b82f6, #60a5fa)';
+      if (progress) progress.style.stroke = '#3b82f6';
+      if (texto) texto.className = 'text-3xl font-black text-slate-800';
+    }
+  }
+
+  // Función para detener el cronómetro (cuando se responde)
+  function detenerCronometro() {
+    if (intervalo) {
+      clearInterval(intervalo);
+      intervalo = null;
+    }
+    cronometroActivo = false;
+  }
+
+  // Limpiar al cambiar de página
+  window.addEventListener('beforeunload', function() {
+    if (intervalo) clearInterval(intervalo);
+  });
+</script>

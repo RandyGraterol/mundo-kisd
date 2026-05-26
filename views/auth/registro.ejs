@@ -1,0 +1,550 @@
+<%- include('../partials/header') %>
+
+<div class="auth-wrapper w-full h-screen max-h-screen bg-white flex flex-col md:flex-row-reverse overflow-hidden">
+
+  <!-- ═══ LADO DERECHO (visualmente): Panel informativo (reemplaza SVG) ═══ -->
+  <div class="hidden md:flex md:w-2/5 lg:w-1/2 flex-col items-center justify-center p-6 sm:p-8 lg:p-10 relative overflow-hidden auth-slide-right">
+    <div class="absolute top-10 right-10 w-64 h-64 bg-emerald-200/20 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 left-10 w-80 h-80 bg-teal-200/20 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-green-100/20 rounded-full blur-3xl"></div>
+
+    <div class="relative z-10 max-w-xs text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white/80 rounded-2xl shadow-md mb-5 text-emerald-500">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <h2 class="text-xl font-bold text-gray-800 mb-1">Mundo Kids</h2>
+      <p class="text-sm text-gray-500 mb-6">Aprende geografía jugando</p>
+
+      <div class="space-y-4 text-left">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5 text-emerald-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+          </div>
+          <div><p class="text-sm font-semibold text-gray-700">Explora 7 continentes</p><p class="text-xs text-gray-400">Viaja por el mundo sin salir de casa</p></div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center shrink-0 mt-0.5 text-green-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div><p class="text-sm font-semibold text-gray-700">Retos interactivos</p><p class="text-xs text-gray-400">Trivia, sopas de letras, puzzles y memoria</p></div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center shrink-0 mt-0.5 text-teal-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 9 7 12 7s5-3 7.5-2.5a2.5 2.5 0 0 1 0 5H18"/><path d="M18 15h1.5a2.5 2.5 0 0 1 0 5C17 20 15 17 12 17s-5 3-7.5 2.5a2.5 2.5 0 0 1 0-5H6"/></svg>
+          </div>
+          <div><p class="text-sm font-semibold text-gray-700">Tu progreso guardado</p><p class="text-xs text-gray-400">Insignias y estadísticas siempre contigo</p></div>
+        </div>
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center shrink-0 mt-0.5 text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div><p class="text-sm font-semibold text-gray-700">Alumnos y profesores</p><p class="text-xs text-gray-400">Cada quien con su experiencia</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ LADO IZQUIERDO (visualmente): Formulario de Registro ═══ -->
+  <div class="w-full md:w-3/5 lg:w-1/2 flex flex-col justify-center p-responsive-main lg:p-8 xl:p-10 min-h-0 auth-fade-up" style="animation-delay: 0.15s">
+    <div class="w-full max-w-sm sm:max-w-md md:max-w-lg mx-auto flex flex-col min-h-0">
+
+      <!-- Logo y título (no se comprime) -->
+      <div class="text-center mb-4 shrink-0">
+        <div class="md:hidden inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-2xl text-emerald-500 shadow-inner mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h1 class="text-xl font-bold text-gray-800 mb-1">¡Únete a la aventura!</h1>
+        <p class="text-gray-400 text-sm">Crea tu cuenta para explorar el mundo</p>
+      </div>
+
+      <!-- Card del formulario (scroll interno si sobra contenido) -->
+      <div class="bg-white rounded-2xl p-6 sm:p-8 flex-1 min-h-0 overflow-y-auto">
+
+        <!-- Error alert -->
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="bg-red-50 text-red-600 px-4 py-3 rounded-xl mb-6 text-sm font-medium border border-red-100 flex items-center gap-2.5" id="error-alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span><%= error %></span>
+            <button type="button" onclick="this.parentElement.remove()" class="ml-auto text-red-400 hover:text-red-600 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        <% } %>
+
+        <form action="/auth/registro" method="POST" class="space-y-4" id="registroForm" novalidate>
+
+          <!-- Nombre completo -->
+          <div>
+            <label for="nombreCompleto" class="block text-sm font-semibold text-gray-700 mb-1.5">
+              Nombre completo
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <input
+                type="text"
+                id="nombreCompleto"
+                name="nombreCompleto"
+                required
+                placeholder="Ej: María Pérez"
+                autocomplete="name"
+                class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-gray-700 placeholder:text-gray-400"
+              >
+            </div>
+            <p class="text-red-500 text-xs mt-1 hidden" id="nombreCompleto-error">Por favor ingresa tu nombre completo</p>
+          </div>
+
+          <!-- Nombre de usuario -->
+          <div>
+            <label for="nombreUsuario" class="block text-sm font-semibold text-gray-700 mb-1.5">
+              Nombre de usuario
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+              </div>
+              <input
+                type="text"
+                id="nombreUsuario"
+                name="nombreUsuario"
+                required
+                placeholder="Ej: maria123"
+                autocomplete="username"
+                class="w-full pl-11 pr-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-gray-700 placeholder:text-gray-400"
+              >
+            </div>
+            <p class="text-red-500 text-xs mt-1 hidden" id="nombreUsuario-error">Por favor ingresa un nombre de usuario</p>
+          </div>
+
+          <!-- Contraseña -->
+          <div>
+            <label for="contrasena" class="block text-sm font-semibold text-gray-700 mb-1.5">
+              Contraseña
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <input
+                type="password"
+                id="contrasena"
+                name="contrasena"
+                required
+                minlength="4"
+                placeholder="Mínimo 4 caracteres"
+                autocomplete="new-password"
+                class="w-full pl-11 pr-12 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-gray-700 placeholder:text-gray-400"
+              >
+              <button
+                type="button"
+                id="togglePassword"
+                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                tabindex="-1"
+                aria-label="Mostrar u ocultar contraseña"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+              </button>
+            </div>
+            <p class="text-red-500 text-xs mt-1 hidden" id="contrasena-error">La contraseña debe tener al menos 4 caracteres</p>
+          </div>
+
+          <!-- Confirmar contraseña -->
+          <div>
+            <label for="confirmarContrasena" class="block text-sm font-semibold text-gray-700 mb-1.5">
+              Confirmar contraseña
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <input
+                type="password"
+                id="confirmarContrasena"
+                name="confirmarContrasena"
+                required
+                placeholder="Repite la contraseña"
+                autocomplete="new-password"
+                class="w-full pl-11 pr-12 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-gray-700 placeholder:text-gray-400"
+              >
+              <button
+                type="button"
+                id="toggleConfirmPassword"
+                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                tabindex="-1"
+                aria-label="Mostrar u ocultar confirmación"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-open-confirm" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-closed-confirm"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+              </button>
+            </div>
+            <p class="text-red-500 text-xs mt-1 hidden" id="confirmar-error">Las contraseñas no coinciden</p>
+          </div>
+
+          <!-- Rol (Alumno / Profesor) -->
+          <div>
+            <label for="rol" class="block text-sm font-semibold text-gray-700 mb-1.5">
+              Me quiero registrar como
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <select
+                id="rol"
+                name="rol"
+                required
+                class="w-full pl-11 pr-10 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-emerald-400 focus:bg-white focus:ring-2 focus:ring-emerald-100 outline-none transition-all text-gray-700 appearance-none cursor-pointer"
+              >
+                <option value="" disabled selected>Selecciona tu rol</option>
+                <option value="alumno">🧒 Alumno — Jugar y aprender</option>
+                <option value="profesor">👨‍🏫 Profesor — Gestionar contenido</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <p class="text-red-500 text-xs mt-1 hidden" id="rol-error">Por favor selecciona un rol</p>
+          </div>
+
+          <!-- Género - Selección de Avatar -->
+          <div class="space-y-3">
+            <p class="text-gray-600 font-semibold text-center text-sm">¿Quién eres?</p>
+            <div class="flex justify-center gap-5 sm:gap-8">
+
+              <!-- Niño avatar -->
+              <label class="avatar-option group cursor-pointer" id="avatar-nino">
+                <input type="radio" name="genero" value="masculino" required class="sr-only">
+                <div class="flex flex-col items-center gap-2 transition-all duration-200">
+                  <div class="w-20 h-20 rounded-2xl bg-gray-50 shadow-sm flex items-center justify-center border-2 border-transparent transition-all duration-200 group-hover:border-sky-300 group-hover:bg-sky-50 group-[.selected]:border-sky-500 group-[.selected]:bg-sky-50 group-[.selected]:shadow-md p-2">
+                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar niño explorador" class="w-full h-full drop-shadow-sm group-[.selected]:scale-105 transition-transform duration-200">
+                      <title>Avatar niño explorador</title>
+                      <ellipse cx="60" cy="112" rx="28" ry="4" fill="rgba(0,0,0,0.06)"/>
+                      <path d="M40 68 L34 92 Q34 96 38 96 L82 96 Q86 96 86 92 L80 68" fill="#3B82F6"/>
+                      <path d="M46 66 L40 72 Q40 74 44 74 L76 74 Q80 74 80 72 L74 66Z" fill="#2563EB"/>
+                      <rect x="52" y="52" width="16" height="14" rx="3" fill="#FDE68A"/>
+                      <circle cx="60" cy="36" r="26" fill="#FDE68A"/>
+                      <path d="M34 36 C34 14 48 10 60 10 C72 10 86 14 86 36 C86 30 80 20 72 16 L48 16 C40 20 34 30 34 36Z" fill="#78350F"/>
+                      <path d="M34 36 C32 40 33 46 36 50" stroke="#78350F" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <path d="M86 36 C88 40 87 46 84 50" stroke="#78350F" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <path d="M42 30 Q48 27 54 30" stroke="#92400E" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <path d="M66 30 Q72 27 78 30" stroke="#92400E" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <ellipse cx="48" cy="37" rx="4.5" ry="5.5" fill="white"/>
+                      <ellipse cx="72" cy="37" rx="4.5" ry="5.5" fill="white"/>
+                      <circle cx="49" cy="37" r="3" fill="#1F2937"/>
+                      <circle cx="73" cy="37" r="3" fill="#1F2937"/>
+                      <circle cx="50" cy="35.5" r="1.2" fill="white"/>
+                      <circle cx="74" cy="35.5" r="1.2" fill="white"/>
+                      <path d="M50 47 Q60 54 70 47" stroke="#92400E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <ellipse cx="42" cy="44" rx="5" ry="3" fill="#FCA5A5" opacity="0.35"/>
+                      <ellipse cx="78" cy="44" rx="5" ry="3" fill="#FCA5A5" opacity="0.35"/>
+                      <circle cx="60" cy="82" r="6" fill="white" opacity="0.3"/>
+                      <path d="M57.5 79.5 L60 78 L62.5 79.5 L60 86Z" fill="white" opacity="0.5"/>
+                    </svg>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-sky-400 opacity-0 group-[.selected]:opacity-100 transition-opacity duration-200"></span>
+                    <p class="text-sm font-bold text-gray-500 group-[.selected]:text-sky-600 transition-colors duration-200">Explorador</p>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Niña avatar -->
+              <label class="avatar-option group cursor-pointer" id="avatar-nina">
+                <input type="radio" name="genero" value="femenino" required class="sr-only">
+                <div class="flex flex-col items-center gap-2 transition-all duration-200">
+                  <div class="w-20 h-20 rounded-2xl bg-gray-50 shadow-sm flex items-center justify-center border-2 border-transparent transition-all duration-200 group-hover:border-pink-300 group-hover:bg-pink-50 group-[.selected]:border-pink-400 group-[.selected]:bg-pink-50 group-[.selected]:shadow-md p-2">
+                    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Avatar niña exploradora" class="w-full h-full drop-shadow-sm group-[.selected]:scale-105 transition-transform duration-200">
+                      <title>Avatar niña exploradora</title>
+                      <ellipse cx="60" cy="112" rx="28" ry="4" fill="rgba(0,0,0,0.06)"/>
+                      <path d="M40 68 L34 92 Q34 96 38 96 L82 96 Q86 96 86 92 L80 68" fill="#EC4899"/>
+                      <path d="M46 66 L40 72 Q40 74 44 74 L76 74 Q80 74 80 72 L74 66Z" fill="#DB2777"/>
+                      <rect x="52" y="52" width="16" height="14" rx="3" fill="#FDE68A"/>
+                      <circle cx="60" cy="36" r="26" fill="#FDE68A"/>
+                      <path d="M34 36 C34 14 48 10 60 10 C72 10 86 14 86 36 L86 50 Q86 62 80 66 L78 62 Q84 56 84 48 L84 36 C84 16 72 12 60 12 C48 12 36 16 36 36 L36 48 Q36 56 42 62 L40 66 Q34 62 34 50Z" fill="#78350F"/>
+                      <path d="M34 50 Q30 68 32 82" stroke="#78350F" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                      <path d="M86 50 Q90 68 88 82" stroke="#78350F" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                      <path d="M36 50 C32 46 28 50 32 54" fill="#F472B6"/>
+                      <path d="M84 50 C88 46 92 50 88 54" fill="#F472B6"/>
+                      <path d="M42 30 Q48 27 54 30" stroke="#92400E" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <path d="M66 30 Q72 27 78 30" stroke="#92400E" stroke-width="2" fill="none" stroke-linecap="round"/>
+                      <ellipse cx="48" cy="37" rx="4.5" ry="5.5" fill="white"/>
+                      <ellipse cx="72" cy="37" rx="4.5" ry="5.5" fill="white"/>
+                      <circle cx="49" cy="37" r="3" fill="#1F2937"/>
+                      <circle cx="73" cy="37" r="3" fill="#1F2937"/>
+                      <circle cx="50" cy="35.5" r="1.5" fill="white"/>
+                      <circle cx="74" cy="35.5" r="1.5" fill="white"/>
+                      <path d="M42 32 L44 33.5" stroke="#78350F" stroke-width="1.5" stroke-linecap="round"/>
+                      <path d="M78 32 L76 33.5" stroke="#78350F" stroke-width="1.5" stroke-linecap="round"/>
+                      <path d="M50 47 Q60 54 70 47" stroke="#92400E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      <ellipse cx="42" cy="44" rx="5" ry="3" fill="#FCA5A5" opacity="0.35"/>
+                      <ellipse cx="78" cy="44" rx="5" ry="3" fill="#FCA5A5" opacity="0.35"/>
+                      <circle cx="60" cy="82" r="6" fill="white" opacity="0.3"/>
+                      <path d="M60 78.5 L61.5 81 L64.5 81.5 L62 83.5 L63 86.5 L60 84.5 L57 86.5 L58 83.5 L55.5 81.5 L58.5 81Z" fill="white" opacity="0.5"/>
+                    </svg>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-pink-400 opacity-0 group-[.selected]:opacity-100 transition-opacity duration-200"></span>
+                    <p class="text-sm font-bold text-gray-500 group-[.selected]:text-pink-500 transition-colors duration-200">Exploradora</p>
+                  </div>
+                </div>
+              </label>
+
+            </div>
+            <p class="text-red-500 text-xs text-center hidden" id="avatar-error">Por favor selecciona tu avatar</p>
+          </div>
+
+          <!-- Botones lado a lado: Crear cuenta + Ya tengo cuenta -->
+          <div class="flex flex-col sm:flex-row gap-3 mt-4">
+            <button type="submit"
+              class="flex-1 py-3 px-6 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold text-base rounded-xl hover:from-emerald-600 hover:to-green-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2.5"
+              id="btnRegistrar"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>¡Crear cuenta y jugar!</span>
+            </button>
+
+            <a href="/auth/login"
+              class="flex-1 py-3 px-6 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-base rounded-xl hover:from-sky-600 hover:to-blue-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              <span>Ya tengo cuenta</span>
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Volver al inicio (no se comprime) -->
+      <div class="text-center mt-4 shrink-0">
+        <a href="/" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-gray-600 text-sm transition-colors group">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-0.5 transition-transform"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+          Volver al inicio
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .avatar-option {
+    cursor: pointer;
+  }
+</style>
+
+<style>
+  /* ═══ EVITAR SCROLL DEL BODY — solo el formulario tiene scroll ═══ */
+  html, body {
+    overflow: hidden !important;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .auth-wrapper {
+    height: 100dvh;
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .auth-slide-right {
+    animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .auth-fade-up {
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .auth-spin-slow {
+    animation: spinSlow 60s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .auth-slide-right, .auth-fade-up, .auth-spin-slow {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  function setupToggle(inputId, toggleId, openId, closedId) {
+    const passInput = document.getElementById(inputId);
+    const toggleBtn = document.getElementById(toggleId);
+    const eyeOpen = document.getElementById(openId);
+    const eyeClosed = document.getElementById(closedId);
+
+    if (toggleBtn && passInput && eyeOpen && eyeClosed) {
+      eyeOpen.classList.add('hidden');
+      eyeClosed.classList.remove('hidden');
+
+      toggleBtn.addEventListener('click', function() {
+        const isPassword = passInput.type === 'password';
+        passInput.type = isPassword ? 'text' : 'password';
+        eyeOpen.classList.toggle('hidden');
+        eyeClosed.classList.toggle('hidden');
+      });
+    }
+  }
+
+  setupToggle('contrasena', 'togglePassword', 'eye-open', 'eye-closed');
+  setupToggle('confirmarContrasena', 'toggleConfirmPassword', 'eye-open-confirm', 'eye-closed-confirm');
+
+  const form = document.getElementById('registroForm');
+
+  const rolSelect = document.getElementById('rol');
+  const rolError = document.getElementById('rol-error');
+
+  const fields = [
+    { input: document.getElementById('nombreCompleto'), error: document.getElementById('nombreCompleto-error'), validar: function(v) { return v.trim().length > 0; }, mensaje: 'Por favor ingresa tu nombre completo' },
+    { input: document.getElementById('nombreUsuario'), error: document.getElementById('nombreUsuario-error'), validar: function(v) { return v.trim().length > 0; }, mensaje: 'Por favor ingresa un nombre de usuario' },
+    { input: document.getElementById('contrasena'), error: document.getElementById('contrasena-error'), validar: function(v) { return v.length >= 4; }, mensaje: 'La contraseña debe tener al menos 4 caracteres' },
+    { input: document.getElementById('confirmarContrasena'), error: document.getElementById('confirmar-error'), validar: function(v) {
+      const pass = document.getElementById('contrasena').value;
+      return v.length > 0 && v === pass;
+    }, mensaje: 'Las contraseñas no coinciden' }
+  ];
+
+  function limpiarError(input, errorEl) {
+    if (!input || !errorEl) return;
+    input.classList.remove('border-red-300', 'bg-red-50');
+    input.classList.add('border-gray-200', 'bg-gray-50');
+    errorEl.classList.add('hidden');
+  }
+
+  function mostrarError(input, errorEl) {
+    if (!input || !errorEl) return;
+    input.classList.remove('border-gray-200', 'bg-gray-50');
+    input.classList.add('border-red-300', 'bg-red-50');
+    errorEl.classList.remove('hidden');
+  }
+
+  fields.forEach(function(f) {
+    if (f.input) {
+      f.input.addEventListener('input', function() {
+        if (f.validar(this.value)) {
+          limpiarError(this, f.error);
+        }
+        if (f.input === document.getElementById('confirmarContrasena') || f.input === document.getElementById('contrasena')) {
+          const pass = document.getElementById('contrasena');
+          const confirm = document.getElementById('confirmarContrasena');
+          if (confirm.value.length > 0) {
+            if (pass.value === confirm.value && pass.value.length >= 4) {
+              limpiarError(confirm, document.getElementById('confirmar-error'));
+            } else {
+              mostrarError(confirm, document.getElementById('confirmar-error'));
+            }
+          }
+        }
+      });
+      f.input.addEventListener('focus', function() {
+        if (f.validar(this.value)) limpiarError(this, f.error);
+      });
+    }
+  });
+
+  if (rolSelect && rolError) {
+    rolSelect.addEventListener('change', function() {
+      if (this.value) {
+        this.classList.remove('border-red-300', 'bg-red-50');
+        this.classList.add('border-gray-200', 'bg-gray-50');
+        rolError.classList.add('hidden');
+      }
+    });
+    rolSelect.addEventListener('focus', function() {
+      if (this.value) {
+        this.classList.remove('border-red-300', 'bg-red-50');
+        this.classList.add('border-gray-200', 'bg-gray-50');
+        rolError.classList.add('hidden');
+      }
+    });
+  }
+
+  const avatarNino = document.getElementById('avatar-nino');
+  const avatarNina = document.getElementById('avatar-nina');
+  const radioNino = avatarNino ? avatarNino.querySelector('input[type="radio"]') : null;
+  const radioNina = avatarNina ? avatarNina.querySelector('input[type="radio"]') : null;
+  const avatarError = document.getElementById('avatar-error');
+
+  function seleccionarAvatar(el, radio) {
+    if (avatarNino) avatarNino.classList.remove('selected');
+    if (avatarNina) avatarNina.classList.remove('selected');
+    el.classList.add('selected');
+    radio.checked = true;
+    if (avatarError) avatarError.classList.add('hidden');
+  }
+
+  if (avatarNino && radioNino) {
+    avatarNino.addEventListener('click', function() { seleccionarAvatar(this, radioNino); });
+  }
+  if (avatarNina && radioNina) {
+    avatarNina.addEventListener('click', function() { seleccionarAvatar(this, radioNina); });
+  }
+
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      let valido = true;
+      let primerError = null;
+
+      fields.forEach(function(f) {
+        if (!f.input) return;
+        if (!f.validar(f.input.value)) {
+          mostrarError(f.input, f.error);
+          valido = false;
+          if (!primerError) primerError = f.input;
+        } else {
+          limpiarError(f.input, f.error);
+        }
+      });
+
+      if ((!radioNino || !radioNino.checked) && (!radioNina || !radioNina.checked)) {
+        if (avatarError) avatarError.classList.remove('hidden');
+        valido = false;
+        if (!primerError && avatarNino) primerError = avatarNino;
+      } else {
+        if (avatarError) avatarError.classList.add('hidden');
+      }
+
+      if (rolSelect && !rolSelect.value) {
+        rolSelect.classList.remove('border-gray-200', 'bg-gray-50');
+        rolSelect.classList.add('border-red-300', 'bg-red-50');
+        if (rolError) rolError.classList.remove('hidden');
+        valido = false;
+        if (!primerError) primerError = rolSelect;
+      } else {
+        if (rolSelect) {
+          rolSelect.classList.remove('border-red-300', 'bg-red-50');
+          rolSelect.classList.add('border-gray-200', 'bg-gray-50');
+        }
+        if (rolError) rolError.classList.add('hidden');
+      }
+
+      if (!valido) {
+        e.preventDefault();
+        if (primerError) primerError.focus();
+      }
+    });
+  }
+
+  const errorAlert = document.getElementById('error-alert');
+  if (errorAlert) {
+    setTimeout(function() {
+      if (errorAlert.parentElement) {
+        errorAlert.style.transition = 'opacity 0.5s ease';
+        errorAlert.style.opacity = '0';
+        setTimeout(function() {
+          if (errorAlert.parentElement) errorAlert.remove();
+        }, 500);
+      }
+    }, 6000);
+  }
+})();
+</script>
+
+<%- include('../partials/footer') %>

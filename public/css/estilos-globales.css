@@ -44,6 +44,10 @@ body {
   animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.animate-fade-in-fast {
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .animate-slide-in {
   animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -113,11 +117,372 @@ p, li, span {
   h3 { font-size: 1.5rem; }
 }
 
+/* Responsive: pantallas pequeñas */
+@media (max-width: 640px) {
+  .container-padding {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .card-padding {
+    padding: 1.5rem !important;
+  }
+  .grid-gap-sm {
+    gap: 0.75rem !important;
+  }
+  .text-responsive-xl {
+    font-size: 1.75rem !important;
+  }
+  .text-responsive-2xl {
+    font-size: 1.5rem !important;
+  }
+  .text-responsive-3xl {
+    font-size: 1.875rem !important;
+  }
+  .text-responsive-4xl {
+    font-size: 2rem !important;
+  }
+  .text-responsive-5xl {
+    font-size: 2.25rem !important;
+  }
+  .gap-responsive {
+    gap: 0.75rem !important;
+  }
+  .p-responsive {
+    padding: 1rem !important;
+  }
+  .px-responsive {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  .py-responsive {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-padding-md {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  .card-padding-md {
+    padding: 1.75rem !important;
+  }
+  .grid-gap-md {
+    gap: 1rem !important;
+  }
+}
+
+/* Tablas responsive con scroll horizontal */
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.responsive-table table {
+  min-width: 600px;
+}
+
+/* Ajustes para inputs en móvil */
+@media (max-width: 640px) {
+  input, select, textarea, button {
+    font-size: 16px !important; /* Evita zoom en iOS */
+  }
+}
+
+/* Contenedores con max-width responsivo */
+.container-responsive {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Stack vertical en móvil para flex */
+@media (max-width: 640px) {
+  .flex-mobile-col {
+    flex-direction: column !important;
+  }
+  .flex-mobile-wrap {
+    flex-wrap: wrap !important;
+  }
+  .w-full-mobile {
+    width: 100% !important;
+  }
+  .text-center-mobile {
+    text-align: center !important;
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+/* Mejora de touch en móvil */
+@media (hover: none) and (pointer: coarse) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  button, .btn, a[class*="bg-"] {
+    min-height: 44px;
+  }
+}
+
+/* Animación reducida para preferencia de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Mejorar accesibilidad con focus visible profesional */
 button:focus, a:focus, input:focus {
   outline: 2px solid #38bdf8; /* Sky 400 */
   outline-offset: 2px;
 }
+
+/* Asegurar fondo blanco en todos los contenedores anidados */
+html, body {
+  background-color: #ffffff !important;
+}
+
+body::before {
+  display: none !important;
+}
+
+/* Glassmorphism refinado para fondo blanco */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Glassmorphism simplificado en móvil (sin blur para rendimiento) */
+@media (max-width: 640px) {
+  .glass-effect {
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* Estilos del modal de atención */
+#modal-atencion {
+  animation: none;
+}
+
+#modal-contenido {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Estilos del cronómetro */
+#cronometro-container {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* ════════════════════════════════════════════
+   UTILITARIAS RESPONSIVE
+   Reemplazan patrones Tailwind repetitivos
+   (p-4 sm:p-6 md:p-8, gap-3 sm:gap-4, etc.)
+   ════════════════════════════════════════════ */
+
+/* ── PADDING FULL ── */
+
+/* p-4 → sm:p-6 → md:p-8 (contenedores principales)  — 16 ocurrencias */
+.p-responsive-main {
+  padding: 1rem;
+}
+@media (min-width: 640px) {
+  .p-responsive-main { padding: 1.5rem; }
+}
+@media (min-width: 768px) {
+  .p-responsive-main { padding: 2rem; }
+}
+
+/* p-4 → sm:p-5 → md:p-6 (tarjetas)  — 5 ocurrencias */
+.p-responsive-card {
+  padding: 1rem;
+}
+@media (min-width: 640px) {
+  .p-responsive-card { padding: 1.25rem; }
+}
+@media (min-width: 768px) {
+  .p-responsive-card { padding: 1.5rem; }
+}
+
+/* ── PADDING HORIZONTAL ── */
+
+/* px-3 → sm:px-4 (compacto)  — 14 ocurrencias */
+.px-responsive-main {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+@media (min-width: 640px) {
+  .px-responsive-main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* px-5 → sm:px-6 (mediano)  — 9 ocurrencias */
+.px-responsive-md {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+@media (min-width: 640px) {
+  .px-responsive-md {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* px-4 → sm:px-5 (tarjetas)  — 6 ocurrencias */
+.px-responsive-card {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .px-responsive-card {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+/* ── PADDING VERTICAL ── */
+
+/* py-3 → sm:py-4 — 8 ocurrencias */
+.py-responsive-main {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+@media (min-width: 640px) {
+  .py-responsive-main {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+/* ── GAPS (sm breakpoint) ── */
+
+/* gap-3 → sm:gap-4 (base)  — 11 ocurrencias */
+.gap-responsive-main {
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .gap-responsive-main { gap: 1rem; }
+}
+
+/* gap-2 → sm:gap-3 (estrecho)  — 5 ocurrencias */
+.gap-responsive-sm {
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .gap-responsive-sm { gap: 0.75rem; }
+}
+
+/* gap-4 → sm:gap-5 (mediano)  — 8 ocurrencias */
+.gap-responsive-md {
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .gap-responsive-md { gap: 1.25rem; }
+}
+
+/* ── GAPS (md breakpoint) ── */
+
+/* gap-4 → md:gap-5 (escritorio)  — 8 ocurrencias */
+.gap-responsive-desk {
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .gap-responsive-desk { gap: 1.25rem; }
+}
+
+/* gap-6 → md:gap-8 (escritorio grande)  — 5 ocurrencias */
+.gap-responsive-desk-lg {
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .gap-responsive-desk-lg { gap: 2rem; }
+}
+
+/* ── GAPS 3 NIVELES ── */
+
+/* gap-4 → sm:gap-5 → md:gap-6  — 3 ocurrencias */
+.gap-responsive-fluid {
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .gap-responsive-fluid { gap: 1.25rem; }
+}
+@media (min-width: 768px) {
+  .gap-responsive-fluid { gap: 1.5rem; }
+}
+
+/* ── SPACE-Y ── */
+
+/* space-y-4 → md:space-y-6  — 3 ocurrencias */
+.space-y-responsive > * + * {
+  margin-top: 1rem;
+}
+@media (min-width: 768px) {
+  .space-y-responsive > * + * { margin-top: 1.5rem; }
+}
+
+/* ── MARGIN ── */
+
+/* mb-6 → md:mb-8  — 3 ocurrencias */
+.mb-responsive {
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+  .mb-responsive { margin-bottom: 2rem; }
+}
+
+/* ── TEXT SIZE ── */
+
+/* text-base → sm:text-lg → md:text-xl (títulos pequeños)  — 2 ocurrencias */
+.text-responsive-title {
+  font-size: 1rem;
+}
+@media (min-width: 640px) {
+  .text-responsive-title { font-size: 1.125rem; }
+}
+@media (min-width: 768px) {
+  .text-responsive-title { font-size: 1.25rem; }
+}
+
+/* text-lg → sm:text-xl → md:text-2xl (subtítulos)  — 2 ocurrencias */
+.text-responsive-subtitle {
+  font-size: 1.125rem;
+}
+@media (min-width: 640px) {
+  .text-responsive-subtitle { font-size: 1.25rem; }
+}
+@media (min-width: 768px) {
+  .text-responsive-subtitle { font-size: 1.5rem; }
+}
+
 
 /* Loader elegante */
 .loader {
