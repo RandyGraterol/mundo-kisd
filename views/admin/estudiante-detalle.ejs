@@ -1,0 +1,256 @@
+<style>
+  [data-theme="dark"] .det-breadcrumb { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-breadcrumb a { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-breadcrumb a:hover { color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-breadcrumb span { color: #64748b !important; }
+  [data-theme="dark"] .det-avatar-m { background: rgba(59,130,246,0.2) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .det-avatar-f { background: rgba(236,72,153,0.2) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .det-name { color: #f1f5f9 !important; }
+  [data-theme="dark"] .det-username { color: #64748b !important; }
+  [data-theme="dark"] .det-dot { background-color: #475569 !important; }
+  [data-theme="dark"] .det-gender-m { background: rgba(59,130,246,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .det-gender-f { background: rgba(236,72,153,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .det-gender-m svg, [data-theme="dark"] .det-gender-f svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-register-date { color: #64748b !important; }
+  [data-theme="dark"] .det-btn-back { background-color: #1e293b !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .det-btn-back:hover { background-color: #0f172a !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-btn-back svg { color: #64748b !important; }
+
+  @media print {
+    nav, footer, .det-btn-back, .det-breadcrumb { display: none !important; }
+    body { background: white !important; }
+    .det-card, .det-stat-card, .det-progress-row, .det-activity-row, .det-activity-summary { break-inside: avoid; }
+  }
+  [data-theme="dark"] .det-stat-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .det-stat-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-stat-value { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-stat-value svg { color: #64748b !important; }
+  [data-theme="dark"] .det-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .det-card-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-card-title svg { color: #64748b !important; }
+  [data-theme="dark"] .det-empty { color: #64748b !important; }
+  [data-theme="dark"] .det-progress-row { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .det-progress-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-progress-meta { color: #64748b !important; }
+  [data-theme="dark"] .det-progress-bar { background-color: #0f172a !important; }
+  [data-theme="dark"] .det-progress-bar-fill { background-color: #64748b !important; }
+  [data-theme="dark"] .det-progress-pct { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-activity-row { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .det-activity-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-activity-count { background: rgba(99,102,241,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .det-activity-summary { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .det-activity-summary-text { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-activity-summary-value { color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-table th { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-table th, [data-theme="dark"] .det-table td { border-color: #334155 !important; }
+  [data-theme="dark"] .det-tr { border-color: #1e293b !important; }
+  [data-theme="dark"] .det-tr:hover { background-color: #0f172a !important; }
+  [data-theme="dark"] .det-td-date { color: #64748b !important; }
+  [data-theme="dark"] .det-td-time { color: #475569 !important; }
+  [data-theme="dark"] .det-td-activity { color: #e2e8f0 !important; }
+  [data-theme="dark"] .det-td-score-positive { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-td-score-none { color: #475569 !important; }
+  [data-theme="dark"] .det-td-ratio-all { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-td-ratio-partial { color: #94a3b8 !important; }
+  [data-theme="dark"] .det-td-ratio-none { color: #475569 !important; }
+  [data-theme="dark"] .det-td-time-val { color: #64748b !important; }
+</style>
+
+<div class="min-h-screen p-4 sm:p-6 animate-fade-in">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Breadcrumb -->
+    <div class="det-breadcrumb flex items-center gap-1.5 text-xs font-semibold text-emerald-600 mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      <a href="/admin/monitoreo" class="hover:text-emerald-700 transition-all">Monitoreo</a>
+      <span class="text-slate-400">/ Detalle</span>
+    </div>
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 <%= alumno.genero === 'femenino' ? 'det-avatar-f bg-pink-100 text-pink-600' : 'det-avatar-m bg-blue-100 text-blue-600' %> rounded-xl flex items-center justify-center font-bold text-2xl shrink-0">
+          <%= alumno.nombre_completo.charAt(0).toUpperCase() %>
+        </div>
+        <div class="min-w-0">
+          <h1 class="det-name text-xl font-extrabold text-slate-900 truncate"><%= alumno.nombre_completo %></h1>
+          <div class="flex flex-wrap items-center gap-2 mt-0.5">
+            <span class="det-username text-xs text-slate-500">@<%= alumno.nombre_usuario %></span>
+            <span class="det-dot w-1 h-1 bg-slate-300 rounded-full"></span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold inline-flex items-center gap-1 <%= alumno.genero === 'femenino' ? 'det-gender-f bg-pink-100 text-pink-700' : 'det-gender-m bg-blue-100 text-blue-700' %>">
+              <% if (alumno.genero === 'femenino') { %>
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/><path d="M14 2l-2 4 2 4"/></svg>
+              <% } else { %>
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/><path d="M16 4l4-2-2 4"/></svg>
+              <% } %>
+              <%= alumno.genero === 'femenino' ? 'Niña' : 'Niño' %>
+            </span>
+            <span class="det-register-date text-[11px] text-slate-400">Reg: <%= new Date(alumno.fecha_registro).toLocaleDateString() %></span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="/admin/monitoreo/<%= alumno.id %>/exportar/csv"
+           class="det-btn-back bg-white hover:bg-slate-50 text-slate-600 font-bold py-2 px-3 rounded-lg border border-slate-200 transition-all text-center text-xs inline-flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="hidden sm:inline">CSV</span>
+        </a>
+        <button onclick="window.print()"
+                class="det-btn-back bg-white hover:bg-slate-50 text-slate-600 font-bold py-2 px-3 rounded-lg border border-slate-200 transition-all text-center text-xs inline-flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span class="hidden sm:inline">Imprimir</span>
+        </button>
+        <a href="/admin/monitoreo"
+           class="det-btn-back bg-white hover:bg-slate-50 text-slate-600 font-bold py-2 px-3 rounded-lg border border-slate-200 transition-all text-center text-xs inline-flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span class="hidden sm:inline">Volver</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+      <div class="det-stat-card bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <p class="det-stat-label text-[11px] text-slate-500 font-medium">Nivel</p>
+        <p class="det-stat-value text-xl font-bold text-sky-600 flex items-center justify-center gap-1.5">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          <%= alumno.nivel %>
+        </p>
+      </div>
+      <div class="det-stat-card bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <p class="det-stat-label text-[11px] text-slate-500 font-medium">Puntos</p>
+        <p class="det-stat-value text-xl font-bold text-amber-600 flex items-center justify-center gap-1.5">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <%= alumno.puntos_total %>
+        </p>
+      </div>
+      <div class="det-stat-card bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <p class="det-stat-label text-[11px] text-slate-500 font-medium">Actividades</p>
+        <p class="det-stat-value text-xl font-bold text-indigo-600"><%= totalActividades %></p>
+      </div>
+      <div class="det-stat-card bg-white rounded-xl p-4 border border-slate-100 text-center">
+        <p class="det-stat-label text-[11px] text-slate-500 font-medium">% Aciertos</p>
+        <p class="text-xl font-bold <%= porcentajeAciertos >= 70 ? 'text-emerald-600' : porcentajeAciertos >= 40 ? 'text-amber-600' : 'text-red-500' %>">
+          <%= porcentajeAciertos %>%</p>
+      </div>
+    </div>
+
+    <!-- Grid: Progreso + Actividades -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+      <!-- Progreso por Continente -->
+      <div class="det-card bg-white rounded-xl p-5 border border-slate-100">
+        <h2 class="det-card-title text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Progreso por Continente
+        </h2>
+
+        <% if (progreso.length === 0) { %>
+          <p class="det-empty text-slate-400 text-center py-6 text-sm">Este estudiante aún no ha explorado continentes.</p>
+        <% } else { %>
+          <div class="space-y-2">
+            <% progreso.forEach(function(p) { %>
+              <div class="det-progress-row flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100 gap-2">
+                <div class="flex items-center gap-3 min-w-0">
+                  <svg class="w-5 h-5 text-slate-600 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  <div class="min-w-0">
+                    <p class="det-progress-name font-semibold text-slate-800 text-sm truncate"><%= p.nombreContinente %></p>
+                    <p class="det-progress-meta text-[11px] text-slate-400"><%= p.puntaje_continente %> pts · <%= p.retos_completados %>/<%= p.retos_totales %> retos</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <div class="det-progress-bar w-16 h-2 bg-slate-200 rounded-full overflow-hidden">
+                    <div class="det-progress-bar-fill h-full bg-emerald-400 rounded-full" style="width: <%= Math.min(100, (p.retos_completados / p.retos_totales) * 100) %>%"></div>
+                  </div>
+                  <span class="det-progress-pct text-[11px] font-bold text-slate-500"><%= Math.round((p.retos_completados / p.retos_totales) * 100) %>%</span>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Actividades por Tipo -->
+      <div class="det-card bg-white rounded-xl p-5 border border-slate-100">
+        <h2 class="det-card-title text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          Actividades por Tipo
+        </h2>
+
+        <% if (Object.keys(actividadesPorTipo).length === 0) { %>
+          <p class="det-empty text-slate-400 text-center py-6 text-sm">Sin actividades registradas.</p>
+        <% } else { %>
+          <div class="space-y-2">
+            <% var tiposMap = { 'reto': 'Retos', 'trivia': 'Trivia', 'sopa': 'Sopa de Letras', 'memoria': 'Memoria', 'puzzle': 'Puzzle' }; %>
+            <% Object.keys(actividadesPorTipo).forEach(function(tipo) { %>
+              <div class="det-activity-row flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
+                <span class="det-activity-name font-medium text-slate-700 text-sm"><%= tiposMap[tipo] || tipo %></span>
+                <span class="det-activity-count bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full text-xs font-bold"><%= actividadesPorTipo[tipo] %> veces</span>
+              </div>
+            <% }); %>
+          </div>
+          <div class="det-activity-summary mt-3 p-3 rounded-lg bg-slate-50 border border-slate-100">
+            <div class="flex items-center justify-between text-xs">
+              <span class="det-activity-summary-text font-medium text-slate-600">Total Respuestas</span>
+              <span class="det-activity-summary-value font-bold text-slate-800"><%= totalCorrectas %> / <%= totalRespuestas %> correctas</span>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Historial -->
+    <div class="det-card bg-white rounded-xl p-5 border border-slate-100">
+      <h2 class="det-card-title text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Historial de Actividad
+      </h2>
+
+      <% if (historial.length === 0) { %>
+        <p class="det-empty text-slate-400 text-center py-6 text-sm">No hay actividad registrada aún.</p>
+      <% } else { %>
+        <div class="overflow-x-auto">
+          <table class="det-table w-full">
+            <thead>
+              <tr class="border-b border-slate-200">
+                <th class="text-left p-2 text-xs font-bold text-slate-600">Fecha</th>
+                <th class="text-left p-2 text-xs font-bold text-slate-600">Actividad</th>
+                <th class="text-center p-2 text-xs font-bold text-slate-600">Puntos</th>
+                <th class="text-center p-2 text-xs font-bold text-slate-600 hidden sm:table-cell">Aciertos</th>
+                <th class="text-center p-2 text-xs font-bold text-slate-600 hidden sm:table-cell">Tiempo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% historial.forEach(function(h) { %>
+                <tr class="det-tr border-b border-slate-100 hover:bg-slate-50 transition-all">
+                  <td class="p-2">
+                    <p class="det-td-date text-xs text-slate-500"><%= new Date(h.fecha).toLocaleDateString() %></p>
+                    <p class="det-td-time text-[10px] text-slate-400"><%= new Date(h.fecha).toLocaleTimeString() %></p>
+                  </td>
+                  <td class="p-2">
+                    <span class="det-td-activity font-medium text-slate-700 text-xs"><%= h.tipo_actividad %></span>
+                  </td>
+                  <td class="p-2 text-center font-bold text-xs <%= h.puntaje_obtenido > 0 ? 'det-td-score-positive text-amber-600' : 'det-td-score-none text-slate-400' %>">
+                    <%= h.puntaje_obtenido > 0 ? '+' + h.puntaje_obtenido : '—' %>
+                  </td>
+                  <td class="p-2 text-center hidden sm:table-cell">
+                    <% if (h.respuestas_totales > 0) { %>
+                      <span class="<%= h.respuestas_correctas === h.respuestas_totales ? 'det-td-ratio-all text-emerald-600' : 'det-td-ratio-partial text-slate-600' %> font-medium text-xs">
+                        <%= h.respuestas_correctas %>/<%= h.respuestas_totales %>
+                      </span>
+                    <% } else { %>
+                      <span class="det-td-ratio-none text-slate-400">—</span>
+                    <% } %>
+                  </td>
+                  <td class="p-2 text-center text-xs hidden sm:table-cell">
+                    <span class="det-td-time-val text-slate-500"><%= h.tiempo_segundos ? h.tiempo_segundos + 's' : '—' %></span>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+
+  </div>
+</div>

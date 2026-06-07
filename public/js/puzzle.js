@@ -11,6 +11,186 @@
  * Sistema de eventos táctiles y ratón unificado con ghost visual.
  */
 
+// ── Selección de modo, tema y dificultad ──
+var modoSeleccionadoPZ = 'libre';
+var temaSeleccionadoPZ = 'mapa';
+var dificultadSeleccionadaPZ = 'facil';
+var modoElegidoPZ = false;
+var temaElegidoPZ = false;
+var dificultadElegidaPZ = false;
+
+window.seleccionarModoPZ = function(modo) {
+  modoSeleccionadoPZ = modo;
+  modoElegidoPZ = true;
+  var base = 'cursor-pointer flex flex-col items-center gap-1.5 p-4 bg-white rounded-xl border-2 transition-all hover:-translate-y-0.5 hover:shadow-md';
+  var cardLibre = document.getElementById('pz-modo-libre');
+  var cardContra = document.getElementById('pz-modo-contrarreloj');
+  if (cardLibre && cardContra) {
+    if (modo === 'libre') {
+      cardLibre.className = base + ' border-emerald-500 shadow-md';
+      cardLibre.style.setProperty('border-color', '#10b981', 'important');
+      cardContra.className = base + ' border-slate-200';
+      cardContra.style.setProperty('border-color', '#cbd5e1', 'important');
+    } else {
+      cardContra.className = base + ' border-emerald-500 shadow-md';
+      cardContra.style.setProperty('border-color', '#10b981', 'important');
+      cardLibre.className = base + ' border-slate-200';
+      cardLibre.style.setProperty('border-color', '#cbd5e1', 'important');
+    }
+  }
+  actualizarBotonComenzarPZ();
+};
+
+window.seleccionarTemaPZ = function(temaId) {
+  temaSeleccionadoPZ = temaId;
+  temaElegidoPZ = true;
+  var baseTheme = 'pz-theme-card cursor-pointer flex flex-col items-center gap-2 p-4 bg-white rounded-xl border transition-all hover:-translate-y-0.5 hover:shadow-md';
+  document.querySelectorAll('.pz-theme-card').forEach(function(el) {
+    var isSelected = el.getAttribute('data-tema') === temaId;
+    if (isSelected) {
+      el.className = baseTheme + ' border-emerald-500 ring-2 ring-emerald-300 shadow-md';
+      el.style.setProperty('border-color', '#10b981', 'important');
+    } else {
+      el.className = baseTheme + ' border-slate-200 hover:border-teal-300';
+      el.style.borderColor = '';
+    }
+  });
+  var baseCont = 'pz-cont-card cursor-pointer flex flex-col items-center gap-2 p-4 bg-white rounded-xl border-2 hover:shadow-md transition-all hover:-translate-y-0.5';
+  document.querySelectorAll('.pz-cont-card').forEach(function(el) {
+    var isSelected = el.getAttribute('data-tema') === temaId;
+    if (isSelected) {
+      el.className = baseCont + ' border-emerald-500 ring-2 ring-emerald-300 shadow-md';
+      el.style.setProperty('border-color', '#10b981', 'important');
+    } else {
+      el.className = baseCont + ' border-slate-200';
+      el.style.borderColor = '';
+    }
+  });
+  actualizarBotonComenzarPZ();
+};
+
+window.seleccionarDificultadPZ = function(dificultadId) {
+  dificultadSeleccionadaPZ = dificultadId;
+  dificultadElegidaPZ = true;
+  var base = 'pz-diff-card cursor-pointer flex flex-col items-center gap-2 p-4 bg-white rounded-xl border-2 transition-all hover:-translate-y-0.5 hover:shadow-md';
+  var colores = { facil: '#22c55e', medio: '#eab308', dificil: '#ef4444', experto: '#8b5cf6', ultra: '#f97316', extremo: '#ec4899', legendario: '#14b8a6' };
+  document.querySelectorAll('.pz-diff-card').forEach(function(el) {
+    el.className = base + ' border-slate-200';
+    el.style.borderColor = '';
+  });
+  document.querySelectorAll('[data-dificultad="' + dificultadId + '"]').forEach(function(el) {
+    el.className = base + ' ring-2 ring-amber-300 scale-105 shadow-md';
+    el.style.setProperty('border-color', colores[dificultadId] || '#22c55e', 'important');
+  });
+  actualizarBotonComenzarPZ();
+};
+
+function actualizarBotonComenzarPZ() {
+  var btn = document.getElementById('pz-btn-comenzar');
+  if (btn) {
+    btn.href = '/puzzle/jugar?tema=' + temaSeleccionadoPZ + '&dificultad=' + dificultadSeleccionadaPZ + '&modo=' + modoSeleccionadoPZ;
+  }
+}
+
+function validarSeleccionPZ() {
+  var faltan = [];
+  if (!modoElegidoPZ) faltan.push('Modo');
+  if (!temaElegidoPZ) faltan.push('Tema');
+  if (!dificultadElegidaPZ) faltan.push('Dificultad');
+  if (faltan.length > 0) {
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);padding:1rem;';
+    var modal = document.createElement('div');
+    modal.style.cssText = 'background:#1e293b;border-radius:2rem;padding:2rem;max-width:380px;width:100%;text-align:center;border:1px solid #334155;box-shadow:0 25px 50px rgba(0,0,0,0.4);animation:modalBounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;';
+    modal.innerHTML =
+      '<div style="width:56px;height:56px;background:#0f172a;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+      '</div>' +
+      '<h2 style="color:#f1f5f9;font-size:1.1rem;font-weight:800;margin-bottom:0.75rem">⚠️ Selección incompleta</h2>' +
+      '<p style="color:#94a3b8;font-size:0.875rem;margin-bottom:0.5rem">Debes seleccionar:</p>' +
+      '<p style="color:#e2e8f0;font-size:0.9rem;font-weight:600;margin-bottom:1.25rem">' + faltan.join(', ') + '</p>' +
+      '<button onclick="this.closest(\'div\').parentElement.remove()" style="width:100%;padding:0.7rem 1rem;background:#334155;color:#f1f5f9;font-weight:700;font-size:0.85rem;border:none;border-radius:0.75rem;cursor:pointer;transition:background 0.2s" onmouseover="this.style.background=\'#475569\'" onmouseout="this.style.background=\'#334155\'">Entendido</button>';
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    return false;
+  }
+  return true;
+}
+
+// ── Temporizador ──
+var temporizadorPZ = null;
+var tiempoRestantePZ = 0;
+
+function iniciarTemporizadorPZ(segundos) {
+  var panel = document.getElementById('pz-temporizador');
+  if (!panel || panel.classList.contains('hidden')) return;
+
+  tiempoRestantePZ = segundos;
+  var display = document.getElementById('pz-display-tiempo');
+  var barra = document.getElementById('pz-barra-tiempo');
+  var totalInicial = segundos;
+
+  if (temporizadorPZ) clearInterval(temporizadorPZ);
+
+  temporizadorPZ = setInterval(function() {
+    tiempoRestantePZ--;
+
+    if (tiempoRestantePZ <= 0) {
+      clearInterval(temporizadorPZ);
+      temporizadorPZ = null;
+      tiempoRestantePZ = 0;
+      tiempoAgotadoPZ();
+    }
+
+    if (display) {
+      var m = Math.floor(tiempoRestantePZ / 60);
+      var s = tiempoRestantePZ % 60;
+      display.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    }
+    if (barra) {
+      barra.style.width = (tiempoRestantePZ / totalInicial) * 100 + '%';
+    }
+
+    if (tiempoRestantePZ <= 10) {
+      if (display) display.style.color = '#e11d48';
+    } else if (tiempoRestantePZ <= 30) {
+      if (display) display.style.color = '#f97316';
+    }
+  }, 1000);
+}
+
+function tiempoAgotadoPZ() {
+  var contador = document.getElementById('piezas-ordenadas');
+  var piezasTexto = contador ? contador.textContent : '0';
+
+  // Crear modal full-screen
+  var overlay = document.createElement('div');
+  overlay.id = 'pz-modal-timeout';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);padding:1rem;';
+
+  var modal = document.createElement('div');
+  modal.style.cssText = 'background:#1e293b;border-radius:2rem;padding:2rem;max-width:400px;width:100%;text-align:center;border:1px solid #334155;box-shadow:0 25px 50px rgba(0,0,0,0.4);animation:modalBounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;';
+
+  modal.innerHTML =
+    '<div style="width:64px;height:64px;background:#0f172a;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem">' +
+      '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>' +
+    '</div>' +
+    '<h2 style="color:#f1f5f9;font-size:1.25rem;font-weight:800;margin-bottom:0.5rem">⏰ ¡Tiempo agotado!</h2>' +
+    '<p style="color:#94a3b8;font-size:0.875rem;margin-bottom:0.25rem">El tiempo se acabó antes de completar el puzzle.</p>' +
+    '<p style="color:#94a3b8;font-size:0.75rem;margin-bottom:1.5rem">Piezas ordenadas: <strong style="color:#e2e8f0">' + piezasTexto + '</strong></p>' +
+    '<button onclick="location.reload()" style="width:100%;padding:0.75rem 1rem;background:#334155;color:#f1f5f9;font-weight:700;font-size:0.875rem;border:none;border-radius:0.75rem;cursor:pointer;transition:background 0.2s" onmouseover="this.style.background=\'#475569\'" onmouseout="this.style.background=\'#334155\'">Reintentar</button>';
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+
+function detenerTemporizadorPZ() {
+  if (temporizadorPZ) {
+    clearInterval(temporizadorPZ);
+    temporizadorPZ = null;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   let piezaSeleccionada = null;
   let movimientos = 0;
@@ -26,6 +206,18 @@ document.addEventListener('DOMContentLoaded', function() {
   filas = parseInt(grid.dataset.filas || 3);
   columnas = parseInt(grid.dataset.columnas || 3);
   totalPiezas = filas * columnas;
+
+  // Iniciar temporizador si existe el panel
+  var timerPanel = document.getElementById('pz-temporizador');
+  if (timerPanel && !timerPanel.classList.contains('hidden')) {
+    var displayEl = document.getElementById('pz-display-tiempo');
+    if (displayEl) {
+      var partes = displayEl.textContent.split(':');
+      var mins = parseInt(partes[0]) || 0;
+      var segs = parseInt(partes[1]) || 0;
+      iniciarTemporizadorPZ(mins * 60 + segs);
+    }
+  }
 
   // ── Modo de interacción ──
   let modoArrastre = true; // true = arrastrar y soltar, false = intercambiar por clics
@@ -45,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
    */
   window.cambiarModoPuzzle = function(nuevoModo) {
     modoArrastre = nuevoModo === 'arrastre';
-    limpiarStateInteraccion();
+    limpiarStateInteraccion(true);
 
     document.querySelectorAll('.modo-puzzle-btn').forEach(btn => {
       const activo = btn.dataset.modo === nuevoModo;
@@ -71,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   /** Limpia todo estado de interacción pendiente */
-  function limpiarStateInteraccion() {
+  function limpiarStateInteraccion(keepSelection) {
     if (arrastre) {
       if (arrastre.ghost && arrastre.ghost.parentNode) {
         arrastre.ghost.parentNode.removeChild(arrastre.ghost);
@@ -87,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
       objetivoArrastre.style.boxShadow = '';
       objetivoArrastre = null;
     }
-    if (piezaSeleccionada) {
+    if (!keepSelection && piezaSeleccionada) {
       deseleccionarPieza(piezaSeleccionada);
       piezaSeleccionada = null;
     }
@@ -104,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (victoriaActiva) return;
 
     // Limpiar cualquier arrastre previo para evitar ghost huérfanos
-    if (arrastre) limpiarStateInteraccion();
+    if (arrastre) limpiarStateInteraccion(!modoArrastre);
 
     const pieza = e.target.closest('.puzzle-pieza');
     if (!pieza) return;
@@ -242,11 +434,6 @@ document.addEventListener('DOMContentLoaded', function() {
       objetivoArrastre.classList.remove('ring-4', 'ring-amber-400', 'scale-105');
       objetivoArrastre.style.boxShadow = '';
       objetivoArrastre.style.transform = '';
-      const idx = parseInt(objetivoArrastre.dataset.index);
-      const posCorr = parseInt(objetivoArrastre.dataset.posicionCorrecta);
-      if (posCorr === idx) {
-        objetivoArrastre.classList.add('ring-2', 'ring-green-300');
-      }
       objetivoArrastre = null;
     }
 
@@ -265,14 +452,12 @@ document.addEventListener('DOMContentLoaded', function() {
           moverPieza(arrastre.index, targetIndex, true);
         }
       }
-    } else if (!arrastre.esArrastre) {
-      // FUE UN CLIC (sin arrastre) → seleccionar en modo intercambio,
-      // o también permitir selección en modo arrastre (tocar sin mover)
+    } else if (!arrastre.esArrastre && modoArrastre) {
+      // FUE UN CLIC en modo arrastre → seleccionar
       seleccionarPieza(arrastre.piezaDOM);
     }
 
     arrastre = null;
-    e.preventDefault();
   }
 
   /** Obtiene coordenadas del evento (mouse o touch) */
@@ -294,7 +479,15 @@ document.addEventListener('DOMContentLoaded', function() {
     return { x: e.clientX, y: e.clientY };
   }
 
-  // ── Registrar eventos sobre el grid ──
+  // ── Click directo para modo intercambio ──
+  grid.addEventListener('click', function(e) {
+    if (modoArrastre) return;
+    if (victoriaActiva) return;
+    var pieza = e.target.closest('.puzzle-pieza');
+    if (!pieza) return;
+    e.stopPropagation();
+    seleccionarPieza(pieza);
+  });
   grid.addEventListener('mousedown', onInteraccionStart);
   window.addEventListener('mousemove', onInteraccionMove);
   window.addEventListener('mouseup', onInteraccionEnd);
@@ -376,7 +569,6 @@ document.addEventListener('DOMContentLoaded', function() {
       pieza.style.backgroundColor = 'transparent';
       pieza.style.opacity = '1';
 
-      // Quitar contenido de texto/número
       pieza.innerHTML = '';
 
       // Efectos hover
@@ -384,9 +576,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Indicador visual si está en posición correcta
       if (posCorrecta === index) {
-        pieza.classList.add('ring-2', 'ring-green-300');
+        pieza.style.outline = '';
+        pieza.style.outlineOffset = '';
       } else {
-        pieza.classList.remove('ring-2', 'ring-green-300');
+        pieza.style.outline = '2px solid #ef4444';
+        pieza.style.outlineOffset = '-2px';
       }
     });
   }
@@ -461,7 +655,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const index = parseInt(pieza.dataset.index);
     const posCorrecta = parseInt(pieza.dataset.posicionCorrecta);
     if (posCorrecta === index) {
-      pieza.classList.add('ring-2', 'ring-green-300');
+      pieza.style.outline = '';
+      pieza.style.outlineOffset = '';
+    } else {
+      pieza.style.outline = '2px solid #ef4444';
+      pieza.style.outlineOffset = '-2px';
     }
   }
 
@@ -497,10 +695,11 @@ document.addEventListener('DOMContentLoaded', function() {
       actualizarGrid(data.piezas);
 
       if (data.completado) {
+        detenerTemporizadorPZ();
         victoriaActiva = true;
         const puntosEl = document.getElementById('puntos-victoria');
         if (puntosEl) {
-          puntosEl.textContent = `🎉 +${data.puntosGanados} puntos en ${movimientos} movimientos`;
+          puntosEl.textContent = '🎉 +' + data.puntosGanados + ' puntos en ' + movimientos + ' movimientos';
         }
         document.getElementById('mensaje-victoria').classList.remove('hidden');
 
@@ -509,6 +708,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (typeof lanzarConfetti === 'function') {
           lanzarConfetti(150, true);
+        }
+
+        if (data.siguienteNivel) {
+          var params = new URLSearchParams(window.location.search);
+          var tema = params.get('tema') || 'mapa';
+          var modo = params.get('modo') || 'libre';
+          setTimeout(function() {
+            window.location.href = '/puzzle/jugar?tema=' + tema + '&dificultad=' + data.siguienteNivel + '&modo=' + modo;
+          }, 3000);
         }
       }
     })
@@ -562,11 +770,13 @@ document.addEventListener('DOMContentLoaded', function() {
         piezaDOM.innerHTML = '';
       }
 
-      // Ring verde si está en posición correcta
+      // Borde rojo si la pieza no está en su posición correcta
       if (pieza.posicionCorrecta === index) {
-        piezaDOM.classList.add('ring-2', 'ring-green-300');
+        piezaDOM.style.outline = '';
+        piezaDOM.style.outlineOffset = '';
       } else {
-        piezaDOM.classList.remove('ring-2', 'ring-green-300');
+        piezaDOM.style.outline = '2px solid #ef4444';
+        piezaDOM.style.outlineOffset = '-2px';
       }
 
       // Cursor según modo actual
@@ -583,9 +793,11 @@ document.addEventListener('DOMContentLoaded', function() {
       const posCorrecta = parseInt(pieza.dataset.posicionCorrecta);
       if (posCorrecta === index) ordenadas++;
       if (posCorrecta === index) {
-        pieza.classList.add('ring-2', 'ring-green-300');
+        pieza.style.outline = '';
+        pieza.style.outlineOffset = '';
       } else {
-        pieza.classList.remove('ring-2', 'ring-green-300');
+        pieza.style.outline = '2px solid #ef4444';
+        pieza.style.outlineOffset = '-2px';
       }
     });
 

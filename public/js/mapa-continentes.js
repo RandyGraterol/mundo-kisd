@@ -17,6 +17,95 @@ const MAPEO_CONTINENTES = {
   'Antarctica': { id: 'antartida', nombre: 'Antártida' }
 };
 
+// Mapeo de nombres de países de inglés (GeoJSON) a español (PAISES_INFO)
+const NOMBRES_PAISES_ES = {
+  // África
+  'Ethiopia': 'Etiopía', 'Egypt': 'Egipto', 'South Africa': 'Sudáfrica',
+  'Morocco': 'Marruecos', 'Algeria': 'Argelia', 'Tunisia': 'Túnez',
+  'Kenya': 'Kenia', 'Uganda': 'Uganda', 'Rwanda': 'Ruanda',
+  'Burundi': 'Burundi', 'Tanzania': 'Tanzania', 'Mozambique': 'Mozambique',
+  'Madagascar': 'Madagascar', 'Angola': 'Angola', 'Zambia': 'Zambia',
+  'Zimbabwe': 'Zimbabue', 'Malawi': 'Malaui', 'Botswana': 'Botsuana',
+  'Namibia': 'Namibia', 'Lesotho': 'Lesoto', 'Swaziland': 'Suazilandia',
+  'Eswatini': 'Suazilandia', 'Sudan': 'Sudán', 'South Sudan': 'Sudán del Sur',
+  'Eritrea': 'Eritrea', 'Djibouti': 'Yibuti', 'Somalia': 'Somalia',
+  'Libya': 'Libia', 'Chad': 'Chad', 'Niger': 'Níger',
+  'Mali': 'Malí', 'Burkina Faso': 'Burkina Faso', 'Mauritania': 'Mauritania',
+  'Senegal': 'Senegal', 'Gambia': 'Gambia', 'Guinea': 'Guinea',
+  'Guinea-Bissau': 'Guinea-Bisáu', 'Sierra Leone': 'Sierra Leona',
+  'Liberia': 'Liberia', "Côte d'Ivoire": 'Costa de Marfil', 'Ivory Coast': 'Costa de Marfil',
+  'Ghana': 'Ghana', 'Togo': 'Togo', 'Benin': 'Benín',
+  'Nigeria': 'Nigeria', 'Cameroon': 'Camerún', 'Central African Republic': 'República Centroafricana',
+  'Equatorial Guinea': 'Guinea Ecuatorial', 'Gabon': 'Gabón',
+  'Republic of the Congo': 'República del Congo', 'Congo': 'República del Congo',
+  'Democratic Republic of the Congo': 'República Democrática del Congo',
+  'DR Congo': 'República Democrática del Congo',
+  'São Tomé and Príncipe': 'Santo Tomé y Príncipe', 'Cabo Verde': 'Cabo Verde',
+  'Comoros': 'Comoras', 'Mauritius': 'Mauricio', 'Seychelles': 'Seychelles',
+  'Western Sahara': 'Sáhara Occidental',
+  // Europa
+  'Germany': 'Alemania', 'France': 'Francia', 'Italy': 'Italia',
+  'Spain': 'España', 'United Kingdom': 'Reino Unido', 'Netherlands': 'Países Bajos',
+  'Switzerland': 'Suiza', 'Sweden': 'Suecia', 'Norway': 'Noruega',
+  'Greece': 'Grecia', 'Portugal': 'Portugal', 'Denmark': 'Dinamarca',
+  'Finland': 'Finlandia', 'Poland': 'Polonia', 'Austria': 'Austria',
+  'Belgium': 'Bélgica', 'Ireland': 'Irlanda',   'Czech Republic': 'República Checa', 'Czechia': 'República Checa',
+  'Hungary': 'Hungría', 'Romania': 'Rumanía', 'Ukraine': 'Ucrania',
+  'Russia': 'Rusia', 'Turkey': 'Turquía', 'Iceland': 'Islandia',
+  'Ukraine': 'Ucrania', 'Belarus': 'Bielorrusia', 'Serbia': 'Serbia',
+  'Bulgaria': 'Bulgaria', 'Slovakia': 'Eslovaquia', 'Croatia': 'Croacia',
+  'Bosnia and Herzegovina': 'Bosnia y Herzegovina', 'Albania': 'Albania',
+  'Lithuania': 'Lituania', 'Slovenia': 'Eslovenia', 'Latvia': 'Letonia',
+  'Estonia': 'Estonia', 'Montenegro': 'Montenegro', 'Luxembourg': 'Luxemburgo',
+  'Malta': 'Malta', 'Andorra': 'Andorra', 'Monaco': 'Mónaco',
+  'Liechtenstein': 'Liechtenstein', 'San Marino': 'San Marino',
+  'Vatican City': 'Ciudad del Vaticano', 'Holy See': 'Ciudad del Vaticano',
+  'North Macedonia': 'Macedonia del Norte', 'Moldova': 'Moldavia',
+  // Asia
+  'China': 'China', 'India': 'India', 'Japan': 'Japón',
+  'South Korea': 'Corea del Sur', 'North Korea': 'Corea del Norte',
+  'Indonesia': 'Indonesia', 'Thailand': 'Tailandia', 'Vietnam': 'Vietnam',
+  'Philippines': 'Filipinas', 'Malaysia': 'Malasia', 'Myanmar': 'Myanmar',
+  'Bangladesh': 'Bangladés', 'Pakistan': 'Pakistán', 'Afghanistan': 'Afganistán',
+  'Iran': 'Irán', 'Iraq': 'Irak', 'Saudi Arabia': 'Arabia Saudita',
+  'Yemen': 'Yemen', 'Oman': 'Omán', 'United Arab Emirates': 'Emiratos Árabes Unidos',
+  'Israel': 'Israel', 'Jordan': 'Jordania', 'Lebanon': 'Líbano',
+  'Syria': 'Siria', 'Kazakhstan': 'Kazajistán', 'Mongolia': 'Mongolia',
+  'Nepal': 'Nepal', 'Sri Lanka': 'Sri Lanka', 'Cambodia': 'Camboya',
+  'Uzbekistan': 'Uzbekistán',
+  'Laos': 'Laos', 'Azerbaijan': 'Azerbaiyán', 'Tajikistan': 'Tayikistán',
+  'Kyrgyzstan': 'Kirguistán', 'Turkmenistan': 'Turkmenistán',
+  'Singapore': 'Singapur', 'Bhutan': 'Bután', 'Maldives': 'Maldivas',
+  'Brunei': 'Brunéi', 'Bahrain': 'Baréin', 'Cyprus': 'Chipre',
+  'Kuwait': 'Kuwait', 'Qatar': 'Catar', 'Armenia': 'Armenia',
+  'Georgia': 'Georgia', 'Timor-Leste': 'Timor Oriental', 'East Timor': 'Timor Oriental',
+  'Palestine': 'Palestina', 'West Bank': 'Palestina', 'Gaza Strip': 'Palestina',
+  // América
+  'United States': 'Estados Unidos', 'Canada': 'Canadá', 'Mexico': 'México',
+  'Brazil': 'Brasil', 'Argentina': 'Argentina', 'Chile': 'Chile',
+  'Colombia': 'Colombia', 'Peru': 'Perú', 'Venezuela': 'Venezuela',
+  'Cuba': 'Cuba', 'Dominican Republic': 'República Dominicana',
+  'Guatemala': 'Guatemala', 'Panama': 'Panamá', 'Costa Rica': 'Costa Rica',
+  'Ecuador': 'Ecuador', 'Bolivia': 'Bolivia', 'Paraguay': 'Paraguay',
+  'Uruguay': 'Uruguay', 'Guyana': 'Guyana', 'Suriname': 'Surinam',
+  'Haiti': 'Haití', 'Honduras': 'Honduras',
+  'Nicaragua': 'Nicaragua', 'El Salvador': 'El Salvador',
+  'Jamaica': 'Jamaica', 'Trinidad and Tobago': 'Trinidad y Tobago',
+  'Bahamas': 'Bahamas', 'Belize': 'Belice', 'Barbados': 'Barbados',
+  'Saint Lucia': 'Santa Lucía', 'Grenada': 'Granada',
+  'Antigua and Barbuda': 'Antigua y Barbuda',
+  'Saint Kitts and Nevis': 'San Cristóbal y Nieves',
+  'Saint Vincent and the Grenadines': 'San Vicente y las Granadinas',
+  'Dominica': 'Dominica',
+  // Oceanía
+  'Australia': 'Australia', 'New Zealand': 'Nueva Zelanda',
+  'Papua New Guinea': 'Papúa Nueva Guinea', 'Fiji': 'Fiyi',
+  'Solomon Islands': 'Islas Salomón', 'Samoa': 'Samoa',
+  'Tonga': 'Tonga', 'Vanuatu': 'Vanuatu', 'Kiribati': 'Kiribati',
+  'Micronesia': 'Micronesia', 'Marshall Islands': 'Islas Marshall',
+  'Palau': 'Palaos', 'Nauru': 'Nauru', 'Tuvalu': 'Tuvalu'
+};
+
 // Nombres en español para tooltips
 const NOMBRES_ES = {
   america: 'América',
@@ -539,10 +628,15 @@ function crearGlobo(container) {
     
     // ── EVENTOS ──
     world.onPolygonClick(d => {
-      const cId = d.properties.continenteId;
-      if (cId) {
-        window.location.href = '/continente/' + cId;
-      }
+      const nombreIngles = d.properties.name || d.properties.ADMIN || '';
+      var nombrePais = d.properties.nombrePais || nombreIngles;
+      // Convertir a español si existe en el mapping
+      var nombreEspanol = NOMBRES_PAISES_ES[nombreIngles] || nombrePais;
+      var paisesInfo = window.PAISES_INFO || {};
+      var paisInfo = paisesInfo[nombreEspanol] || null;
+      var cId = d.properties.continenteId;
+      
+      mostrarModalPais(nombreEspanol, paisInfo, cId);
     });
     
     world.onPolygonHover(hoverD => {
@@ -609,6 +703,73 @@ function cargarDesdeCDN(container) {
     .catch(() => {
       container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400">No se pudo cargar el mapa</div>';
     });
+}
+
+/**
+ * Muestra un modal con información del país seleccionado
+ */
+function mostrarModalPais(nombre, info, continenteId) {
+  var modal = document.getElementById('modal-pais');
+  if (!modal) return;
+  
+  var nombreEl = document.getElementById('modal-pais-nombre');
+  var banderaEl = document.getElementById('modal-pais-bandera');
+  var capitalEl = document.getElementById('modal-pais-capital');
+  var poblacionEl = document.getElementById('modal-pais-poblacion');
+  var monedaEl = document.getElementById('modal-pais-moneda');
+  var datoEl = document.getElementById('modal-pais-dato');
+  var continenteBtn = document.getElementById('modal-pais-continente-btn');
+  var infoSection = document.getElementById('modal-pais-info');
+  var noInfoSection = document.getElementById('modal-pais-no-info');
+  
+  if (nombreEl) nombreEl.textContent = nombre;
+  
+  if (info) {
+    if (infoSection) infoSection.classList.remove('hidden');
+    if (noInfoSection) noInfoSection.classList.add('hidden');
+    if (banderaEl) banderaEl.textContent = info.bandera || '';
+    if (capitalEl) capitalEl.textContent = info.capital || '—';
+    if (poblacionEl) poblacionEl.textContent = info.poblacion || '—';
+    if (monedaEl) monedaEl.textContent = info.moneda || '—';
+    if (datoEl) datoEl.textContent = info.dato || '';
+    if (datoEl) datoEl.classList.remove('hidden');
+  } else {
+    if (infoSection) infoSection.classList.add('hidden');
+    if (noInfoSection) noInfoSection.classList.remove('hidden');
+    if (banderaEl) banderaEl.textContent = '';
+    if (datoEl) datoEl.classList.add('hidden');
+  }
+  
+  if (continenteBtn && continenteId) {
+    continenteBtn.style.display = '';
+    continenteBtn.onclick = function() { window.location.href = '/continente/' + continenteId; };
+  } else if (continenteBtn) {
+    continenteBtn.style.display = 'none';
+  }
+  
+  modal.style.display = 'flex';
+  modal.classList.remove('hidden');
+  
+  var overlay = document.getElementById('modal-pais-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', function() { cerrarModalPais(); });
+  }
+  
+  // Cerrar con Escape
+  document.addEventListener('keydown', function listener(e) {
+    if (e.key === 'Escape') {
+      cerrarModalPais();
+      document.removeEventListener('keydown', listener);
+    }
+  });
+}
+
+function cerrarModalPais() {
+  var modal = document.getElementById('modal-pais');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.add('hidden');
+  }
 }
 
 // ── INICIALIZAR ──

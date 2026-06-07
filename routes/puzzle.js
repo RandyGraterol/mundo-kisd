@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { generarPuzzle, obtenerTemas, obtenerTemasContinentes, obtenerDificultades, verificarPuzzleCompletado } = require('../helpers/puzzle');
 const { registrarActividad, actualizarPuntosYNivel } = require('../database/db');
+const { verificarYDesbloquearLogros } = require('../helpers/logros');
+const { enriquecerConDesbloqueo, estaDesbloqueado, marcarCompletado, PROGRESION } = require('../helpers/desbloqueos');
 
 // Middleware de verificación de sesión
 function verificarSesion(req, res, next) {
@@ -22,10 +24,12 @@ router.get('/', verificarSesion, (req, res) => {
   const temas = obtenerTemas();
   const temasContinentes = obtenerTemasContinentes();
   const dificultades = obtenerDificultades();
+  const completados = req.session.progreso?.nivelesCompletados;
+  const dificultadesDesbloqueo = enriquecerConDesbloqueo('puzzle', dificultades, completados);
   res.render('puzzle', {
     temas,
     temasContinentes,
-    dificultades,
+    dificultades: dificultadesDesbloqueo,
     juego: null
   });
 });
@@ -36,6 +40,13 @@ router.get('/', verificarSesion, (req, res) => {
 router.get('/jugar', verificarSesion, (req, res) => {
   const temaId = req.query.tema || 'mapa';
   const dificultadId = req.query.dificultad || 'facil';
+  const modo = req.query.modo || 'libre';
+
+  // Verificar desbloqueo de la dificultad
+  const completados = req.session.progreso?.nivelesCompletados;
+  if (!estaDesbloqueado('puzzle', dificultadId, completados)) {
+    return res.redirect('/puzzle');
+  }
 
   const dificultades = obtenerDificultades();
   const dificultad = dificultades.find(d => d.id === dificultadId) || dificultades[0];
@@ -46,13 +57,19 @@ router.get('/jugar', verificarSesion, (req, res) => {
   const todosLosTemas = [...temas, ...temasContinentes];
   const temaSeleccionado = todosLosTemas.find(t => t.id === temaId) || temas[0];
 
+  const tiempos = { facil: 60, medio: 120, dificil: 180, experto: 240, ultra: 300, extremo: 360, legendario: 420 };
+  const tiempoLimite = modo === 'contrarreloj' ? (tiempos[dificultadId] || 120) : null;
+
   // Guardar en sesión
   req.session.puzzleJuego = {
     piezas: juego.piezas,
     filas: juego.filas,
     columnas: juego.columnas,
-    totalPiezas: juego.totalPiezas,
-    movimientos: 0
+    movimientos: 0,
+    dificultadId: dificultadId,
+    tema: temaId,
+    modo: modo,
+    tiempoLimite
   };
 
   res.render('puzzle', {
@@ -64,7 +81,9 @@ router.get('/jugar', verificarSesion, (req, res) => {
       columnas: juego.columnas,
       totalPiezas: juego.totalPiezas,
       tema: temaSeleccionado,
-      dificultad
+      dificultad,
+      modo,
+      tiempoLimite
     }
   });
 });
@@ -118,13 +137,30 @@ router.post('/mover', express.json(), verificarSesion, (req, res) => {
         tiempoSegundos: null
       });
       actualizarPuntosYNivel(req.session.usuarioId, puntosTotales);
+      try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
+    }
+
+    // Registrar nivel completado
+    var siguienteNivel = null;
+    if (juegoGuardado.dificultadId) {
+      req.session.progreso.nivelesCompletados = marcarCompletado('puzzle', juegoGuardado.dificultadId, req.session.progreso.nivelesCompletados);
+      if (req.session.usuarioId) {
+        const { guardarNivelesCompletados } = require('../database/db');
+        guardarNivelesCompletados(req.session.usuarioId, req.session.progreso.nivelesCompletados);
+      }
+      var progresion = PROGRESION.puzzle;
+      var idx = progresion.indexOf(juegoGuardado.dificultadId);
+      if (idx >= 0 && idx < progresion.length - 1) {
+        siguienteNivel = progresion[idx + 1];
+      }
     }
 
     return res.json({
       piezas: juegoGuardado.piezas,
       movimientos: juegoGuardado.movimientos,
       completado: true,
-      puntosGanados: puntosTotales
+      puntosGanados: puntosTotales,
+      siguienteNivel
     });
   }
 

@@ -4,6 +4,19 @@
 const { numeroAleatorio, mezclarArray } = require('./aleatorizacion');
 
 /**
+ * Niveles de dificultad para la sopa de letras
+ */
+const NIVELES_SOPA = [
+  { id: 'facil', nombre: 'Fácil', tamano: 8, palabras: 5, descripcion: '8×8 • 5 palabras', tiempoSegundos: 120 },
+  { id: 'medio', nombre: 'Medio', tamano: 10, palabras: 7, descripcion: '10×10 • 7 palabras', tiempoSegundos: 100 },
+  { id: 'dificil', nombre: 'Difícil', tamano: 12, palabras: 9, descripcion: '12×12 • 9 palabras', tiempoSegundos: 80 },
+  { id: 'experto', nombre: 'Experto', tamano: 14, palabras: 11, descripcion: '14×14 • 11 palabras', tiempoSegundos: 60 },
+  { id: 'ultra', nombre: 'Ultra', tamano: 15, palabras: 13, descripcion: '15×15 • 13 palabras', tiempoSegundos: 50 },
+  { id: 'extremo', nombre: 'Extremo', tamano: 16, palabras: 15, descripcion: '16×16 • 15 palabras', tiempoSegundos: 40 },
+  { id: 'legendario', nombre: 'Legendario', tamano: 18, palabras: 18, descripcion: '18×18 • 18 palabras', tiempoSegundos: 30 }
+];
+
+/**
  * Vocabulario geográfico organizado por continente
  */
 const VOCABULARIO_POR_CONTINENTE = {
@@ -34,6 +47,35 @@ const TEMAS_SOPA = [
  */
 function obtenerTemas() {
   return TEMAS_SOPA;
+}
+
+/**
+ * Obtiene los niveles disponibles
+ */
+function obtenerNiveles() {
+  return NIVELES_SOPA;
+}
+
+/**
+ * Obtiene un nivel por su ID
+ */
+function obtenerNivelPorId(id) {
+  return NIVELES_SOPA.find(n => n.id === id) || NIVELES_SOPA[0];
+}
+
+/**
+ * Genera una sopa de letras para un tema y nivel específicos
+ */
+function generarSopaPorNivel(temaId, nivelId) {
+  const nivel = obtenerNivelPorId(nivelId);
+  let palabrasBase = obtenerPalabrasPorTema(temaId);
+  // If the theme doesn't have enough words, supplement with global words
+  if (palabrasBase.length < nivel.palabras) {
+    const extras = VOCABULARIO_GLOBAL.filter(p => !palabrasBase.includes(p));
+    palabrasBase = [...palabrasBase, ...extras];
+  }
+  const palabrasSeleccionadas = mezclarArray(palabrasBase).slice(0, nivel.palabras);
+  return generarSopaLetrasConPalabras(palabrasSeleccionadas, nivel.tamano);
 }
 
 /**
@@ -91,6 +133,7 @@ function generarSopaLetras(tamano = 12, palabrasPersonalizadas = []) {
   const grid = Array.from({ length: tamano }, () => Array(tamano).fill(''));
   
   const posiciones = [];
+  const palabrasColocadas = [];
   const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   // Colocar cada palabra
@@ -106,6 +149,7 @@ function generarSopaLetras(tamano = 12, palabrasPersonalizadas = []) {
       if (colocarPalabra(grid, tamano, palabra, fila, col, direccion)) {
         posiciones.push({ palabra, fila, col, direccion });
         colocada = true;
+        palabrasColocadas.push(palabra);
       }
       intentos++;
     }
@@ -120,7 +164,7 @@ function generarSopaLetras(tamano = 12, palabrasPersonalizadas = []) {
     }
   }
 
-  return { grid, palabras, posiciones };
+  return { grid, palabras: palabrasColocadas, posiciones };
 }
 
 /**
@@ -148,6 +192,8 @@ function generarSopaLetrasConPalabras(palabras, tamano = 12) {
   const posiciones = [];
   const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
+  const palabrasColocadas = [];
+
   for (const palabra of palabras) {
     let colocada = false;
     let intentos = 0;
@@ -160,6 +206,7 @@ function generarSopaLetrasConPalabras(palabras, tamano = 12) {
       if (colocarPalabra(grid, tamano, palabra, fila, col, direccion)) {
         posiciones.push({ palabra, fila, col, direccion });
         colocada = true;
+        palabrasColocadas.push(palabra);
       }
       intentos++;
     }
@@ -174,13 +221,16 @@ function generarSopaLetrasConPalabras(palabras, tamano = 12) {
     }
   }
 
-  return { grid, palabras, posiciones };
+  return { grid, palabras: palabrasColocadas, posiciones };
 }
 
 module.exports = {
   obtenerTemas,
+  obtenerNiveles,
+  obtenerNivelPorId,
   generarSopaLetras,
   generarSopaPorTema,
+  generarSopaPorNivel,
   generarSopaLetrasConPalabras,
   VOCABULARIO_POR_CONTINENTE,
   VOCABULARIO_GLOBAL

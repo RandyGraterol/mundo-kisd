@@ -4,6 +4,7 @@
 const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
+const { calcularNivel } = require('../helpers/niveles');
 
 const DB_PATH = path.join(__dirname, 'mundo-kids.db');
 
@@ -29,6 +30,12 @@ function inicializarBaseDeDatos() {
   const database = obtenerDB();
   const schema = require('./schema');
   database.exec(schema);
+  // Migración: agregar columna niveles_completados si no existe
+  try {
+    database.exec("ALTER TABLE usuarios ADD COLUMN niveles_completados TEXT DEFAULT '{}'");
+  } catch (e) {
+    // Columna ya existe, ignorar
+  }
   console.log('✅ Base de datos inicializada correctamente');
   return database;
 }
@@ -155,10 +162,10 @@ function actualizarPuntosYNivel(usuarioId, puntosGanados) {
     UPDATE usuarios SET puntos_total = puntos_total + ? WHERE id = ?
   `).run(puntosGanados, usuarioId);
   
-  // Recalcular nivel (cada 30 puntos = 1 nivel)
+  // Recalcular nivel con curva de progresión
   const usuario = buscarUsuarioPorId(usuarioId);
   if (usuario) {
-    const nuevoNivel = Math.floor(usuario.puntos_total / 30) + 1;
+    const nuevoNivel = calcularNivel(usuario.puntos_total);
     if (nuevoNivel > usuario.nivel) {
       database.prepare('UPDATE usuarios SET nivel = ? WHERE id = ?')
         .run(nuevoNivel, usuarioId);
@@ -167,6 +174,23 @@ function actualizarPuntosYNivel(usuarioId, puntosGanados) {
   }
   
   return { subioNivel: false };
+}
+
+/**
+ * Incrementa el nivel del usuario en +1 (usado por trivia de banderas)
+ */
+function incrementarNivel(usuarioId) {
+  const database = obtenerDB();
+  database.prepare('UPDATE usuarios SET nivel = nivel + 1 WHERE id = ?').run(usuarioId);
+}
+
+/**
+ * Guarda los niveles completados de un usuario en la BD
+ */
+function guardarNivelesCompletados(usuarioId, nivelesCompletados) {
+  const database = obtenerDB();
+  database.prepare('UPDATE usuarios SET niveles_completados = ? WHERE id = ?')
+    .run(JSON.stringify(nivelesCompletados || {}), usuarioId);
 }
 
 // ──────────────────────────────────────────────
@@ -477,6 +501,8 @@ module.exports = {
   obtenerTodoProgreso,
   actualizarProgresoContinente,
   actualizarPuntosYNivel,
+  incrementarNivel,
+  guardarNivelesCompletados,
   
   // Historial
   registrarActividad,

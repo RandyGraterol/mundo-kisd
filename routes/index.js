@@ -2,11 +2,14 @@
 const express = require('express');
 const router = express.Router();
 const { obtenerContinentes, obtenerContinentePorId } = require('../data/continentes');
-const { obtenerPreguntaAleatoria, obtenerPreguntaPorId } = require('../data/banderas');
+const { obtenerPreguntasBanderas, obtenerPreguntaAleatoria, obtenerPreguntaPorId } = require('../data/banderas');
 const { mezclarArray, mezclarOpciones } = require('../helpers/aleatorizacion');
+const { calcularNivel } = require('../helpers/niveles');
 const { 
+  obtenerDB,
   actualizarProgresoContinente, 
   actualizarPuntosYNivel,
+  incrementarNivel,
   obtenerTodoProgreso,
   registrarActividad,
   obtenerPreguntasPersonalizadas,
@@ -50,7 +53,7 @@ router.get('/', (req, res) => {
   if (req.session.usuarioId) {
     return res.redirect('/menu');
   }
-  res.render('bienvenida');
+  res.redirect('/auth/login');
 });
 
 /**
@@ -77,6 +80,7 @@ router.post('/menu', (req, res) => {
     puntosTotal: 0,
     continentesVisitados: [],
     retosCompletados: [],
+    nivelesCompletados: {},
     fechaRegistro: new Date().toISOString()
   };
   
@@ -122,7 +126,13 @@ router.get('/continente/:id', verificarSesion, (req, res) => {
     req.session.progreso.continentesVisitados.push(req.params.id);
   }
   
-  res.render('continente', { continente });
+  // Seleccionar un dato curioso aleatorio
+  const datosCuriososArray = continente.datosCuriosos;
+  const datoCurioso = Array.isArray(datosCuriososArray)
+    ? datosCuriososArray[Math.floor(Math.random() * datosCuriososArray.length)]
+    : datosCuriososArray;
+  
+  res.render('continente', { continente, datoCurioso });
 });
 
 /**
@@ -243,9 +253,9 @@ router.post('/reto/:id/responder', verificarSesion, (req, res) => {
     req.session.progreso.puntosTotal += puntosGanados;
     req.session.progreso.retosCompletados.push(preguntaId);
     
-    // Sistema de niveles: cada 30 puntos = 1 nivel
+    // Sistema de niveles
     const nivelAnterior = req.session.progreso.nivel;
-    const nuevoNivel = Math.floor(req.session.progreso.puntosTotal / 30) + 1;
+    const nuevoNivel = calcularNivel(req.session.progreso.puntosTotal);
     
     if (nuevoNivel > nivelAnterior) {
       req.session.progreso.nivel = nuevoNivel;
@@ -294,13 +304,48 @@ router.post('/reto/:id/responder', verificarSesion, (req, res) => {
  * Muestra preguntas aleatorias sobre banderas de países (requiere sesión)
  */
 router.get('/trivia-banderas', verificarSesion, (req, res) => {
+  const modo = req.query.modo || null;
+
+  const totalBanderas = obtenerPreguntasBanderas().length;
+
+  if (!modo) {
+    return res.render('trivia-banderas', {
+      pregunta: null,
+      preguntasRespondidas: 0,
+      totalPreguntas: totalBanderas,
+      modo: null,
+      modoJuego: null,
+      tiempoLimite: null
+    });
+  }
+
   // Inicializar array de preguntas respondidas si no existe
   if (!req.session.banderasRespondidas) {
     req.session.banderasRespondidas = [];
   }
   
-  // Obtener pregunta aleatoria que no haya sido respondida
-  let pregunta = obtenerPreguntaAleatoria(req.session.banderasRespondidas);
+  // Si viene de timeout (?pendiente=ID), forzar esa pregunta
+  let pregunta = null;
+  if (req.query.pendiente) {
+    pregunta = obtenerPreguntaPorId(req.query.pendiente);
+    if (!pregunta && req.session.banderasPersonalizadas) {
+      pregunta = req.session.banderasPersonalizadas.find(p => p.id === req.query.pendiente);
+    }
+  }
+  
+  // Si hay una pregunta pendiente en sesión (respondida incorrectamente), forzarla
+  if (!pregunta && req.session.triviaPreguntaPendiente) {
+    pregunta = obtenerPreguntaPorId(req.session.triviaPreguntaPendiente);
+    if (!pregunta && req.session.banderasPersonalizadas) {
+      pregunta = req.session.banderasPersonalizadas.find(p => p.id === req.session.triviaPreguntaPendiente);
+    }
+    delete req.session.triviaPreguntaPendiente;
+  }
+  
+  // Si no hay pendiente, obtener pregunta aleatoria
+  if (!pregunta) {
+    pregunta = obtenerPreguntaAleatoria(req.session.banderasRespondidas);
+  }
   
   // Agregar preguntas personalizadas de banderas (del profesor) si existen
   if (!req.session.banderasPersonalizadas && req.session.usuarioId) {
@@ -323,8 +368,8 @@ router.get('/trivia-banderas', verificarSesion, (req, res) => {
     }
   }
   
-  // Si hay preguntas personalizadas, combinarlas con las originales para la selección aleatoria
-  if (req.session.banderasPersonalizadas && req.session.banderasPersonalizadas.length > 0) {
+  // Si hay preguntas personalizadas y no hay pendiente, combinarlas para selección aleatoria
+  if (!pregunta && req.session.banderasPersonalizadas && req.session.banderasPersonalizadas.length > 0) {
     const todasBanderas = [...require('../data/banderas').obtenerPreguntasBanderas(), ...req.session.banderasPersonalizadas];
     const disponibles = todasBanderas.filter(p => !req.session.banderasRespondidas.includes(p.id));
     if (disponibles.length > 0) {
@@ -335,6 +380,9 @@ router.get('/trivia-banderas', verificarSesion, (req, res) => {
   if (pregunta) {
     // Mezclar opciones para que la respuesta no esté siempre en el mismo índice
     const { opciones, nuevoIndiceCorrecto } = mezclarOpciones(pregunta.opciones, pregunta.respuestaCorrecta);
+    // Guardar el índice correcto mezclado en sesión para validación POST
+    if (!req.session.triviaRespuestas) req.session.triviaRespuestas = {};
+    req.session.triviaRespuestas[pregunta.id] = nuevoIndiceCorrecto;
     pregunta = {
       ...pregunta,
       opciones,
@@ -344,7 +392,11 @@ router.get('/trivia-banderas', verificarSesion, (req, res) => {
   
   res.render('trivia-banderas', {
     pregunta,
-    preguntasRespondidas: req.session.banderasRespondidas.length
+    totalPreguntas: totalBanderas,
+    preguntasRespondidas: req.session.banderasRespondidas.length,
+    modo: 'juego',
+    modoJuego: modo,
+    tiempoLimite: modo === 'contrarreloj' ? 30 : null
   });
 });
 
@@ -375,8 +427,13 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
     return res.redirect('/trivia-banderas');
   }
   
-  // Verificar si la respuesta es correcta
-  const esCorrecta = respuestaUsuario === preguntaReal.respuestaCorrecta;
+  // Verificar si la respuesta es correcta usando el índice mezclado guardado en sesión
+  const indiceCorrectoMezclado = (req.session.triviaRespuestas || {})[preguntaId];
+  const esCorrecta = typeof indiceCorrectoMezclado !== 'undefined' && respuestaUsuario === indiceCorrectoMezclado;
+  // Limpiar la mezcla después de validar
+  if (req.session.triviaRespuestas) {
+    delete req.session.triviaRespuestas[preguntaId];
+  }
   let puntosGanados = 0;
   let subisteNivel = false;
   
@@ -385,24 +442,20 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
     req.session.banderasRespondidas = [];
   }
   
-  // Si es correcta y no ha sido respondida antes, dar puntos
-  if (esCorrecta && !req.session.banderasRespondidas.includes(preguntaId)) {
-    puntosGanados = preguntaReal.puntos;
-    req.session.progreso.puntosTotal += puntosGanados;
-    
-    // Sistema de niveles: cada 30 puntos = 1 nivel
-    const nivelAnterior = req.session.progreso.nivel;
-    const nuevoNivel = Math.floor(req.session.progreso.puntosTotal / 30) + 1;
-    
-    if (nuevoNivel > nivelAnterior) {
-      req.session.progreso.nivel = nuevoNivel;
+  if (esCorrecta) {
+    // Correcta: marcar como respondida y dar puntos + nivel
+    if (!req.session.banderasRespondidas.includes(preguntaId)) {
+      req.session.banderasRespondidas.push(preguntaId);
+      puntosGanados = preguntaReal.puntos;
+      req.session.progreso.puntosTotal += puntosGanados;
+      // Trivia: cada respuesta correcta = +1 nivel
+      req.session.progreso.nivel += 1;
       subisteNivel = true;
     }
-  }
-  
-  // Marcar pregunta como respondida
-  if (!req.session.banderasRespondidas.includes(preguntaId)) {
-    req.session.banderasRespondidas.push(preguntaId);
+    delete req.session.triviaPreguntaPendiente;
+  } else {
+    // Incorrecta: guardar como pendiente para reintentar
+    req.session.triviaPreguntaPendiente = preguntaId;
   }
   
   // Registrar actividad en BD si el usuario está autenticado
@@ -416,9 +469,10 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
       tiempoSegundos: parseInt(req.body.tiempo) || null
     });
     
-    // Persistir puntos y nivel en BD
+    // Persistir puntos y nivel en BD (trivia: nivel se incrementa directamente)
     if (puntosGanados > 0) {
-      actualizarPuntosYNivel(req.session.usuarioId, puntosGanados);
+      obtenerDB().prepare('UPDATE usuarios SET puntos_total = puntos_total + ? WHERE id = ?').run(puntosGanados, req.session.usuarioId);
+      incrementarNivel(req.session.usuarioId);
     }
     
     // Verificar logros después de la actividad
@@ -430,14 +484,18 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
   }
   
   // Determinar si hay más preguntas
-  const hayMasPreguntas = req.session.banderasRespondidas.length < 12;
-  
+  const totalBanderas = obtenerPreguntasBanderas().length;
+  const hayMasPreguntas = req.session.banderasRespondidas.length < totalBanderas;
+  const modoJuego = req.body.modoJuego || 'libre';
+
   res.render('resultado-trivia', {
     esCorrecta,
     puntosGanados,
     paisCorrecto: preguntaReal.pais,
     hayMasPreguntas,
-    subisteNivel
+    totalPreguntas: totalBanderas,
+    subisteNivel,
+    modoJuego
   });
 });
 

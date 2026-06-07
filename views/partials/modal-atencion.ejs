@@ -1,42 +1,46 @@
 <!-- Modal de Atención: Aparece antes de iniciar trivias/retos -->
-<div id="modal-atencion" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="display: none;">
+<div id="modal-atencion" class="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-8 md:p-10" style="display: none;">
   <!-- Overlay -->
   <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="cerrarAtencion()"></div>
   
   <!-- Contenido del modal -->
-  <div class="relative bg-white rounded-[2.5rem] shadow-2xl max-w-lg w-full p-10 text-center animate-modal-bounce border border-slate-100" id="modal-contenido">
-    <!-- Icono de alerta -->
-    <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-      </svg>
+  <div class="modal-atencion-content relative bg-white rounded-[2.5rem] shadow-2xl max-w-xl w-full p-6 sm:p-8 text-center animate-modal-bounce border border-slate-100" id="modal-contenido">
+    <div class="flex flex-col gap-4 sm:gap-5">
+      <!-- Icono de alerta -->
+      <div class="modal-atencion-icon w-14 sm:w-16 h-14 sm:h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto animate-pulse-soft">
+        <svg class="modal-atencion-svg" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      
+      <h2 class="modal-atencion-title text-xl sm:text-2xl font-extrabold text-slate-900"><%- icono('reloj', 'w-4 h-4 sm:w-5 sm:h-5 inline text-amber-600') %> Atencion!</h2>
+      
+      <% if (typeof modoJuego === 'undefined' || modoJuego === 'contrarreloj') { %>
+      <div class="modal-atencion-warn bg-amber-50 rounded-2xl p-4 sm:p-5 border border-amber-100">
+        <p class="modal-atencion-warn-title text-sm sm:text-base font-bold text-amber-800 mb-1.5">
+          Esta actividad tiene un <span class="underline decoration-wavy decoration-amber-400">limite de tiempo</span>
+        </p>
+        <p class="modal-atencion-warn-text text-xs sm:text-sm text-amber-700">
+          Debes responder cada pregunta dentro del tiempo establecido. 
+          Si el tiempo se agota, la respuesta se enviara automaticamente.
+        </p>
+      </div>
+      <% } %>
+      
+      <div class="modal-atencion-tip flex items-center gap-2 sm:gap-3 bg-sky-50 rounded-xl p-3 sm:p-4 border border-sky-100">
+        <span class="modal-atencion-tip-icon"><%- icono('luz', 'w-5 h-5 sm:w-6 sm:h-6 text-sky-600 shrink-0') %></span>
+        <p class="modal-atencion-tip-text text-sky-700 text-xs sm:text-sm font-medium">
+          Lee bien cada pregunta antes de responder. Concentrate y da lo mejor de ti!
+        </p>
+      </div>
+      
+      <button onclick="iniciarActividad()" 
+              class="modal-atencion-btn w-full py-3 px-6 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-base sm:text-lg rounded-2xl hover:from-sky-600 hover:to-blue-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+        <span class="modal-atencion-btn-icon"><%- icono('jugar', 'w-4 h-4 sm:w-5 sm:h-5') %></span>
+        Comenzar Ahora!
+      </button>
     </div>
-    
-    <h2 class="text-3xl font-extrabold text-slate-900 mb-3"><%- icono('reloj', 'w-6 h-6 inline text-amber-600') %> Atencion!</h2>
-    
-    <div class="bg-amber-50 rounded-2xl p-6 mb-6 border border-amber-100">
-      <p class="text-lg font-bold text-amber-800 mb-2">
-        Esta actividad tiene un <span class="underline decoration-wavy decoration-amber-400">limite de tiempo</span>
-      </p>
-      <p class="text-amber-700">
-        Debes responder cada pregunta dentro del tiempo establecido. 
-        Si el tiempo se agota, la respuesta se enviara automaticamente.
-      </p>
-    </div>
-    
-    <div class="flex items-center gap-3 bg-sky-50 rounded-xl p-4 mb-8 border border-sky-100">
-      <%- icono('luz', 'w-7 h-7 text-sky-600 shrink-0') %>
-      <p class="text-sky-700 text-sm font-medium">
-        Lee bien cada pregunta antes de responder. Concentrate y da lo mejor de ti!
-      </p>
-    </div>
-    
-    <button onclick="iniciarActividad()" 
-            class="w-full py-4 px-8 bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-xl rounded-2xl hover:from-sky-600 hover:to-blue-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
-      <%- icono('jugar', 'w-5 h-5') %>
-      Comenzar Ahora!
-    </button>
   </div>
 </div>
 
@@ -55,6 +59,54 @@
   }
   .animate-pulse-soft {
     animation: pulseSoft 2s ease-in-out infinite;
+  }
+  [data-theme="dark"] .modal-atencion-content {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+  }
+  [data-theme="dark"] .modal-atencion-icon {
+    background-color: #0f172a !important;
+  }
+  [data-theme="dark"] .modal-atencion-svg {
+    stroke: #64748b !important;
+  }
+  [data-theme="dark"] .modal-atencion-title {
+    color: #f1f5f9 !important;
+  }
+  [data-theme="dark"] .modal-atencion-title svg {
+    color: #94a3b8 !important;
+  }
+  [data-theme="dark"] .modal-atencion-warn {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+  }
+  [data-theme="dark"] .modal-atencion-warn-title {
+    color: #e2e8f0 !important;
+  }
+  [data-theme="dark"] .modal-atencion-warn-title span {
+    text-decoration-color: #64748b !important;
+  }
+  [data-theme="dark"] .modal-atencion-warn-text {
+    color: #94a3b8 !important;
+  }
+  [data-theme="dark"] .modal-atencion-tip {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+  }
+  [data-theme="dark"] .modal-atencion-tip-icon svg {
+    color: #64748b !important;
+  }
+  [data-theme="dark"] .modal-atencion-tip-text {
+    color: #94a3b8 !important;
+  }
+  [data-theme="dark"] .modal-atencion-btn {
+    background: #334155 !important;
+  }
+  [data-theme="dark"] .modal-atencion-btn:hover {
+    background: #475569 !important;
+  }
+  [data-theme="dark"] .modal-atencion-btn-icon svg {
+    color: #cbd5e1 !important;
   }
 </style>
 
@@ -91,12 +143,13 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    const estadoActividad = sessionStorage.getItem('actividad_iniciada');
-    if (!estadoActividad) {
-      setTimeout(mostrarAtencion, 300);
-    } else {
-      const contenido = document.getElementById('contenido-actividad');
-      if (contenido) contenido.style.display = 'block';
+    const contenido = document.getElementById('contenido-actividad');
+    if (contenido) {
+      contenido.style.display = 'block';
+      contenido.classList.add('animate-fade-in');
+    }
+    if (typeof iniciarCronometro === 'function') {
+      setTimeout(iniciarCronometro, 500);
     }
   });
 
