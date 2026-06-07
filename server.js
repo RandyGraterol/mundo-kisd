@@ -9,7 +9,7 @@ const morgan = require('morgan');
 
 // Inicializar aplicación Express
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3041;
 
 // Configurar middleware de logs detallados en terminal
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
