@@ -10,7 +10,10 @@ const NIVELES_MEMORIA = [
   { id: 'facil', nombre: 'Fácil', pares: 4, columnas: 4, descripcion: '4 pares • Ideal para empezar', tiempoSegundos: 60 },
   { id: 'medio', nombre: 'Medio', pares: 6, columnas: 4, descripcion: '6 pares • Un buen reto', tiempoSegundos: 90 },
   { id: 'dificil', nombre: 'Difícil', pares: 8, columnas: 4, descripcion: '8 pares • Para expertos', tiempoSegundos: 120 },
-  { id: 'experto', nombre: 'Experto', pares: 10, columnas: 5, descripcion: '10 pares • Sólo valientes', tiempoSegundos: 150 }
+  { id: 'experto', nombre: 'Experto', pares: 10, columnas: 5, descripcion: '10 pares • Sólo valientes', tiempoSegundos: 150 },
+  { id: 'ultra', nombre: 'Ultra', pares: 12, columnas: 5, descripcion: '12 pares • Muy difícil', tiempoSegundos: 180 },
+  { id: 'extremo', nombre: 'Extremo', pares: 15, columnas: 5, descripcion: '15 pares • Desafío total', tiempoSegundos: 210 },
+  { id: 'legendario', nombre: 'Legendario', pares: 18, columnas: 6, descripcion: '18 pares • Sólo leyendas', tiempoSegundos: 240 }
 ];
 
 /**

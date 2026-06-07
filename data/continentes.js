@@ -8,7 +8,13 @@ const continentes = [
     svgIcon: 'america',
     color: '#ec4899', // Rosa/Fucsia
     descripcion: 'América es el segundo continente más grande del mundo, dividido en América del Norte, Central y del Sur. Tiene una gran diversidad de climas, desde el frío ártico hasta las selvas tropicales. Es hogar de culturas milenarias como los mayas, aztecas e incas.',
-    datosCuriosos: 'El río Amazonas, que atraviesa América del Sur, es el más caudaloso del mundo y su selva produce el 20% del oxígeno de la Tierra.',
+    datosCuriosos: [
+      'El río Amazonas, que atraviesa América del Sur, es el más caudaloso del mundo y su selva produce el 20% del oxígeno de la Tierra.',
+      'América tiene el desierto más seco del mundo: el Desierto de Atacama en Chile, donde hay zonas que nunca han registrado lluvias.',
+      'El Gran Cañón en Estados Unidos tiene casi 2,000 millones de años de antigüedad y fue formado por el río Colorado.',
+      'Canadá tiene más lagos que cualquier otro país del mundo: más de 2 millones de lagos.',
+      'Brasil es el país con mayor biodiversidad del planeta, con más de 4,000 especies de aves y mamíferos.'
+    ],
     paisesPrincipales: ['Brasil', 'Estados Unidos', 'México', 'Argentina', 'Canadá', 'Venezuela'],
     preguntas: [
       {
@@ -40,7 +46,13 @@ const continentes = [
     svgIcon: 'europa',
     color: '#3b82f6', // Azul
     descripcion: 'Europa es un continente con una rica historia y cultura. Aunque es el segundo continente más pequeño, tiene una gran densidad de población. Es conocido por sus monumentos históricos, arte y arquitectura. Aquí nacieron grandes civilizaciones como la griega y la romana.',
-    datosCuriosos: 'Europa tiene más de 200 idiomas diferentes y es el continente con mayor número de países pequeños. El Vaticano, el país más pequeño del mundo, está en Europa.',
+    datosCuriosos: [
+      'Europa tiene más de 200 idiomas diferentes y es el continente con mayor número de países pequeños.',
+      'El Vaticano, el país más pequeño del mundo con solo 0.44 km², está en Europa y es gobernado por el Papa.',
+      'Los Juegos Olímpicos modernos comenzaron en Atenas, Grecia, en 1896, inspirándose en los antiguos juegos de Olimpia.',
+      'El tren más rápido del mundo está en Francia: el TGV alcanzó una velocidad récord de 574.8 km/h.',
+      'Islandia, un país europeo, no tiene ejército y es uno de los lugares más seguros del mundo para vivir.'
+    ],
     paisesPrincipales: ['Rusia', 'Alemania', 'Francia', 'Reino Unido', 'Italia', 'España'],
     preguntas: [
       {
@@ -72,7 +84,13 @@ const continentes = [
     svgIcon: 'asia',
     color: '#fbbf24', // Amarillo
     descripcion: 'Asia es el continente más grande y poblado del mundo. Tiene una increíble diversidad de paisajes, desde las montañas más altas (el Himalaya) hasta desiertos y selvas tropicales. Es la cuna de grandes civilizaciones antiguas como China, India y Mesopotamia.',
-    datosCuriosos: 'El Monte Everest, la montaña más alta del mundo con 8,848 metros, está en Asia. Además, más de la mitad de la población mundial vive en este continente.',
+    datosCuriosos: [
+      'El Monte Everest, la montaña más alta del mundo con 8,848 metros, está en la cordillera del Himalaya en Asia.',
+      'Más de la mitad de la población mundial vive en Asia: aproximadamente 4,700 millones de personas.',
+      'China tiene la muralla más larga del mundo: la Gran Muralla China mide más de 21,000 kilómetros.',
+      'Japón tiene más de 6,800 islas, pero solo 430 están habitadas.',
+      'El idioma más hablado del mundo es el chino mandarín, con más de 1,100 millones de hablantes.'
+    ],
     paisesPrincipales: ['China', 'India', 'Japón', 'Indonesia', 'Corea del Sur', 'Tailandia'],
     preguntas: [
       {
@@ -104,7 +122,13 @@ const continentes = [
     svgIcon: 'africa',
     color: '#10b981', // Verde
     descripcion: 'África es el tercer continente más grande del mundo y es conocido como la cuna de la humanidad. Tiene una increíble diversidad de vida salvaje, con animales como leones, elefantes y jirafas. El desierto del Sahara, el más grande del mundo, está en África.',
-    datosCuriosos: 'El río Nilo, que atraviesa África, es el río más largo del mundo con 6,650 kilómetros. África tiene más de 3,000 grupos étnicos diferentes y más de 2,000 idiomas.',
+    datosCuriosos: [
+      'El río Nilo, que atraviesa África, es el río más largo del mundo con 6,650 kilómetros de longitud.',
+      'África tiene más de 3,000 grupos étnicos diferentes y más de 2,000 idiomas distintos.',
+      'El Kilimanjaro en Tanzania es la montaña más alta de África con 5,895 metros, ¡y tiene nieve en el ecuador!',
+      'Egipto tiene las pirámides más antiguas del mundo: la Gran Pirámide de Guiza se construyó hace más de 4,500 años.',
+      'África es el único continente que se extiende por los cuatro hemisferios: norte, sur, este y oeste.'
+    ],
     paisesPrincipales: ['Nigeria', 'Egipto', 'Sudáfrica', 'Kenia', 'Etiopía', 'Marruecos'],
     preguntas: [
       {
@@ -136,7 +160,13 @@ const continentes = [
     svgIcon: 'oceania',
     color: '#8b5cf6', // Morado
     descripcion: 'Oceanía es el continente más pequeño, formado por miles de islas en el océano Pacífico. Australia es el país más grande de este continente. Tiene animales únicos que no se encuentran en ningún otro lugar, como los canguros y los koalas.',
-    datosCuriosos: 'Hay más ovejas y canguros que personas en gran parte de este continente. La Gran Barrera de Coral, el arrecife de coral más grande del mundo, está en Australia.',
+    datosCuriosos: [
+      'Hay más ovejas y canguros que personas en gran parte de Oceanía: Australia tiene 3 veces más ovejas que personas.',
+      'La Gran Barrera de Coral, el arrecife de coral más grande del mundo, está en Australia y puede verse desde el espacio.',
+      'Nueva Zelanda fue el primer país del mundo en darle el voto a la mujer, en 1893.',
+      'Oceanía tiene la capital más pequeña del mundo: Funafuti, en Tuvalu, con menos de 7,000 habitantes.',
+      'Papúa Nueva Guinea tiene más de 800 idiomas nativos, lo que la convierte en el país con mayor diversidad lingüística del planeta.'
+    ],
     paisesPrincipales: ['Australia', 'Fiyi', 'Islas Marshall', 'Islas Salomón', 'Kiribati', 'Micronesia', 'Nauru', 'Nueva Zelanda', 'Palaos', 'Papúa N. Guinea', 'Samoa', 'Tonga', 'Tuvalu', 'Vanuatu'],
     preguntas: [
       {
@@ -168,7 +198,13 @@ const continentes = [
     svgIcon: 'antartida',
     color: '#6b7280', // Gris
     descripcion: 'La Antártida es el continente más frío, seco y ventoso de la Tierra. Está cubierto casi completamente de hielo y nieve. No tiene población permanente, solo científicos que viven temporalmente en estaciones de investigación. Es el hogar de pingüinos, focas y ballenas.',
-    datosCuriosos: 'La Antártida contiene el 90% del hielo del mundo y el 70% del agua dulce del planeta. La temperatura más baja registrada en la Tierra fue aquí: -89.2°C.',
+    datosCuriosos: [
+      'La Antártida contiene el 90% del hielo del mundo y el 70% del agua dulce del planeta.',
+      'La temperatura más baja registrada en la Tierra fue en la Antártida: -89.2°C en 1983.',
+      'No hay osos polares en la Antártida — los osos polares viven solo en el Ártico, en el Polo Norte.',
+      'La Antártida no tiene husos horarios: es el único continente sin una zona horaria definida.',
+      'En verano, la Antártida recibe 24 horas de luz solar al día, y en invierno, 24 horas de oscuridad total.'
+    ],
     paisesPrincipales: [], // No tiene países, es un territorio internacional
     preguntas: [
       {

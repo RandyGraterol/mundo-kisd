@@ -219,6 +219,14 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof lanzarFuegosArtificiales === 'function') {
               lanzarFuegosArtificiales(3);
             }
+            if (data.siguienteNivel) {
+              var params = new URLSearchParams(window.location.search);
+              var tema = params.get('tema') || 'global';
+              var modo = params.get('modo') || 'normal';
+              setTimeout(function() {
+                window.location.href = '/memoria/jugar?tema=' + tema + '&nivel=' + data.siguienteNivel + '&modo=' + modo;
+              }, 2500);
+            }
           }, 800);
         }
 
@@ -257,10 +265,11 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 let nivelSeleccionado = null;
 let modoSeleccionado = 'normal';
+let temaSeleccionado = null;
 
-function seleccionarNivel(nivelId) {
+function seleccionarMemNivel(nivelId) {
   nivelSeleccionado = nivelId;
-  document.querySelectorAll('.nivel-link').forEach(el => {
+  document.querySelectorAll('.mem-nivel-link').forEach(el => {
     if (el.dataset.nivel === nivelId) {
       el.classList.add('ring-2', 'ring-purple-500', 'shadow-lg', 'scale-[1.02]');
       el.style.borderWidth = '3px';
@@ -269,35 +278,68 @@ function seleccionarNivel(nivelId) {
       el.style.borderWidth = '2px';
     }
   });
-  actualizarEnlaces();
 }
 
-function actualizarEnlaces() {
-  var modo = modoSeleccionado || 'normal';
-  var nivel = nivelSeleccionado || 'medio';
-  document.querySelectorAll('.tema-link, .continente-link').forEach(function(el) {
-    var href = el.getAttribute('href');
-    if (href) {
-      href = href.replace(/modo=[a-z]+/, 'modo=' + modo).replace(/nivel=[a-z]+/, 'nivel=' + nivel);
-      el.setAttribute('href', href);
+function seleccionarMemTema(temaId) {
+  temaSeleccionado = temaId;
+  document.querySelectorAll('.mem-tema-card').forEach(el => {
+    if (el.dataset.tema === temaId) {
+      el.classList.add('ring-2', 'ring-purple-500', 'shadow-lg', 'scale-[1.02]');
+      el.style.borderColor = '#a855f7';
+    } else {
+      el.classList.remove('ring-2', 'ring-purple-500', 'shadow-lg', 'scale-[1.02]');
+      el.style.borderColor = '';
     }
   });
 }
 
+function iniciarMemoria() {
+  var faltan = [];
+  if (!temaSeleccionado) faltan.push('Tema');
+  if (!nivelSeleccionado) faltan.push('Nivel');
+  if (faltan.length > 0) {
+    mostrarMemFaltan(faltan);
+    return;
+  }
+  window.location.href = '/memoria/jugar?tema=' + temaSeleccionado + '&nivel=' + nivelSeleccionado + '&modo=' + modoSeleccionado;
+}
+
+function mostrarMemFaltan(faltan) {
+  var modal = document.getElementById('mem-modal-faltan');
+  var msg = document.getElementById('mem-modal-faltan-msg');
+  if (modal && msg) {
+    msg.textContent = 'Debes seleccionar: ' + faltan.join(', ');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function cerrarMemFaltan() {
+  var modal = document.getElementById('mem-modal-faltan');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
 function seleccionarModo(modo) {
   modoSeleccionado = modo;
-  const cardNormal = document.getElementById('modo-normal-card');
-  const cardContra = document.getElementById('modo-contrarreloj-card');
-  const ayudaTiempos = document.getElementById('tiempos-ayuda');
+  var base = 'mem-mode-card cursor-pointer flex flex-col items-center gap-1 p-3 bg-white rounded-xl border-2 transition-all hover:-translate-y-0.5 hover:shadow-md';
+  var cardNormal = document.getElementById('modo-normal-card');
+  var cardContra = document.getElementById('modo-contrarreloj-card');
+  var ayudaTiempos = document.getElementById('tiempos-ayuda');
 
-  // Actualizar estilos de las tarjetas
   if (cardNormal && cardContra) {
     if (modo === 'normal') {
-      cardNormal.className = 'cursor-pointer flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border-2 border-purple-400 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg';
-      cardContra.className = 'cursor-pointer flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border-2 border-slate-200 transition-all hover:-translate-y-1 hover:shadow-lg';
+      cardNormal.className = base + ' border-emerald-500 shadow-md';
+      cardNormal.style.setProperty('border-color', '#10b981', 'important');
+      cardContra.className = base + ' border-slate-200';
+      cardContra.style.setProperty('border-color', '#cbd5e1', 'important');
     } else {
-      cardContra.className = 'cursor-pointer flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border-2 border-rose-400 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg';
-      cardNormal.className = 'cursor-pointer flex flex-col items-center gap-2 p-5 bg-white rounded-2xl border-2 border-slate-200 transition-all hover:-translate-y-1 hover:shadow-lg';
+      cardContra.className = base + ' border-emerald-500 shadow-md';
+      cardContra.style.setProperty('border-color', '#10b981', 'important');
+      cardNormal.className = base + ' border-slate-200';
+      cardNormal.style.setProperty('border-color', '#cbd5e1', 'important');
     }
   }
 
@@ -307,9 +349,7 @@ function seleccionarModo(modo) {
   }
 
   // Mostrar/ocultar badge de tiempo en cada tarjeta de nivel
-  document.querySelectorAll('.tiempito').forEach(el => {
+  document.querySelectorAll('.tiempito').forEach(function(el) {
     el.style.display = modo === 'contrarreloj' ? 'inline-flex' : 'none';
   });
-
-  actualizarEnlaces();
 }

@@ -52,10 +52,28 @@ function verificarSesion(req, res, next) {
       puntosTotal: usuario.puntos_total,
       continentesVisitados,
       retosCompletados,
-      fechaRegistro: usuario.fecha_registro || new Date().toISOString()
+      fechaRegistro: usuario.fecha_registro || new Date().toISOString(),
+      nivelesCompletados: {}
     };
   }
   
+  // Cargar niveles completados desde BD (puede ser JSON string)
+  if (usuario.niveles_completados) {
+    try {
+      const parsed = typeof usuario.niveles_completados === 'string'
+        ? JSON.parse(usuario.niveles_completados)
+        : usuario.niveles_completados;
+      req.session.progreso.nivelesCompletados = parsed;
+    } catch (e) {
+      req.session.progreso.nivelesCompletados = {};
+    }
+  }
+
+  // Asegurar que nivelesCompletados siempre exista
+  if (!req.session.progreso.nivelesCompletados) {
+    req.session.progreso.nivelesCompletados = {};
+  }
+
   res.locals.progreso = req.session.progreso;
   
   req.usuario = usuario;

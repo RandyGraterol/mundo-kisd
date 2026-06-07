@@ -4,6 +4,8 @@ const router = express.Router();
 const { generarJuegoMemoria, obtenerTemasMemoria, obtenerNivelesMemoria, obtenerNivelPorId } = require('../helpers/memoria');
 const { obtenerContinentes } = require('../data/continentes');
 const { registrarActividad, actualizarPuntosYNivel } = require('../database/db');
+const { verificarYDesbloquearLogros } = require('../helpers/logros');
+const { enriquecerConDesbloqueo, estaDesbloqueado, PROGRESION } = require('../helpers/desbloqueos');
 
 // Middleware de verificación de sesión
 function verificarSesion(req, res, next) {
@@ -19,6 +21,24 @@ function verificarSesion(req, res, next) {
 /**
  * GET /memoria - Página principal del juego de memoria
  */
+// ──────────────────────────────────────────────
+// Funciones de Utilidad
+// ──────────────────────────────────────────────
+
+function registrarCompletado(req, juego, nivelId) {
+  req.session.progreso.nivelesCompletados = require('../helpers/desbloqueos').marcarCompletado(
+    juego, nivelId, req.session.progreso.nivelesCompletados
+  );
+  if (req.session.usuarioId) {
+    const { guardarNivelesCompletados } = require('../database/db');
+    guardarNivelesCompletados(req.session.usuarioId, req.session.progreso.nivelesCompletados);
+  }
+}
+
+// ──────────────────────────────────────────────
+// Rutas
+// ──────────────────────────────────────────────
+
 router.get('/', verificarSesion, (req, res) => {
   const temas = obtenerTemasMemoria();
   const niveles = obtenerNivelesMemoria();
@@ -28,10 +48,12 @@ router.get('/', verificarSesion, (req, res) => {
     emoji: c.emoji,
     color: c.color
   }));
+  const completados = req.session.progreso?.nivelesCompletados;
+  const nivelesDesbloqueo = enriquecerConDesbloqueo('memoria', niveles, completados);
 
   res.render('memoria', {
     temas,
-    niveles,
+    niveles: nivelesDesbloqueo,
     continentes,
     juego: null
   });
@@ -45,6 +67,12 @@ router.get('/jugar', verificarSesion, (req, res) => {
   const nivelId = req.query.nivel || 'medio';
   const modo = req.query.modo || 'normal';
 
+  // Verificar desbloqueo del nivel
+  const completados = req.session.progreso?.nivelesCompletados;
+  if (!estaDesbloqueado('memoria', nivelId, completados)) {
+    return res.redirect('/memoria');
+  }
+
   const juego = generarJuegoMemoria(temaId, nivelId, modo);
   const temas = obtenerTemasMemoria();
   const niveles = obtenerNivelesMemoria();
@@ -57,6 +85,8 @@ router.get('/jugar', verificarSesion, (req, res) => {
     totalPares: juego.totalPares,
     paresEncontrados: 0,
     intentos: 0,
+    nivelId: nivelId,
+    tema: temaId,
     modo: juego.modo,
     tiempoLimite: juego.tiempoLimite
   };
@@ -120,14 +150,26 @@ router.post('/verificar', express.json(), verificarSesion, (req, res) => {
         tipoActividad: 'memoria',
         puntajeObtenido: 10,
         respuestasCorrectas: 1,
-        respuestasTotales: juegoGuardado.totalPares,
+        respuestasTotales: 1,
         tiempoSegundos: null
       });
       actualizarPuntosYNivel(req.session.usuarioId, 10);
+      try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
     }
   }
 
   const juegoCompletado = juegoGuardado.paresEncontrados >= juegoGuardado.totalPares;
+
+  // Registrar nivel completado
+  var siguienteNivel = null;
+  if (juegoCompletado && juegoGuardado.nivelId) {
+    registrarCompletado(req, 'memoria', juegoGuardado.nivelId);
+    var progresion = PROGRESION.memoria;
+    var idx = progresion.indexOf(juegoGuardado.nivelId);
+    if (idx >= 0 && idx < progresion.length - 1) {
+      siguienteNivel = progresion[idx + 1];
+    }
+  }
 
   res.json({
     esPar,
@@ -136,7 +178,8 @@ router.post('/verificar', express.json(), verificarSesion, (req, res) => {
     paresEncontrados: juegoGuardado.paresEncontrados,
     totalPares: juegoGuardado.totalPares,
     intentos: juegoGuardado.intentos,
-    juegoCompletado
+    juegoCompletado,
+    siguienteNivel
   });
 });
 

@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   rol TEXT DEFAULT 'alumno' CHECK(rol IN ('alumno', 'profesor')),
   nivel INTEGER DEFAULT 1,
   puntos_total INTEGER DEFAULT 0,
+  niveles_completados TEXT DEFAULT '{}',
   fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
   ultimo_acceso DATETIME DEFAULT CURRENT_TIMESTAMP
 );

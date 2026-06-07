@@ -1,105 +1,147 @@
-<div class="min-h-screen p-responsive-main lg:p-10 animate-fade-in">
+<style>
+  [data-theme="dark"] .con-badge { background: rgba(99,102,241,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .con-badge svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .con-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] .con-subtitle { color: #64748b !important; }
+  [data-theme="dark"] .con-btn-primary { background: #475569 !important; }
+  [data-theme="dark"] .con-btn-primary:hover { background: #64748b !important; }
+  [data-theme="dark"] .con-filter-bar { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .con-filter-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .con-filter-btn-active { background-color: #475569 !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .con-filter-btn { color: #94a3b8 !important; }
+  [data-theme="dark"] .con-filter-btn:hover { background-color: #0f172a !important; }
+  [data-theme="dark"] .con-empty { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .con-empty-icon { background: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .con-empty-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .con-empty-text { color: #64748b !important; }
+  [data-theme="dark"] .con-empty-btn { background: #475569 !important; }
+  [data-theme="dark"] .con-empty-btn:hover { background: #64748b !important; }
+  [data-theme="dark"] .con-card { background-color: #1e293b !important; }
+  [data-theme="dark"] .con-card-active { border-color: #334155 !important; }
+  [data-theme="dark"] .con-card-inactive { border-color: #334155 !important; background-color: rgba(30,41,59,0.5) !important; }
+  [data-theme="dark"] .con-card:hover { border-color: #475569 !important; }
+  [data-theme="dark"] .con-type-cont { background: rgba(56,189,248,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .con-type-cont svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .con-type-band { background: rgba(251,146,60,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .con-type-band svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .con-continent-tag { background: rgba(100,116,139,0.2) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .con-status-inactive { background: rgba(239,68,68,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .con-id { color: #475569 !important; }
+  [data-theme="dark"] .con-question-text { color: #e2e8f0 !important; }
+  [data-theme="dark"] .con-option-correct { color: #94a3b8 !important; }
+  [data-theme="dark"] .con-option-dot-correct { background-color: #64748b !important; }
+  [data-theme="dark"] .con-option-dot { background-color: #475569 !important; }
+  [data-theme="dark"] .con-option-check { color: #64748b !important; }
+  [data-theme="dark"] .con-meta { color: #64748b !important; }
+  [data-theme="dark"] .con-meta svg { color: #475569 !important; }
+  [data-theme="dark"] .con-action-btn { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .con-action-btn:hover { background-color: rgba(56,189,248,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .con-action-del { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .con-action-del:hover { background-color: rgba(239,68,68,0.15) !important; color: #94a3b8 !important; }
+</style>
+
+<div class="min-h-screen p-4 sm:p-6 animate-fade-in">
   <div class="max-w-7xl mx-auto">
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8 md:mb-10 gap-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
       <div>
-        <div class="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+        <div class="con-badge inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
           Gestor de Contenido
         </div>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Banco de Preguntas</h1>
-        <p class="text-slate-500 mt-1 text-sm sm:text-base">Crea y administra las preguntas personalizadas para tus actividades.</p>
+        <h1 class="con-title text-2xl font-extrabold text-slate-900">Banco de Preguntas</h1>
+        <p class="con-subtitle text-slate-500 text-xs mt-0.5">Crea y administra preguntas personalizadas.</p>
       </div>
       <a href="/admin/contenido/nueva"
-         class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-all soft-shadow flex items-center gap-2 w-full sm:w-auto justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+         class="con-btn-primary bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl transition-all flex items-center gap-2 w-full sm:w-auto justify-center text-xs">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Nueva Pregunta
       </a>
     </div>
 
     <!-- Filtros -->
-    <div class="bg-white rounded-2xl p-3 sm:p-4 md:p-5 soft-shadow border border-slate-100 mb-responsive flex flex-wrap items-center gap-responsive-main">
-      <span class="text-xs sm:text-sm font-semibold text-slate-600">Filtrar:</span>
-      <button onclick="filtrar('todas')" class="filtro-btn px-responsive-main py-1.5 rounded-lg text-xs sm:text-sm font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-all" data-filtro="todas">Todas</button>
-      <button onclick="filtrar('continente')" class="filtro-btn px-responsive-main py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition-all" data-filtro="continente">Continentes</button>
-      <button onclick="filtrar('banderas')" class="filtro-btn px-responsive-main py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition-all" data-filtro="banderas">Banderas</button>
-      <button onclick="filtrar('activas')" class="filtro-btn px-responsive-main py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition-all" data-filtro="activas">Activas</button>
-      <button onclick="filtrar('inactivas')" class="filtro-btn px-responsive-main py-1.5 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition-all" data-filtro="inactivas">Inactivas</button>
+    <div class="con-filter-bar bg-white rounded-xl p-3 border border-slate-100 mb-6 flex flex-wrap items-center gap-2">
+      <span class="con-filter-label text-xs font-semibold text-slate-600">Filtrar:</span>
+      <button onclick="filtrar('todas')" class="filtro-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition-all con-filter-btn-active" data-filtro="todas">Todas</button>
+      <button onclick="filtrar('continente')" class="filtro-btn px-3 py-1.5 rounded-lg text-xs font-medium con-filter-btn text-slate-600 hover:bg-slate-100 transition-all" data-filtro="continente">Continentes</button>
+      <button onclick="filtrar('banderas')" class="filtro-btn px-3 py-1.5 rounded-lg text-xs font-medium con-filter-btn text-slate-600 hover:bg-slate-100 transition-all" data-filtro="banderas">Banderas</button>
+      <button onclick="filtrar('activas')" class="filtro-btn px-3 py-1.5 rounded-lg text-xs font-medium con-filter-btn text-slate-600 hover:bg-slate-100 transition-all" data-filtro="activas">Activas</button>
+      <button onclick="filtrar('inactivas')" class="filtro-btn px-3 py-1.5 rounded-lg text-xs font-medium con-filter-btn text-slate-600 hover:bg-slate-100 transition-all" data-filtro="inactivas">Inactivas</button>
     </div>
 
-    <!-- Lista de Preguntas -->
+    <!-- Lista -->
     <% if (preguntas.length === 0) { %>
-      <div class="bg-white rounded-2xl p-6 sm:p-12 md:p-16 soft-shadow border border-slate-100 text-center">
-        <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-100 text-indigo-600 mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+      <div class="con-empty bg-white rounded-xl p-8 border border-slate-100 text-center">
+        <div class="con-empty-icon inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
         </div>
-        <h3 class="text-xl font-bold text-slate-700 mb-2">No hay preguntas aún</h3>
-        <p class="text-slate-400 mb-6">Crea tu primera pregunta personalizada para tus alumnos.</p>
+        <h3 class="con-empty-title text-lg font-bold text-slate-700 mb-1">No hay preguntas aún</h3>
+        <p class="con-empty-text text-slate-400 text-sm mb-4">Crea tu primera pregunta personalizada.</p>
         <a href="/admin/contenido/nueva"
-           class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition-all inline-block">
+           class="con-empty-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl transition-all inline-block text-xs">
           Crear Primera Pregunta
         </a>
       </div>
     <% } else { %>
-      <div class="space-y-3 sm:space-y-4">
+      <div class="space-y-3">
         <% preguntas.forEach(function(p, index) { %>
-          <div class="pregunta-item bg-white rounded-2xl p-4 sm:p-5 soft-shadow border <%= p.activa ? 'border-slate-100' : 'border-red-100 bg-red-50/30' %> hover:border-indigo-200 transition-all"
+          <div class="pregunta-item rounded-xl p-4 border <%= p.activa ? 'con-card-active border-slate-100 con-card' : 'con-card-inactive border-red-100 bg-red-50/30 con-card' %> hover:border-indigo-200 transition-all"
                data-tipo="<%= p.tipo %>"
                data-activa="<%= p.activa %>">
-            <div class="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-start gap-3">
               <div class="flex-1 min-w-0">
-                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
-                  <span class="px-2.5 py-0.5 rounded-full text-xs font-bold inline-flex items-center gap-1 <%= p.tipo === 'continente' ? 'bg-sky-100 text-sky-700' : 'bg-orange-100 text-orange-700' %>">
-                    <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold inline-flex items-center gap-1 <%= p.tipo === 'continente' ? 'con-type-cont bg-sky-100 text-sky-700' : 'con-type-band bg-orange-100 text-orange-700' %>">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                     <%= p.tipo === 'continente' ? 'Continente' : 'Banderas' %>
                   </span>
                   <% if (p.continente_id) { %>
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+                    <span class="con-continent-tag px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">
                       <%= continentes.find(c => c.id === p.continente_id)?.nombre || p.continente_id %>
                     </span>
                   <% } %>
                   <% if (!p.activa) { %>
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600">Inactiva</span>
+                    <span class="con-status-inactive px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-600">Inactiva</span>
                   <% } %>
-                  <span class="text-xs text-slate-400 ml-auto">#<%= p.id %></span>
+                  <span class="con-id text-[10px] text-slate-400 ml-auto">#<%= p.id %></span>
                 </div>
-                <h3 class="text-base sm:text-lg font-bold text-slate-800"><%= p.pregunta %></h3>
-                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                <h3 class="con-question-text text-sm font-bold text-slate-800"><%= p.pregunta %></h3>
+                <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
                   <% p.opciones.forEach(function(opcion, oIndex) { %>
-                    <div class="flex items-center gap-2 <%= oIndex === p.respuesta_correcta ? 'text-emerald-600 font-semibold' : 'text-slate-500' %>">
-                      <span class="w-2 h-2 rounded-full <%= oIndex === p.respuesta_correcta ? 'bg-emerald-500' : 'bg-slate-300' %> flex-shrink-0"></span>
-                      <span class="text-sm truncate"><%= opcion %></span>
+                    <div class="flex items-center gap-1.5 <%= oIndex === p.respuesta_correcta ? 'con-option-correct text-emerald-600 font-semibold' : 'text-slate-500' %>">
+                      <span class="w-1.5 h-1.5 rounded-full <%= oIndex === p.respuesta_correcta ? 'con-option-dot-correct bg-emerald-500' : 'con-option-dot bg-slate-300' %> shrink-0"></span>
+                      <span class="text-xs truncate"><%= opcion %></span>
                       <% if (oIndex === p.respuesta_correcta) { %>
-                        <svg class="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        <svg class="con-option-check w-3 h-3 text-emerald-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                       <% } %>
                     </div>
                   <% }); %>
                 </div>
-                <div class="flex flex-wrap items-center gap-2 sm:gap-4 mt-3 text-xs text-slate-400">
+                <div class="con-meta flex flex-wrap items-center gap-2 mt-2 text-[11px] text-slate-400">
                   <span class="inline-flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     <%= p.puntos %> pts
                   </span>
                   <span class="inline-flex items-center gap-1">
-                    <svg class="w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <%= p.tiempo_limite %>s
                   </span>
-                  <span class="truncate">Creada por: <%= p.creado_por %></span>
+                  <span class="truncate"><%= p.creado_por %></span>
                   <span class="hidden sm:inline"><%= new Date(p.fecha_creacion).toLocaleDateString() %></span>
                 </div>
               </div>
-              <div class="flex items-center gap-2 flex-shrink-0 self-end sm:self-start">
+              <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-start">
                 <a href="/admin/contenido/editar/<%= p.id %>"
-                   class="p-2.5 bg-slate-100 hover:bg-sky-100 rounded-xl text-slate-500 hover:text-sky-600 transition-all"
+                   class="con-action-btn p-2 bg-slate-100 hover:bg-sky-100 rounded-lg text-slate-500 hover:text-sky-600 transition-all"
                    title="Editar">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
                 </a>
-                <form action="/admin/contenido/eliminar/<%= p.id %>" method="POST" onsubmit="return confirm('¿Desactivar esta pregunta? No se eliminará permanentemente.');">
+                <form action="/admin/contenido/eliminar/<%= p.id %>" method="POST" onsubmit="return confirm('¿Desactivar esta pregunta?');">
                   <button type="submit"
-                     class="p-2.5 bg-slate-100 hover:bg-red-100 rounded-xl text-slate-500 hover:text-red-600 transition-all"
+                     class="con-action-del p-2 bg-slate-100 hover:bg-red-100 rounded-lg text-slate-500 hover:text-red-600 transition-all"
                      title="Desactivar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
                 </form>
               </div>
@@ -114,13 +156,13 @@
 <script>
 function filtrar(filtro) {
   document.querySelectorAll('.filtro-btn').forEach(function(btn) {
-    btn.classList.remove('bg-indigo-100', 'text-indigo-700');
-    btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+    btn.classList.remove('con-filter-btn-active', 'bg-indigo-100', 'text-indigo-700');
+    btn.classList.add('con-filter-btn', 'text-slate-600', 'hover:bg-slate-100');
   });
   var activo = document.querySelector('.filtro-btn[data-filtro="' + filtro + '"]');
   if (activo) {
-    activo.classList.add('bg-indigo-100', 'text-indigo-700');
-    activo.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    activo.classList.add('con-filter-btn-active', 'bg-indigo-100', 'text-indigo-700');
+    activo.classList.remove('con-filter-btn', 'text-slate-600', 'hover:bg-slate-100');
   }
 
   document.querySelectorAll('.pregunta-item').forEach(function(item) {

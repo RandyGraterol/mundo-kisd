@@ -1,99 +1,87 @@
 <%- include('partials/confetti') %>
 
-<div class="min-h-screen flex items-center justify-center p-6 py-12 animate-fade-in">
+<style>
+  [data-theme="dark"] .res-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .res-icon-correct { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .res-icon-wrong { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .res-h2 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .res-label { color: #64748b !important; }
+  [data-theme="dark"] .res-pais { color: #cbd5e1 !important; }
+  [data-theme="dark"] .res-pais-wrong { color: #94a3b8 !important; }
+  [data-theme="dark"] .res-puntos { background-color: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .res-stat { background-color: #0f172a !important; border-color: #1e293b !important; }
+  [data-theme="dark"] .res-stat-value { color: #94a3b8 !important; }
+  [data-theme="dark"] .res-box-correct { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .res-box-wrong { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .res-nivelup { background: #1e293b !important; }
+  [data-theme="dark"] .res-nivelup-icon { background-color: #0f172a !important; }
+  [data-theme="dark"] .res-nivelup-text { color: #e2e8f0 !important; }
+
+</style>
+
+<div class="min-h-screen flex items-center justify-center p-4 sm:p-6 animate-fade-in">
   
-  <div class="bg-white rounded-[3rem] shadow-xl p-responsive card-padding-md max-w-2xl w-full border border-slate-100 relative overflow-hidden">
-    
-    <!-- Resultado -->
-    <div class="text-center mb-10">
-    <% if (esCorrecta) { %>
-        <!-- Respuesta Correcta -->
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-green-100 text-green-600 mb-6 animate-bounce">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+  <div class="res-card bg-white rounded-[2.5rem] shadow-xl p-6 sm:p-8 max-w-lg w-full border border-slate-100">
+
+    <!-- Resultado + Stats -->
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-5">
+      <div class="flex-1">
+        <% if (esCorrecta) { %>
+          <div class="flex items-center gap-3">
+            <div class="res-icon-correct inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-green-100 text-green-600 animate-bounce shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div>
+              <h2 class="res-h2 text-xl font-black text-slate-900">¡Muy bien!</h2>
+              <div class="res-puntos inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-white text-green-700 font-bold text-xs shadow-sm border border-slate-100 mt-0.5">
+                +<%= puntosGanados %> pts
+                <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="res-box-correct mt-2 p-3 bg-green-50 rounded-xl border border-green-100">
+            <p class="res-label text-slate-500 font-bold uppercase tracking-widest text-[10px] mb-0.5">Es la bandera de:</p>
+            <p class="res-pais text-base font-black text-green-600"><%= paisCorrecto %></p>
+          </div>
+        <% } else { %>
+          <div class="flex items-center gap-3">
+            <div class="res-icon-wrong inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-red-100 text-red-600 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+            </div>
+            <div>
+              <h2 class="res-h2 text-xl font-black text-slate-900">¡Casi!</h2>
+            </div>
+          </div>
+          <div class="res-box-wrong mt-2 p-3 bg-slate-50 rounded-xl border border-slate-100">
+            <p class="res-label text-slate-500 font-bold uppercase tracking-widest text-[10px] mb-0.5">La respuesta correcta era:</p>
+            <p class="res-pais-wrong text-base font-black text-orange-600"><%= paisCorrecto %></p>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex gap-2 shrink-0 justify-center sm:justify-end">
+        <div class="res-stat bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-center shadow-sm min-w-[70px]">
+          <p class="res-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Nivel</p>
+          <p class="res-stat-value text-xs font-black text-slate-600"><%= progreso.nivel %></p>
         </div>
-        <h2 class="text-responsive-5xl font-black text-slate-900 mb-4">
-          ¡Muy bien!
-        </h2>
-        <div class="p-6 bg-green-50 rounded-2xl border border-green-100 mb-4">
-          <p class="text-slate-500 font-bold mb-2 uppercase tracking-widest text-xs">Es la bandera de:</p>
-          <p class="text-2xl font-black text-green-600"><%= paisCorrecto %></p>
+        <div class="res-stat bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-center shadow-sm min-w-[70px]">
+          <p class="res-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pts</p>
+          <p class="res-stat-value text-xs font-black text-slate-600"><%= progreso.puntosTotal %></p>
         </div>
-        <div class="inline-block px-6 py-2 rounded-full bg-white text-green-700 font-bold text-xl shadow-sm border border-slate-100 mb-4">
-          +<%= puntosGanados %> puntos
-          <svg class="w-5 h-5 inline-block align-text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-      <% } else { %>
-        <!-- Respuesta Incorrecta -->
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-red-100 text-red-600 mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-circle"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
-        </div>
-        <h2 class="text-5xl font-black text-slate-900 mb-4">
-          ¡Casi!
-        </h2>
-        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 mb-4">
-          <p class="text-slate-500 font-bold mb-2 uppercase tracking-widest text-xs">La bandera correcta era:</p>
-          <p class="text-2xl font-black text-orange-600"><%= paisCorrecto %></p>
-        </div>
-      <% } %>
+      </div>
     </div>
 
-    <!-- Progreso actualizado -->
-    <div class="grid grid-cols-2 gap-responsive gap-4 mb-10">
-      <div class="bg-orange-50/60 rounded-2xl p-6 border border-orange-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nivel Actual</p>
-        <p class="text-3xl font-black text-orange-600 flex items-center justify-center gap-1">
-          <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          <%= progreso.nivel %>
-        </p>
-      </div>
-      <div class="bg-orange-50/60 rounded-2xl p-6 border border-orange-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Puntos Totales</p>
-        <p class="text-3xl font-black text-orange-600 flex items-center justify-center gap-1">
-          <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <%= progreso.puntosTotal %></p>
-      </div>
-    </div>
-
-    <!-- Mensaje de nivel -->
+    <!-- Nivel -->
     <% if (subisteNivel) { %>
-      <div class="bg-gradient-to-br from-amber-400 to-orange-500 rounded-[2rem] p-8 mb-8 text-center text-white shadow-xl animate-pulse">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-2xl mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <div class="res-nivelup bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-4 mb-4 text-center text-white shadow-lg animate-pulse">
+        <div class="res-nivelup-icon inline-flex items-center justify-center w-10 h-10 bg-white/20 rounded-xl mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
-        <h4 class="text-3xl font-black mb-1">¡NUEVO NIVEL!</h4>
-        <p class="text-xl font-bold opacity-90">
-          Has alcanzado el Nivel <%= progreso.nivel %>
-        </p>
+        <h4 class="res-nivelup-text text-lg font-black mb-0.5">¡NUEVO NIVEL!</h4>
+        <p class="res-nivelup-text text-sm font-bold opacity-90">Nivel <%= progreso.nivel %></p>
       </div>
     <% } %>
-
-    <!-- Botones de navegación -->
-    <div class="grid gap-4">
-      <% if (hayMasPreguntas) { %>
-        <!-- Siguiente pregunta -->
-        <a href="/trivia-banderas" 
-           class="flex items-center justify-center gap-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xl py-5 rounded-2xl shadow-xl transition-all transform hover:-translate-y-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-circle"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="m12 16 4-4-4-4"/></svg>
-          Siguiente Bandera
-        </a>
-      <% } else { %>
-        <!-- Trivia completada -->
-        <div class="bg-green-50 border border-green-100 rounded-2xl p-6 text-center">
-          <p class="text-xl font-bold text-green-700">
-            <svg class="w-5 h-5 inline-block align-text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            ¡Has completado todas las banderas disponibles!
-          </p>
-        </div>
-      <% } %>
-
-      <!-- Volver al menú -->
-      <a href="/menu" 
-         class="flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 font-bold py-4 rounded-2xl transition-all border border-slate-200 shadow-sm">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Volver al Menú Principal
-      </a>
-    </div>
-
   </div>
 
 </div>
@@ -116,5 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1500);
     setTimeout(function() { if (typeof lanzarFuegosArtificiales === 'function') lanzarFuegosArtificiales(3); }, 2500);
   <% } %>
+  // Auto-avance
+  setTimeout(function() {
+    window.location.href = '/trivia-banderas?modo=<%= typeof modoJuego !== 'undefined' ? modoJuego : 'libre' %>';
+  }, 2500);
 });
 </script>

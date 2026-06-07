@@ -385,7 +385,7 @@ router.get('/monitoreo/:id', (req, res) => {
     };
   });
 
-  res.render('admin/alumno-detalle', {
+  res.render('admin/estudiante-detalle', {
     alumno,
     progreso: progresoConNombres,
     historial,
@@ -470,6 +470,100 @@ router.get('/exportar/csv', (req, res) => {
 
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename="mundo-kids-reporte-${new Date().toISOString().split('T')[0]}.csv"`);
+  res.send(bom + csvContent);
+});
+
+/**
+ * GET /admin/monitoreo/:id/exportar/csv - Exporta datos de un alumno como CSV
+ */
+router.get('/monitoreo/:id/exportar/csv', (req, res) => {
+  const alumnoId = parseInt(req.params.id);
+  const alumno = buscarUsuarioPorId(alumnoId);
+
+  if (!alumno || alumno.rol !== 'alumno') {
+    return res.redirect('/admin/monitoreo');
+  }
+
+  const progreso = obtenerTodoProgreso(alumnoId);
+  const historial = obtenerHistorialCompleto(alumnoId);
+  const continentes = obtenerContinentes();
+
+  const totalActividades = historial.length;
+  const totalCorrectas = historial.reduce((sum, h) => sum + h.respuestas_correctas, 0);
+  const totalRespuestas = historial.reduce((sum, h) => sum + h.respuestas_totales, 0);
+  const porcentaje = totalRespuestas > 0 ? Math.round((totalCorrectas / totalRespuestas) * 100) : 0;
+
+  const progresoPorContinente = {};
+  for (const p of progreso) {
+    progresoPorContinente[p.continente_id] = p;
+  }
+
+  // --- Sección 1: Datos del estudiante ---
+  const infoEncabezados = ['Campo', 'Valor'];
+  const infoFilas = [
+    ['Nombre Completo', alumno.nombre_completo],
+    ['Usuario', alumno.nombre_usuario],
+    ['Género', alumno.genero],
+    ['Nivel', alumno.nivel],
+    ['Puntos Totales', alumno.puntos_total],
+    ['Fecha Registro', alumno.fecha_registro],
+    ['Último Acceso', alumno.ultimo_acceso],
+    ['Total Actividades', totalActividades],
+    ['% Aciertos', porcentaje + '%']
+  ];
+
+  // --- Sección 2: Progreso por continente ---
+  const contEncabezados = ['Continente', 'Puntos', 'Retos Completados', 'Retos Totales'];
+  const contFilas = continentes.map(c => {
+    const p = progresoPorContinente[c.id];
+    return [
+      c.nombre,
+      p?.puntaje_continente || 0,
+      p?.retos_completados || 0,
+      p?.retos_totales || 0
+    ];
+  });
+
+  // --- Sección 3: Historial de actividad ---
+  const histEncabezados = ['Fecha', 'Actividad', 'Puntos', 'Correctas', 'Totales', 'Tiempo (s)'];
+  const histFilas = historial.map(h => [
+    h.fecha,
+    h.tipo_actividad,
+    h.puntaje_obtenido,
+    h.respuestas_correctas,
+    h.respuestas_totales,
+    h.tiempo_segundos || 0
+  ]);
+
+  function csvEscape(val) {
+    const s = String(val);
+    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }
+
+  function seccionCSV(titulo, encabezados, filas) {
+    const lines = [];
+    lines.push('"' + titulo + '"');
+    lines.push(encabezados.join(','));
+    for (const fila of filas) {
+      lines.push(fila.map(csvEscape).join(','));
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+
+  const csvContent =
+    seccionCSV('Datos del Estudiante', infoEncabezados, infoFilas) +
+    seccionCSV('Progreso por Continente', contEncabezados, contFilas) +
+    seccionCSV('Historial de Actividad', histEncabezados, histFilas);
+
+  const bom = '\uFEFF';
+  const filename = `mundo-kids-${alumno.nombre_usuario}-${new Date().toISOString().split('T')[0]}.csv`;
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
   res.send(bom + csvContent);
 });
 

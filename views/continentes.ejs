@@ -9,6 +9,7 @@
     border-radius: 2rem;
     cursor: grab;
     background: radial-gradient(ellipse at center, #132743 0%, #0a1628 40%, #050d1a 100%);
+    border: 1px solid rgba(255,255,255,0.08);
     overflow: hidden;
     position: relative;
     box-shadow: inset 0 0 100px rgba(59, 130, 246, 0.08), 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -141,64 +142,93 @@
   }
 </style>
 
-<div class="min-h-screen p-4 sm:p-6 py-8 sm:py-12 animate-fade-in" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);">
-  
+<style>
+  [data-theme="dark"] .ct-sidebar { background: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .ct-sidebar-icon { background: #0f172a !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .ct-sidebar-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] .ct-link { background: #0f172a !important; border-color: #1e293b !important; }
+  [data-theme="dark"] .ct-link:hover { background: #1e293b !important; border-color: #475569 !important; }
+  [data-theme="dark"] .ct-link-text { color: #cbd5e1 !important; }
+  [data-theme="dark"] .ct-link-arrow { color: #475569 !important; }
+  [data-theme="dark"] .ct-map-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] .ct-map-icon { background-color: #1e293b !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .ct-hint { color: #64748b !important; }
+  [data-theme="dark"] .ct-hint-dot { color: #334155 !important; }
+  [data-theme="dark"] .ct-header-badge { background: rgba(30,41,59,0.8) !important; border-color: rgba(255,255,255,0.06) !important; }
+  [data-theme="dark"] .ct-header-badge span { color: #e2e8f0 !important; }
+  [data-theme="dark"] .ct-subtitle { color: #94a3b8 !important; }
+  [data-theme="dark"] .ct-back { background: #1e293b !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .ct-back:hover { background: #334155 !important; }
+  /* Modal país */
+  [data-theme="dark"] #modal-pais .modal-content { background: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] #modal-pais .modal-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] #modal-pais .modal-label { color: #64748b !important; }
+  [data-theme="dark"] #modal-pais .modal-value { color: #e2e8f0 !important; }
+  [data-theme="dark"] #modal-pais .modal-fact { background: #0f172a !important; color: #94a3b8 !important; border-color: #334155 !important; }
+  [data-theme="dark"] #modal-pais-no-info { background: #1e293b !important; border-color: #475569 !important; }
+  [data-theme="dark"] #modal-pais-no-info p:first-child { color: #fbbf24 !important; }
+  [data-theme="dark"] #modal-pais-no-info p { color: #94a3b8 !important; }
+  [data-theme="dark"] #modal-pais .modal-btn-close { background: #1e293b !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] #modal-pais .modal-btn-close:hover { background: #0f172a !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] #modal-pais .modal-btn-continente { background: #475569 !important; }
+  [data-theme="dark"] #modal-pais .modal-btn-continente:hover { background: #64748b !important; }
+</style>
+
+<div class="min-h-screen p-4 sm:p-6 lg:p-8 animate-fade-in" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);">
   <div class="max-w-7xl mx-auto">
-    
-    <!-- Título -->
-    <div class="text-center mb-8 sm:mb-12">
-      <div class="inline-flex items-center gap-3 bg-white/60 backdrop-blur-md px-4 sm:px-6 py-2 rounded-full border border-white/70 shadow-sm mb-4 sm:mb-6">
-        <span class="text-xl sm:text-2xl">🌍</span>
-        <h2 class="text-xl sm:text-2xl font-bold text-slate-800">
-          Explora los Continentes
-        </h2>
+
+    <!-- ═══ HEADER ═══ -->
+    <div class="flex flex-col sm:flex-row items-center sm:items-end justify-between gap-4 mb-8">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div class="ct-header-badge w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm shrink-0">
+          <span class="text-2xl sm:text-3xl">🌍</span>
+        </div>
+        <div>
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">El Mundo en tus Manos</h1>
+          <p class="ct-subtitle text-slate-500 text-sm sm:text-base mt-0.5">Haz clic en el mapa o en los accesos rápidos</p>
+        </div>
       </div>
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight">El Mundo en tus Manos</h1>
-      <p class="text-slate-500 text-lg sm:text-xl font-medium mt-3 sm:mt-4">Haz clic en el mapa o en los botones para descubrir nuevas historias</p>
     </div>
 
-    <!-- Contenedor principal con dos columnas -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
-      
-      <!-- Mapa interactivo (3/4 del espacio en pantallas grandes) -->
-      <div class="lg:col-span-3 rounded-[2rem] shadow-xl border border-slate-200/60 p-4 relative overflow-hidden" style="background: #ffffff;">
-        
-        <div class="flex items-center gap-3 mb-4 px-2">
-          <div class="p-2 bg-sky-100 rounded-lg text-sky-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe-2"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M12 2v20"/><path d="m20 15-8 5-8-5"/><path d="m4 9 8 5 8-5"/></svg>
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
+
+      <!-- Map (3/4) -->
+      <div class="lg:col-span-3 flex flex-col">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="ct-map-icon p-1.5 bg-sky-100 rounded-lg text-sky-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M12 2v20"/><path d="m20 15-8 5-8-5"/><path d="m4 9 8 5 8-5"/></svg>
           </div>
-          <h3 class="text-xl font-bold text-slate-800">Mapa Mundial Interactivo</h3>
+          <h3 class="ct-map-title text-base sm:text-lg font-bold text-slate-800">Mapa Mundial Interactivo</h3>
         </div>
 
-        <div id="mapa-mundo"></div>
-        
-        <div class="flex items-center justify-center gap-2 mt-4 text-slate-400 text-sm font-medium">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mouse-pointer-2"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a.5.5 0 0 0-.353.353l-1.58 6.124a.5.5 0 0 1-.947.063z"/></svg>
-          <p>Haz clic en cualquier continente para explorar</p>
-          <span class="text-slate-300 mx-2">·</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9.001-9A9 9 0 0 1 21 12Z"/><path d="M3 12h18"/><path d="M12 3v18"/></svg>
-          <p>Arrastra para girar el globo</p>
+        <div id="mapa-mundo" class="flex-1"></div>
+
+        <div class="flex items-center justify-center gap-2 mt-3 text-slate-400 text-xs sm:text-sm font-medium flex-wrap ct-hint">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a.5.5 0 0 0-.353.353l-1.58 6.124a.5.5 0 0 1-.947.063z"/></svg>
+          <p>Haz clic en un país</p>
+          <span class="ct-hint-dot text-slate-300 mx-1">·</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9.001-9A9 9 0 0 1 21 12Z"/><path d="M3 12h18"/><path d="M12 3v18"/></svg>
+          <p>Arrastra para girar</p>
         </div>
       </div>
 
-      <!-- Grid de continentes (1/4 del espacio en pantallas grandes) -->
-      <div class="rounded-[2rem] shadow-md border border-slate-200/60 p-6" style="background: #ffffff;">
-        <div class="flex items-center gap-3 mb-6">
-          <div class="p-2 bg-teal-100 rounded-lg text-teal-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
+      <!-- Sidebar (1/4) -->
+      <div class="ct-sidebar rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="ct-sidebar-icon p-2 bg-teal-100 rounded-xl text-teal-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
           </div>
-          <h3 class="text-xl font-bold text-slate-800">Acceso Rápido</h3>
+          <h3 class="ct-sidebar-title text-base sm:text-lg font-bold text-slate-800">Acceso Rápido</h3>
         </div>
 
-        <div class="grid grid-cols-2 lg:grid-cols-1 gap-3">
+        <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
           <% continentes.forEach(continente => { %>
-            <a href="/continente/<%= continente.id %>" 
-               class="group relative flex items-center gap-4 p-4 rounded-xl bg-slate-50 hover:bg-white hover:shadow-md border border-slate-100 hover:border-sky-200 transition-all duration-200">
-              <div class="transition-transform group-hover:scale-110"><span class="icono-render" data-icono="<%= continente.svgIcon %>" data-clases="w-9 h-9" data-titulo="<%= continente.nombre %>"></span></div>
-              <div class="text-slate-700 font-bold text-sm"><%= continente.nombre %></div>
-              <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-sky-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
-              </div>
+            <a href="/continente/<%= continente.id %>"
+               class="ct-link group flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-white hover:shadow-sm border border-slate-100 hover:border-slate-300 transition-all duration-200">
+              <div class="shrink-0"><span class="icono-render" data-icono="<%= continente.svgIcon %>" data-clases="w-8 h-8" data-titulo="<%= continente.nombre %>"></span></div>
+              <span class="ct-link-text text-slate-700 font-semibold text-sm"><%= continente.nombre %></span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="ct-link-arrow ml-auto text-slate-300 group-hover:text-slate-500 transition-colors shrink-0"><path d="m9 18 6-6-6-6"/></svg>
             </a>
           <% }); %>
         </div>
@@ -206,18 +236,67 @@
 
     </div>
 
-    <!-- Botón Volver -->
+    <!-- ═══ BACK ═══ -->
     <div class="text-center">
-      <a href="/menu" 
-         class="inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xl shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      <a href="/menu"
+         class="ct-back inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         Volver al Menú
       </a>
     </div>
 
   </div>
-
 </div>
 
-<!-- Script del mapa de continentes -->
+<!-- Modal del país -->
+<div id="modal-pais" class="hidden fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" style="display:none;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);">
+  <div class="modal-content bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 sm:p-6 w-full animate-fade-in mx-2 sm:mx-0" style="max-width:28rem;max-height:90vh;overflow-y:auto">
+    <div class="flex items-start justify-between mb-3 sm:mb-4">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <span id="modal-pais-bandera" class="text-3xl sm:text-4xl shrink-0"></span>
+        <div class="min-w-0">
+          <h3 id="modal-pais-nombre" class="modal-title text-lg sm:text-xl font-bold text-slate-900 truncate"></h3>
+        </div>
+      </div>
+      <button onclick="cerrarModalPais()" class="modal-btn-close bg-white hover:bg-slate-50 text-slate-500 w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-slate-200 flex items-center justify-center transition-all text-sm font-bold shrink-0 ml-2">
+        ✕
+      </button>
+    </div>
+
+    <div id="modal-pais-info" class="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
+      <div class="flex items-center justify-between py-1.5 sm:py-2 border-b border-slate-100 gap-2">
+        <span class="modal-label text-xs sm:text-sm font-medium text-slate-500 shrink-0">Capital</span>
+        <span id="modal-pais-capital" class="modal-value text-xs sm:text-sm font-bold text-slate-800 text-right truncate"></span>
+      </div>
+      <div class="flex items-center justify-between py-1.5 sm:py-2 border-b border-slate-100 gap-2">
+        <span class="modal-label text-xs sm:text-sm font-medium text-slate-500 shrink-0">Población</span>
+        <span id="modal-pais-poblacion" class="modal-value text-xs sm:text-sm font-bold text-slate-800 text-right truncate"></span>
+      </div>
+      <div class="flex items-center justify-between py-1.5 sm:py-2 border-b border-slate-100 gap-2">
+        <span class="modal-label text-xs sm:text-sm font-medium text-slate-500 shrink-0">Moneda</span>
+        <span id="modal-pais-moneda" class="modal-value text-xs sm:text-sm font-bold text-slate-800 text-right truncate"></span>
+      </div>
+    </div>
+
+    <div id="modal-pais-no-info" class="hidden mb-3 sm:mb-4 p-3 sm:p-4 bg-amber-50 border border-amber-200 rounded-xl text-center">
+      <p class="text-amber-800 font-bold text-xs sm:text-sm mb-1">⚠️ Información no disponible</p>
+      <p class="text-amber-700 text-xs">Se debe actualizar la base de datos, no tenemos información de ese país.</p>
+      <p class="text-amber-600 text-xs mt-2">Estamos trabajando para incluir todos los países del mundo. Si deseas contribuir, contacta al administrador.</p>
+    </div>
+
+    <div id="modal-pais-dato" class="modal-fact bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-200 text-xs sm:text-sm text-slate-700 italic mb-3 sm:mb-4"></div>
+
+    <div class="flex gap-2">
+      <button onclick="cerrarModalPais()" class="modal-btn-close flex-1 py-2 sm:py-2.5 bg-white hover:bg-slate-50 text-slate-600 font-bold rounded-xl border border-slate-200 transition-all text-xs sm:text-sm">
+        Cerrar
+      </button>
+      <a id="modal-pais-continente-btn" href="#" class="modal-btn-continente flex flex-1 items-center justify-center py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all text-xs sm:text-sm truncate">
+        Ver Continente →
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts del mapa -->
+<script src="/js/paises-info.js"></script>
 <script src="/js/mapa-continentes.js"></script>

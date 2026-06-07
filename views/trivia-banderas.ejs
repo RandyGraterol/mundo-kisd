@@ -1,140 +1,254 @@
-<% 
+<%
   var tiempoLimite = 30;
-  if (typeof pregunta !== 'undefined' && pregunta.tiempo_limite) {
+  if (pregunta && pregunta.tiempo_limite) {
     tiempoLimite = parseInt(pregunta.tiempo_limite);
   }
+  var esSeleccion = typeof modo === 'undefined' || modo === null || modo === '';
+  var esContrarreloj = modoJuego === 'contrarreloj';
 %>
 
+<%- include('partials/confetti') %>
+
 <%- include('partials/modal-atencion') %>
-<%- include('partials/cronometro') %>
 
-<div class="min-h-screen flex items-center justify-center p-responsive-main animate-fade-in">
-  
-  <div class="bg-white rounded-[3rem] shadow-xl p-responsive card-padding-md max-w-3xl w-full border border-slate-100 relative overflow-hidden md:rounded-[3.5rem]">
-    
-    <!-- Encabezado -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-3 bg-orange-50 backdrop-blur-md px-6 py-2 rounded-full border border-orange-100 shadow-sm mb-6">
-        <svg class="w-7 h-7 text-orange-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
-        <h2 class="text-xl font-bold text-slate-800">
-          Trivia de Banderas
-        </h2>
-      </div>
-      <h1 class="text-responsive-4xl font-extrabold text-slate-900 tracking-tight">¿Reconoces estas banderas?</h1>
-    </div>
+<style>
+  [data-theme="dark"] .triv-main { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .triv-badge { background: rgba(30,41,59,0.8) !important; border-color: #334155 !important; }
+  [data-theme="dark"] .triv-badge svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-badge h2 { color: #e2e8f0 !important; }
+  [data-theme="dark"] .triv-h1 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .triv-stat { background-color: #0f172a !important; border-color: #1e293b !important; }
+  [data-theme="dark"] .triv-stat-label { color: #64748b !important; }
+  [data-theme="dark"] .triv-stat-value { color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-question-card { background-color: #0f172a !important; }
+  [data-theme="dark"] .triv-question-title { color: #64748b !important; }
+  [data-theme="dark"] .triv-question-text { color: #f1f5f9 !important; }
+  [data-theme="dark"] .triv-option-group .triv-option { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .triv-option-group .triv-option-letter { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .triv-option-group .triv-option-text { color: #cbd5e1 !important; }
+  [data-theme="dark"] .triv-option-group .peer:checked ~ .triv-option { border-color: #64748b !important; background-color: #0f172a !important; }
+  [data-theme="dark"] .triv-option-group .peer:checked ~ .triv-option .triv-option-letter { background-color: #475569 !important; color: #f1f5f9 !important; }
+  [data-theme="dark"] .triv-option-group .peer:checked ~ .triv-option .triv-option-text { color: #f1f5f9 !important; }
+  [data-theme="dark"] .triv-submit { background-color: #334155 !important; }
+  [data-theme="dark"] .triv-submit:hover { background-color: #475569 !important; }
+  [data-theme="dark"] .triv-complete-icon { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .triv-complete-h3 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .triv-complete-p { color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-complete-score { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .triv-complete-score-text { color: #e2e8f0 !important; }
+  [data-theme="dark"] .triv-divider { border-color: #1e293b !important; }
+  [data-theme="dark"] .triv-back { background-color: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-back:hover { background-color: #1e293b !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .triv-select-icon { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .triv-select-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] .triv-select-p { color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-mode-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .triv-mode-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .triv-mode-desc { color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-mode-card:hover { border-color: #475569 !important; }
+  [data-theme="dark"] .triv-mode-label { color: #e2e8f0 !important; }
+  [data-theme="dark"] .triv-continue-btn { background-color: #334155 !important; }
+  [data-theme="dark"] .triv-continue-btn:hover { background-color: #475569 !important; }
+  [data-theme="dark"] .triv-label { color: #64748b !important; }
+  [data-theme="dark"] .triv-value { color: #cbd5e1 !important; }
+  [data-theme="dark"] #cronometro-container .text-slate-200 { color: #334155 !important; }
+  [data-theme="dark"] #timer-texto { color: #f1f5f9 !important; }
+  [data-theme="dark"] #cronometro-container .text-slate-500 { color: #94a3b8 !important; }
+  [data-theme="dark"] #timeout-overlay .bg-white { background-color: #1e293b !important; }
+  [data-theme="dark"] #timeout-overlay h3 { color: #f1f5f9 !important; }
+  [data-theme="dark"] #timeout-overlay p { color: #94a3b8 !important; }
+  [data-theme="dark"] .triv-contrarreloj-badge { background-color: #0f172a !important; border-color: #ef4444 !important; }
+  [data-theme="dark"] .triv-contrarreloj-badge svg { color: #f87171 !important; }
+  [data-theme="dark"] .triv-contrarreloj-badge span { color: #fca5a5 !important; }
+</style>
 
-    <!-- Información de progreso -->
-    <div class="grid grid-cols-3 gap-responsive gap-responsive-desk mb-8 md:mb-12">
-      <div class="bg-orange-50/60 rounded-2xl p-4 border border-orange-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nivel</p>
-        <p class="text-xl font-black text-orange-600 flex items-center justify-center gap-1">
-          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          <%= progreso.nivel %>
-        </p>
-      </div>
-      <div class="bg-orange-50/60 rounded-2xl p-4 border border-orange-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Puntos</p>
-        <p class="text-xl font-black text-orange-600 flex items-center justify-center gap-1">
-          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <%= progreso.puntosTotal %>
-        </p>
-      </div>
-      <div class="bg-orange-50/60 rounded-2xl p-4 border border-orange-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Respondidas</p>
-        <p class="text-xl font-black text-orange-600 flex items-center justify-center gap-1">
-          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
-          <%= preguntasRespondidas %> / 12
-        </p>
-      </div>
-    </div>
+<div class="min-h-screen flex items-center justify-center p-4 sm:p-6 animate-fade-in">
 
-    <% if (pregunta) { %>
-      <!-- Contenido de la actividad (oculto hasta que se confirme el modal) -->
-      <div id="contenido-actividad" style="display: none;">
+  <div class="triv-main bg-white rounded-[2.5rem] shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-slate-100">
 
-        <!-- Pregunta actual -->
-        <div class="mb-10">
-          <div class="bg-slate-900 rounded-[2rem] p-6 sm:p-8 md:p-10 mb-6 md:mb-10 shadow-xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-4 opacity-10">
-              <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
-            </div>
-            <h3 class="text-xl font-bold text-orange-400 mb-3 relative z-10 uppercase tracking-widest">Descripción de la Bandera</h3>
-            <p class="text-2xl font-bold text-white text-center leading-tight relative z-10">
-              <%= pregunta.descripcion %>
-            </p>
-          </div>
+    <% if (esSeleccion) { %>
 
-          <!-- Opciones de respuesta -->
-          <form method="POST" action="/trivia-banderas/responder" id="form-actividad" onsubmit="detenerCronometro()">
-            <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
-            
-            <div class="grid gap-responsive-desk">
-              <% pregunta.opciones.forEach((opcion, index) => { %>
-                <label class="group cursor-pointer">
-                  <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
-                  <div class="flex items-center gap-4 p-responsive-card rounded-2xl bg-white border border-slate-200 peer-checked:border-orange-400 peer-checked:shadow-md peer-checked:bg-orange-50 transition-all group-hover:border-orange-200 group-hover:bg-orange-50/50">
-                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold peer-checked:bg-orange-500 peer-checked:text-white group-hover:bg-orange-100 group-hover:text-orange-600 transition-colors">
-                      <%= String.fromCharCode(65 + index) %>
-                    </div>
-                    <p class="text-lg font-bold text-slate-700 peer-checked:text-slate-900">
-                      <%= opcion %>
-                    </p>
-                    <div class="ml-auto opacity-0 peer-checked:opacity-100 text-orange-500 transition-opacity">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                    </div>
-                  </div>
-                </label>
-              <% }); %>
-            </div>
-
-            <!-- Botón enviar -->
-            <div class="text-center mt-12">
-              <button type="submit" 
-                      class="inline-flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-responsive-subtitle py-4 sm:py-5 md:py-6 px-8 sm:px-12 md:px-16 rounded-2xl shadow-xl hover:shadow-orange-100 transition-all transform hover:-translate-y-1">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Enviar Respuesta
-              </button>
-            </div>
-          </form>
+      <!-- === SELECCION DE MODO === -->
+      <div class="text-center mb-6">
+        <div class="triv-select-icon inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-100 text-slate-500 mb-3">
+          <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
         </div>
-
+        <h2 class="triv-select-title text-xl font-black text-slate-900 mb-1">Trivia de Banderas</h2>
+        <p class="triv-select-p text-sm text-slate-500">Demuestra cuánto sabes de las banderas del mundo.</p>
       </div>
+
+      <div class="flex items-center justify-center gap-3 mb-6">
+        <a href="/trivia-banderas?modo=libre"
+           class="triv-mode-card flex flex-col items-center gap-2 p-5 bg-white rounded-xl border-2 border-emerald-400 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md min-w-[130px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <p class="triv-mode-name text-sm font-bold text-slate-700">Libre</p>
+          <p class="triv-mode-desc text-[10px] text-slate-400 text-center">Sin límite de tiempo</p>
+        </a>
+        <a href="/trivia-banderas?modo=contrarreloj"
+           class="triv-mode-card flex flex-col items-center gap-2 p-5 bg-white rounded-xl border-2 border-red-400 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md min-w-[130px]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <p class="triv-mode-name text-sm font-bold text-slate-700">Contrarreloj</p>
+          <p class="triv-mode-desc text-[10px] text-slate-400 text-center">30s por pregunta</p>
+        </a>
+      </div>
+
+      <div class="text-center">
+        <p class="triv-mode-desc text-xs text-slate-400">Selecciona un modo para comenzar</p>
+      </div>
+
     <% } else { %>
-      <!-- Trivia completada -->
-      <div class="text-center mb-10 py-10">
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-green-100 text-green-600 mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+
+    <!-- === ENCABEZADO + STATS === -->
+    <% if (esContrarreloj) { %>
+    <div class="mb-4">
+      <%- include('partials/cronometro') %>
+      <div class="flex items-center justify-between gap-2 mt-2">
+        <div class="triv-badge inline-flex items-center gap-1.5 bg-red-50 dark:bg-red-900/20 px-2.5 py-1 rounded-full border border-red-200 dark:border-red-800 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-red-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="text-[10px] font-bold text-red-600 dark:text-red-400">Contrarreloj</span>
         </div>
-        <h3 class="text-4xl font-black text-slate-900 mb-4">
-          ¡Trivia Completada!
-        </h3>
-        <p class="text-xl text-slate-500 mb-8 max-w-md mx-auto">
-          Has demostrado ser un experto en las banderas del mundo. ¡Excelente trabajo!
-        </p>
-        <div class="inline-block bg-white soft-shadow rounded-2xl px-8 py-4 border border-slate-100">
-          <p class="text-2xl font-black text-slate-800">
-          <svg class="w-6 h-6 inline-block align-text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          Nivel <%= progreso.nivel %> ·
-          <svg class="w-6 h-6 inline-block align-text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <%= progreso.puntosTotal %> puntos
-        </p>
+        <div class="flex gap-1.5">
+          <div class="triv-stat bg-slate-50 dark:bg-slate-800 rounded-lg px-2 py-1 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
+            <p class="triv-stat-label text-[8px] text-slate-400 font-bold uppercase tracking-wider">Nivel</p>
+            <p class="triv-stat-value text-[10px] font-black text-slate-600 dark:text-slate-300"><%= progreso.nivel %></p>
+          </div>
+          <div class="triv-stat bg-slate-50 dark:bg-slate-800 rounded-lg px-2 py-1 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
+            <p class="triv-stat-label text-[8px] text-slate-400 font-bold uppercase tracking-wider">Progreso</p>
+            <p class="triv-stat-value text-[10px] font-black text-slate-600 dark:text-slate-300"><%= preguntasRespondidas %>/<%= typeof totalPreguntas !== 'undefined' ? totalPreguntas : 12 %></p>
+          </div>
+          <div class="triv-stat bg-slate-50 dark:bg-slate-800 rounded-lg px-2 py-1 border border-slate-200 dark:border-slate-700 text-center shadow-sm">
+            <p class="triv-stat-label text-[8px] text-slate-400 font-bold uppercase tracking-wider">Pts</p>
+            <p class="triv-stat-value text-[10px] font-black text-slate-600 dark:text-slate-300"><%= progreso.puntosTotal %></p>
+          </div>
         </div>
       </div>
+    </div>
+    <% } else { %>
+    <div class="flex items-center justify-between gap-3 mb-5">
+      <div class="triv-badge inline-flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+        <svg class="w-4 h-4 text-slate-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+        <h2 class="text-sm font-bold text-slate-700">Trivia de Banderas</h2>
+      </div>
+      <div class="flex gap-2">
+        <div class="triv-stat bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-center shadow-sm">
+          <p class="triv-stat-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Nivel</p>
+          <p class="triv-stat-value text-xs font-black text-slate-600"><%= progreso.nivel %></p>
+        </div>
+        <div class="triv-stat bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-center shadow-sm">
+          <p class="triv-stat-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Progreso</p>
+          <p class="triv-stat-value text-xs font-black text-slate-600"><%= preguntasRespondidas %>/<%= typeof totalPreguntas !== 'undefined' ? totalPreguntas : 12 %></p>
+        </div>
+        <div class="triv-stat bg-slate-50 rounded-lg px-3 py-1.5 border border-slate-200 text-center shadow-sm">
+          <p class="triv-stat-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pts</p>
+          <p class="triv-stat-value text-xs font-black text-slate-600"><%= progreso.puntosTotal %></p>
+        </div>
+      </div>
+    </div>
     <% } %>
 
-    <!-- Botón volver -->
-    <div class="text-center pt-6 border-t border-slate-100">          <a href="/menu" 
-         class="inline-flex items-center gap-3 px-6 sm:px-8 py-responsive-main rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <!-- === PREGUNTA === -->
+    <% if (pregunta) { %>
+      <div id="contenido-actividad">
+
+        <div class="triv-question-card bg-slate-800 rounded-xl p-4 sm:p-5 mb-4 shadow-lg relative overflow-hidden">
+          <div class="flex items-center gap-4">
+            <% if (pregunta.codigo) { %>
+             <img src="https://flagcdn.com/w160/<%= pregunta.codigo %>.png"
+                 srcset="https://flagcdn.com/w320/<%= pregunta.codigo %>.png 2x"
+                 alt="Bandera"
+                 class="w-28 sm:w-32 h-auto rounded-lg shadow-md border border-slate-600 shrink-0">
+            <% } %>
+             <div class="flex-1 min-w-0">
+              <h3 class="triv-question-title text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">¿De qué país es esta bandera?</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Opciones -->
+        <form method="POST" action="/trivia-banderas/responder" id="form-actividad" onsubmit="if (typeof detenerCronometro === 'function') detenerCronometro()">
+          <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
+          <input type="hidden" name="modoJuego" value="<%= modoJuego %>">
+
+          <div class="grid sm:grid-cols-2 gap-2.5">
+            <% pregunta.opciones.forEach((opcion, index) => { %>
+              <label class="triv-option-group group cursor-pointer">
+                <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
+                <div class="triv-option flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-200 peer-checked:border-slate-500 peer-checked:shadow-sm peer-checked:bg-slate-50 transition-all group-hover:border-slate-300 group-hover:bg-slate-50/50">
+                  <div class="triv-option-letter w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 text-xs font-bold peer-checked:bg-slate-600 peer-checked:text-white group-hover:bg-slate-200 group-hover:text-slate-600 transition-colors shrink-0">
+                    <%= String.fromCharCode(65 + index) %>
+                  </div>
+                  <p class="triv-option-text text-sm font-semibold text-slate-700 peer-checked:text-slate-900 leading-snug">
+                    <%= opcion %>
+                  </p>
+                </div>
+              </label>
+            <% }); %>
+          </div>
+
+          <div class="text-center mt-4">
+            <button type="submit"
+                    class="triv-submit inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm py-2.5 px-6 rounded-xl shadow-lg transition-all hover:-translate-y-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar Respuesta
+            </button>
+          </div>
+        </form>
+      </div>
+
+    <% } else { %>
+
+      <!-- === TRIVIA COMPLETADA === -->
+      <div class="text-center py-6">
+        <div class="triv-complete-icon inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-green-100 text-green-600 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        </div>
+        <h3 class="triv-complete-h3 text-xl font-black text-slate-900 mb-1">¡Trivia Completada!</h3>
+        <p class="triv-complete-p text-sm text-slate-500 mb-5">Has demostrado ser un experto en las banderas del mundo.</p>
+        <div class="triv-complete-score inline-block bg-white shadow-sm rounded-xl px-5 py-2.5 border border-slate-100">
+          <p class="triv-complete-score-text text-sm font-black text-slate-800">
+            <svg class="w-3.5 h-3.5 inline-block align-text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            Nivel <%= progreso.nivel %> ·
+            <svg class="w-3.5 h-3.5 inline-block align-text-bottom" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <%= progreso.puntosTotal %> puntos
+          </p>
+        </div>
+
+        <!-- Volver -->
+        <div class="text-center pt-3 mt-4 triv-divider border-t border-slate-100">
+          <a href="/menu"
+             class="triv-back inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 text-sm font-bold transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Volver al Menú
+          </a>
+        </div>
+      </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          if (typeof lanzarConfetti === 'function') {
+            lanzarConfetti(150, true);
+            setTimeout(function() { if (typeof lanzarFuegosArtificiales === 'function') lanzarFuegosArtificiales(3); }, 800);
+          }
+          if (typeof SonidosMundoKids !== 'undefined') SonidosMundoKids.nivel();
+        });
+      </script>
+    <% } %>
+
+    <!-- Volver (solo en modo libre, oculto en contrarreloj durante juego) -->
+    <% if (!esContrarreloj && pregunta) { %>
+    <div class="text-center pt-3 mt-4 triv-divider border-t border-slate-100">
+      <a href="/menu"
+         class="triv-back inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 text-sm font-bold transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Volver al Menú
       </a>
     </div>
+    <% } %>
+  <% } %>
 
   </div>
 
 </div>
 
 <script>
-  // Limpiar flag de sesión al cargar página nueva de trivia (para que el modal aparezca)
   sessionStorage.removeItem('actividad_iniciada');
 </script>

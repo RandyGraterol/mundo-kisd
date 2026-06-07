@@ -22,8 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Configurar sesiones
 app.use(session({
   secret: 'mundo-kids-secret-key-2024',
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie: {
     maxAge: 24 * 60 * 60 * 1000 // 24 horas
   }

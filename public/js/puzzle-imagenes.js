@@ -468,112 +468,305 @@ async function dibujarMapaMundo(ctx, w, h) {
 
 
 // =====================================================================
-//  TEMA: CONTINENTES (collage tipo infografía profesional)
+//  TEMA: CONTINENTES — un continente al azar por partida (mapa simple)
 // =====================================================================
 
-function dibujarContinentes(ctx, w, h) {
-  // Fondo degradado azul cielo vibrante
-  const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, '#e0f2fe');
-  grad.addColorStop(0.3, '#bae6fd');
-  grad.addColorStop(0.6, '#7dd3fc');
-  grad.addColorStop(1, '#38bdf8');
+function dibujarSiluetaContinente(ctx, puntos, w, h, color, offsetX, offsetY, escala) {
+  escala = escala || 1;
+  const cx = w / 2 + (offsetX || 0) * w;
+  const cy = h / 2 + (offsetY || 0) * h;
+  const factor = Math.min(w, h) * 0.38 * escala;
+
+  ctx.beginPath();
+  puntos.forEach((p, i) => {
+    const x = cx + p[0] * factor;
+    const y = cy + p[1] * factor;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.shadowColor = 'rgba(0,0,0,0.25)';
+  ctx.shadowBlur = 12;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+}
+
+function dibujarFondoOceano(ctx, w, h) {
+  const grad = ctx.createRadialGradient(w*0.5, h*0.4, w*0.1, w*0.45, h*0.4, w*0.65);
+  grad.addColorStop(0, '#aed6f1');
+  grad.addColorStop(0.25, '#5dade2');
+  grad.addColorStop(0.55, '#3498db');
+  grad.addColorStop(1, '#2980b9');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, w, h);
-  
-  // Textura de fondo sutil
-  generarTexturaTerreno(ctx, 0, 0, w, h, [56, 189, 248], 0.03, 7);
-  
-  // ── Círculos con información de continentes (estilo infografía) ──
-  const cards = [
-    { label: 'AMÉRICA', color: '#f472b6', 
-      desc: 'Norte y Sur', cx: 0.2, cy: 0.2 },
-    { label: 'EUROPA', color: '#60a5fa', 
-      desc: 'Viejo Continente', cx: 0.5, cy: 0.15 },
-    { label: 'ASIA', color: '#fbbf24', 
-      desc: 'El más grande', cx: 0.8, cy: 0.2 },
-    { label: 'ÁFRICA', color: '#34d399', 
-      desc: 'Cuna de la Humanidad', cx: 0.3, cy: 0.55 },
-    { label: 'OCEANÍA', color: '#a78bfa', 
-      desc: 'Islas del Pacífico', cx: 0.7, cy: 0.55 },
-    { label: 'ANTÁRTIDA', color: '#94a3b8', 
-      desc: 'Continente Helado', cx: 0.5, cy: 0.85 },
-  ];
-  
-  cards.forEach(c => {
-    const cx = c.cx * w;
-    const cy = c.cy * h;
-    const r = Math.min(w, h) * 0.13;
-    
-    // Sombra exterior
-    ctx.shadowColor = 'rgba(0,0,0,0.4)';
-    ctx.shadowBlur = 25;
-    
-    // Círculo principal con gradiente esférico
-    const grad2 = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.25, 0, cx, cy, r);
-    grad2.addColorStop(0, c.color);
-    grad2.addColorStop(0.6, c.color);
-    grad2.addColorStop(1, 'rgba(0,0,0,0.3)');
-    ctx.fillStyle = grad2;
+}
+
+var CONTINENTE_DISENOS = [
+  // 0 — América
+  function(ctx, w, h) {
+    dibujarFondoOceano(ctx, w, h);
+    // América del Norte + América del Sur simplificado
+    dibujarSiluetaContinente(ctx, [
+      [-0.1,-0.7],[0.2,-0.65],[0.4,-0.5],[0.45,-0.3],[0.35,-0.15],
+      [0.3,-0.05],[0.35,0.05],[0.3,0.15],[0.2,0.2],[0.1,0.25],
+      [0.05,0.35],[0.0,0.45],[-0.05,0.5],[-0.12,0.45],[-0.15,0.35],
+      [-0.1,0.25],[-0.15,0.2],[-0.2,0.15],[-0.25,0.05],[-0.2,-0.05],
+      [-0.25,-0.15],[-0.3,-0.25],[-0.35,-0.35],[-0.3,-0.45],[-0.25,-0.55],
+      [-0.2,-0.65]
+    ], w, h, '#5b8c5a');
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `700 ${Math.round(Math.min(w,h)*0.055)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 8;
+    ctx.fillText('AMÉRICA', w*0.5, h*0.88); ctx.shadowBlur = 0;
+  },
+  // 1 — Europa
+  function(ctx, w, h) {
+    dibujarFondoOceano(ctx, w, h);
+    dibujarSiluetaContinente(ctx, [
+      [-0.15,-0.4],[0.0,-0.45],[0.15,-0.4],[0.2,-0.3],[0.25,-0.2],
+      [0.3,-0.1],[0.25,0.0],[0.2,0.05],[0.15,0.1],[0.1,0.05],
+      [0.0,0.1],[-0.1,0.05],[-0.15,0.0],[-0.2,-0.05],[-0.25,-0.1],
+      [-0.2,-0.2],[-0.15,-0.3]
+    ], w, h, '#7aaa6a');
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `700 ${Math.round(Math.min(w,h)*0.055)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 8;
+    ctx.fillText('EUROPA', w*0.5, h*0.88); ctx.shadowBlur = 0;
+  },
+  // 2 — Asia
+  function(ctx, w, h) {
+    dibujarFondoOceano(ctx, w, h);
+    dibujarSiluetaContinente(ctx, [
+      [-0.4,-0.5],[-0.2,-0.55],[0.0,-0.5],[0.2,-0.45],[0.35,-0.4],
+      [0.45,-0.3],[0.5,-0.2],[0.55,-0.1],[0.5,0.0],[0.45,0.1],
+      [0.4,0.2],[0.35,0.3],[0.25,0.25],[0.15,0.3],[0.05,0.25],
+      [-0.05,0.2],[-0.15,0.15],[-0.2,0.05],[-0.25,-0.05],[-0.3,-0.1],
+      [-0.35,-0.2],[-0.4,-0.3],[-0.45,-0.4]
+    ], w, h, '#c4a86a');
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `700 ${Math.round(Math.min(w,h)*0.055)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 8;
+    ctx.fillText('ASIA', w*0.5, h*0.88); ctx.shadowBlur = 0;
+  },
+  // 3 — África
+  function(ctx, w, h) {
+    dibujarFondoOceano(ctx, w, h);
+    dibujarSiluetaContinente(ctx, [
+      [-0.1,-0.5],[0.1,-0.45],[0.2,-0.35],[0.25,-0.25],[0.2,-0.1],
+      [0.15,0.0],[0.1,0.1],[0.05,0.2],[0.0,0.3],[-0.05,0.35],
+      [-0.15,0.3],[-0.2,0.2],[-0.15,0.1],[-0.2,0.0],[-0.2,-0.1],
+      [-0.25,-0.2],[-0.2,-0.35],[-0.15,-0.45]
+    ], w, h, '#c4b06a');
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `700 ${Math.round(Math.min(w,h)*0.055)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 8;
+    ctx.fillText('ÁFRICA', w*0.5, h*0.88); ctx.shadowBlur = 0;
+  },
+  // 4 — Oceanía
+  function(ctx, w, h) {
+    dibujarFondoOceano(ctx, w, h);
+    dibujarSiluetaContinente(ctx, [
+      [-0.1,-0.25],[0.0,-0.3],[0.1,-0.25],[0.15,-0.15],[0.2,-0.05],
+      [0.15,0.05],[0.1,0.1],[0.05,0.15],[-0.0,0.2],[-0.05,0.15],
+      [-0.1,0.1],[-0.15,0.05],[-0.2,0.0],[-0.15,-0.1],[-0.1,-0.2]
+    ], w, h, '#b8884a');
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `700 ${Math.round(Math.min(w,h)*0.055)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 8;
+    ctx.fillText('OCEANÍA', w*0.5, h*0.88); ctx.shadowBlur = 0;
+  },
+  // 5 — Antártida
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#e0f2fe'); grad.addColorStop(0.5,'#bae6fd'); grad.addColorStop(1,'#7dd3fc');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = '#e8ecf0';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 10;
     ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.ellipse(w*0.5, h*0.7, w*0.35, h*0.15, 0, 0, Math.PI*2);
     ctx.fill();
     ctx.shadowBlur = 0;
-    
-    // Borde brillante
-    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    
-    // Reflejo superior
-    const grad3 = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, 0, cx - r * 0.3, cy - r * 0.3, r * 0.5);
-    grad3.addColorStop(0, 'rgba(255,255,255,0.2)');
-    grad3.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = grad3;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
-    
-    // Nombre del continente
-    ctx.fillStyle = '#ffffff';
-    ctx.font = `700 ${Math.round(w * 0.03)}px 'Quicksand', 'Segoe UI', sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0,0,0,0.5)';
-    ctx.shadowBlur = 5;
-    ctx.fillText(c.label, cx, cy - r * 0.15);
-    ctx.shadowBlur = 0;
-    
-    // Descripción
-    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-    ctx.font = `${Math.round(w * 0.016)}px 'Quicksand', 'Segoe UI', sans-serif`;
-    ctx.fillText(c.desc, cx, cy + r * 0.35);
-  });
-  
-  // ── Líneas decorativas orbitales ──
-  ctx.strokeStyle = 'rgba(0,0,0,0.03)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i < 3; i++) {
-    ctx.beginPath();
-    ctx.arc(w * 0.5, h * 0.5, Math.min(w, h) * (0.15 + i * 0.12), 0, Math.PI * 2);
-    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = `700 ${Math.round(Math.min(w,h)*0.055)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 8;
+    ctx.fillText('ANTÁRTIDA', w*0.5, h*0.88); ctx.shadowBlur = 0;
   }
-  
-  // ── Título inferior ──
-  ctx.fillStyle = 'rgba(0,0,0,0.15)';
-  ctx.font = `600 ${Math.round(w * 0.032)}px 'Quicksand', 'Segoe UI', sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('LOS CONTINENTES', w * 0.5, h * 0.04);
+];
+
+var CONTINENTE_SELECCIONADO = -1;
+
+function dibujarContinentes(ctx, w, h) {
+  if (CONTINENTE_SELECCIONADO < 0) {
+    CONTINENTE_SELECCIONADO = Math.floor(Math.random() * CONTINENTE_DISENOS.length);
+  }
+  CONTINENTE_DISENOS[CONTINENTE_SELECCIONADO](ctx, w, h);
 }
 
 
 // =====================================================================
-//  TEMA: BANDERAS (collage de banderas realista)
+//  TEMA: BANDERAS — diseños únicos (se elige 1 al azar por partida)
 // =====================================================================
 
+var FLAG_DISENOS = [
+
+  // 0 — Francia (tricolor vertical) con estrella
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ['#0055A4','#FFFFFF','#EF4135'].forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(fx + (flagW/3)*i, fy, flagW/3+0.5, flagH);
+    });
+    const cx = fx + flagW/2, cy = fy + flagH/2, r = Math.min(flagW,flagH)*0.18;
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#D4A843'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+    dibujarEstrella(ctx,cx,cy,r*0.55,5);
+    ctx.fillStyle = '#D4A843'; ctx.shadowColor = 'rgba(212,168,67,0.3)'; ctx.shadowBlur = 6; ctx.fill(); ctx.shadowBlur = 0;
+    for (let i = 0; i < 12; i++) {
+      const a = (i/12)*Math.PI*2, d = r*0.85;
+      ctx.fillStyle = i%2===0 ? '#0055A4' : '#EF4135';
+      ctx.beginPath(); ctx.arc(cx+Math.cos(a)*d,cy+Math.sin(a)*d,3,0,Math.PI*2); ctx.fill();
+    }
+  },
+
+  // 1 — Alemania (tricolor horizontal)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ['#000000','#DD0000','#FFD700'].forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(fx, fy + (flagH/3)*i, flagW, flagH/3+0.5);
+    });
+  },
+
+  // 2 — Italia (tricolor vertical verde-blanco-rojo)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ['#009246','#FFFFFF','#CE2B37'].forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(fx + (flagW/3)*i, fy, flagW/3+0.5, flagH);
+    });
+  },
+
+  // 3 — España (rojo-amarillo-rojo con escudo)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ctx.fillStyle = '#AA151B';
+    ctx.fillRect(fx,fy,flagW,flagH*0.25);
+    ctx.fillRect(fx,fy+flagH*0.75,flagW,flagH*0.25);
+    ctx.fillStyle = '#F1BF00';
+    ctx.fillRect(fx,fy+flagH*0.25,flagW,flagH*0.5);
+    const cx = fx+flagW/2, cy = fy+flagH/2, r = Math.min(flagW,flagH)*0.14;
+    ctx.fillStyle = 'rgba(0,0,128,0.15)'; ctx.shadowBlur = 0;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#AA151B'; ctx.font = `700 ${Math.round(r*1.2)}px sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('★', cx, cy);
+  },
+
+  // 4 — Brasil (verde con rombo amarillo y círculo azul)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ctx.fillStyle = '#009739';
+    ctx.fillRect(fx,fy,flagW,flagH);
+    ctx.fillStyle = '#FEDD00';
+    ctx.beginPath();
+    ctx.moveTo(fx+flagW*0.5, fy+flagH*0.08);
+    ctx.lineTo(fx+flagW*0.82, fy+flagH*0.5);
+    ctx.lineTo(fx+flagW*0.5, fy+flagH*0.92);
+    ctx.lineTo(fx+flagW*0.18, fy+flagH*0.5);
+    ctx.closePath(); ctx.fill();
+    const cx = fx+flagW/2, cy = fy+flagH/2, r = Math.min(flagW,flagH)*0.15;
+    ctx.fillStyle = '#012169';
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#FFFFFF'; ctx.font = `700 ${Math.round(r*0.7)}px sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('ORDEM', cx, cy-r*0.1);
+    ctx.fillStyle = '#009739'; ctx.font = `600 ${Math.round(r*0.35)}px sans-serif`;
+    ctx.fillText('E PROGRESSO', cx, cy+r*0.25);
+  },
+
+  // 5 — Japón (círculo rojo sobre blanco)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(fx,fy,flagW,flagH);
+    const cx = fx+flagW/2, cy = fy+flagH/2, r = Math.min(flagW,flagH)*0.28;
+    ctx.fillStyle = '#BC002D';
+    ctx.shadowColor = 'rgba(0,0,0,0.08)'; ctx.shadowBlur = 6;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+  },
+
+  // 6 — Argentina (celeste y blanco con sol)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ctx.fillStyle = '#75AADB';
+    ctx.fillRect(fx,fy,flagW,flagH*0.33);
+    ctx.fillRect(fx,fy+flagH*0.66,flagW,flagH*0.34);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(fx,fy+flagH*0.33,flagW,flagH*0.33);
+    const cx = fx+flagW/2, cy = fy+flagH/2, r = Math.min(flagW,flagH)*0.16;
+    ctx.fillStyle = '#FFD700';
+    ctx.shadowColor = 'rgba(255,215,0,0.3)'; ctx.shadowBlur = 8;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = '#D4A017';
+    ctx.font = `700 ${Math.round(r*1.4)}px sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('☀', cx, cy);
+  },
+
+  // 7 — México (verde-blanco-rojo vertical con escudo)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ['#006847','#FFFFFF','#CE1126'].forEach((c, i) => {
+      ctx.fillStyle = c;
+      ctx.fillRect(fx + (flagW/3)*i, fy, flagW/3+0.5, flagH);
+    });
+    const cx = fx+flagW/2, cy = fy+flagH/2, r = Math.min(flagW,flagH)*0.15;
+    ctx.fillStyle = '#5B7C2B';
+    ctx.shadowColor = 'rgba(0,0,0,0.1)'; ctx.shadowBlur = 4;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = '#FFFFFF'; ctx.font = `700 ${Math.round(r)}px sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('🦅', cx, cy+2);
+  },
+
+  // 8 — Chile (blanco-rojo con cuadrado azul y estrella)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(fx,fy,flagW,flagH*0.5);
+    ctx.fillStyle = '#D52B1E';
+    ctx.fillRect(fx,fy+flagH*0.5,flagW,flagH*0.5);
+    ctx.fillStyle = '#0039A6';
+    ctx.fillRect(fx,fy,flagW*0.4,flagH*0.5);
+    const cx = fx+flagW*0.2, cy = fy+flagH*0.25;
+    const r = Math.min(flagW,flagH)*0.04;
+    dibujarEstrella(ctx,cx,cy,r,5);
+    ctx.fillStyle = '#FFFFFF'; ctx.shadowColor = 'rgba(0,0,0,0.1)'; ctx.shadowBlur = 3; ctx.fill(); ctx.shadowBlur = 0;
+  },
+
+  // 9 — Grecia (azul y blanco con cruz)
+  function(ctx, w, h, fx, fy, flagW, flagH) {
+    for (let i = 0; i < 9; i++) {
+      ctx.fillStyle = i%2===0 ? '#0D5EAF' : '#FFFFFF';
+      ctx.fillRect(fx, fy + (flagH/9)*i, flagW, flagH/9+0.5);
+    }
+    const cw = flagW*0.4, ch = flagH*0.44;
+    ctx.fillStyle = '#0D5EAF';
+    ctx.fillRect(fx,fy,cw,ch);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(fx+cw*0.42, fy, cw*0.16, ch);
+    ctx.fillRect(fx, fy+ch*0.42, cw, ch*0.16);
+  }
+];
+
+var FLAG_SELECCIONADA = -1;
+
 function dibujarBanderas(ctx, w, h) {
-  // Fondo degradado azul claro vibrante
+  // Fondo degradado azul cielo
   const grad = ctx.createLinearGradient(0, 0, 0, h);
   grad.addColorStop(0, '#dbeafe');
   grad.addColorStop(0.3, '#bfdbfe');
@@ -581,346 +774,410 @@ function dibujarBanderas(ctx, w, h) {
   grad.addColorStop(1, '#60a5fa');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, w, h);
-  
-  // Estrellas de fondo (más visibles sobre fondo claro)
-  for (let i = 0; i < 25; i++) {
-    const sx = ((i * 137 + 47) % 100) / 100 * w;
-    const sy = ((i * 89 + 23) % 100) / 100 * h;
-    const sr = 0.8 + (i % 4) * 0.6;
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.beginPath();
-    ctx.arc(sx, sy, sr, 0, Math.PI * 2);
-    ctx.fill();
+
+  // Elegir diseño al azar
+  if (FLAG_SELECCIONADA < 0) {
+    FLAG_SELECCIONADA = Math.floor(Math.random() * FLAG_DISENOS.length);
   }
-  
-  // Banderas en cuadrícula
-  const banderas = [
-    { x: 0, y: 0, w: w * 0.5, h: h * 0.5, 
-      colores: ['#CE1126', '#003893', '#ffffff', '#003893', '#CE1126'], tipo: 'franjas-h' },
-    { x: w * 0.5, y: 0, w: w * 0.5, h: h * 0.5, 
-      colores: ['#012169', '#ffffff', '#C8102E'], tipo: 'franjas-v' },
-    { x: 0, y: h * 0.5, w: w * 0.5, h: h * 0.5, 
-      colores: ['#009E49', '#ffffff', '#CE1126'], tipo: 'franjas-h' },
-    { x: w * 0.5, y: h * 0.5, w: w * 0.5, h: h * 0.5, 
-      colores: ['#000000', '#DD0000', '#FFD700'], tipo: 'franjas-h' },
-  ];
-  
-  banderas.forEach(b => {
-    const { x, y, w: bw, h: bh, colores, tipo } = b;
-    const numBandas = colores.length;
-    
-    if (tipo === 'franjas-h') {
-      colores.forEach((color, i) => {
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y + (bh / numBandas) * i, bw, bh / numBandas + 0.5);
-      });
-    } else {
-      colores.forEach((color, i) => {
-        ctx.fillStyle = color;
-        ctx.fillRect(x + (bw / numBandas) * i, y, bw / numBandas + 0.5, bh);
-      });
-    }
-    
-    // Marco decorativo de la bandera
-    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(x, y, bw, bh);
-    
-    // Sombra interna sutil
-    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x + 1, y + 1, bw - 2, bh - 2);
-  });
-  
-  // ── Elementos decorativos ──
-  // Estrella dorada
-  const estrellaX = w * 0.25;
-  const estrellaY = h * 0.75;
-  dibujarEstrella(ctx, estrellaX, estrellaY, Math.min(w, h) * 0.05, 5);
-  ctx.fillStyle = '#f59e0b';
-  ctx.shadowColor = 'rgba(245, 158, 11, 0.3)';
-  ctx.shadowBlur = 8;
-  ctx.fill();
+
+  // ── Una sola bandera grande ──
+  const flagW = w * 0.7;
+  const flagH = h * 0.55;
+  const fx = (w - flagW) / 2;
+  const fy = (h - flagH) / 2;
+
+  // Sombra de la bandera
+  ctx.shadowColor = 'rgba(0,0,0,0.3)';
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 4;
+
+  // Dibujar el diseño elegido
+  FLAG_DISENOS[FLAG_SELECCIONADA](ctx, w, h, fx, fy, flagW, flagH);
+
   ctx.shadowBlur = 0;
-  
-  // Sol
-  const solX = w * 0.75, solY = h * 0.25;
-  const solR = Math.min(w, h) * 0.06;
-  ctx.fillStyle = '#fbbf24';
-  ctx.shadowColor = 'rgba(251, 191, 36, 0.3)';
-  ctx.shadowBlur = 12;
-  ctx.beginPath();
-  ctx.arc(solX, solY, solR, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.shadowOffsetY = 0;
+
+  // ── Marco de la bandera ──
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(fx, fy, flagW, flagH);
+
+  // ── Asta decorativa ──
+  ctx.fillStyle = '#8B7355';
+  ctx.shadowColor = 'rgba(0,0,0,0.2)';
+  ctx.shadowBlur = 4;
+  ctx.fillRect(fx - flagW * 0.03, fy, flagW * 0.03, flagH);
   ctx.shadowBlur = 0;
-  
-  // Anillos olímpicos
-  const aniX = w * 0.25, aniY = h * 0.25, aniR = Math.min(w, h) * 0.025;
-  const coloresAnillos = ['#0085C7', '#F4C300', '#000000', '#009F3D', '#DF0024'];
-  coloresAnillos.forEach((color, i) => {
-    const offsetX = (i - 2) * aniR * 1.5;
-    const offsetY = i < 3 ? 0 : aniR * 0.6;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(aniX + offsetX, aniY + offsetY, aniR, 0, Math.PI * 2);
-    ctx.stroke();
-  });
-  
-  // ── Texto ──
-  ctx.fillStyle = 'rgba(0,0,0,0.2)';
-  ctx.font = `600 ${Math.round(w * 0.032)}px 'Quicksand', 'Segoe UI', sans-serif`;
+
+  // ── Texto inferior ──
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.font = `600 ${Math.round(w * 0.03)}px 'Quicksand', 'Segoe UI', sans-serif`;
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';  
-  ctx.fillText('BANDERAS DEL MUNDO', w * 0.5, h * 0.91);
+  ctx.textBaseline = 'middle';
+  ctx.fillText('BANDERAS DEL MUNDO', w * 0.5, h * 0.92);
 }
 
 
 // =====================================================================
-//  TEMA: ANIMALES (infografía estilo documental)
+//  TEMA: ANIMALES — un animal grande al azar por partida
 // =====================================================================
+
+var ANIMAL_DISENOS = [
+  // 0 — León (sabana)
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fbbf24'); grad.addColorStop(0.4,'#f59e0b');
+    grad.addColorStop(0.7,'#86efac'); grad.addColorStop(1,'#22c55e');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🦁', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('LEÓN', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Rey de la sabana africana', w*0.5, h*0.91);
+  },
+  // 1 — Pingüino (antártico)
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#e0f2fe'); grad.addColorStop(0.3,'#bae6fd');
+    grad.addColorStop(0.6,'#7dd3fc'); grad.addColorStop(1,'#38bdf8');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    for (let i = 0; i < 15; i++) {
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      ctx.beginPath(); ctx.arc(((i*137+47)%100)/100*w, ((i*89+23)%100)/100*h, 1.5, 0, Math.PI*2); ctx.fill();
+    }
+    const eSize = Math.min(w,h)*0.4;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 12;
+    ctx.fillText('🐧', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('PINGÜINO', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Habitante del hielo antártico', w*0.5, h*0.91);
+  },
+  // 2 — Perro (doméstico / pastor alemán)
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fef3c7'); grad.addColorStop(0.5,'#fde68a'); grad.addColorStop(1,'#fcd34d');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🐕', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('PERRO', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('El mejor amigo del hombre', w*0.5, h*0.91);
+  },
+  // 3 — Gato
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#ddd6fe'); grad.addColorStop(0.5,'#c4b5fd'); grad.addColorStop(1,'#a78bfa');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🐱', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('GATO', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Felino doméstico', w*0.5, h*0.91);
+  },
+  // 4 — Elefante
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#a78bfa'); grad.addColorStop(0.5,'#8b5cf6'); grad.addColorStop(1,'#6d28d9');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.4;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🐘', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('ELEFANTE', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('El animal terrestre más grande', w*0.5, h*0.91);
+  },
+  // 5 — Delfín
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#dbeafe'); grad.addColorStop(0.5,'#93c5fd'); grad.addColorStop(1,'#3b82f6');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 15;
+    ctx.fillText('🐬', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('DELFÍN', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Inteligente nadador del océano', w*0.5, h*0.91);
+  },
+  // 6 — Tigre
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fdba74'); grad.addColorStop(0.5,'#fb923c'); grad.addColorStop(1,'#f97316');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.42;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🐅', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('TIGRE', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('El gran felino rayado de Asia', w*0.5, h*0.91);
+  },
+  // 7 — Oso Panda
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#e5e7eb'); grad.addColorStop(0.5,'#d1d5db'); grad.addColorStop(1,'#9ca3af');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🐼', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('OSO PANDA', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.15)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Tesoro nacional de China', w*0.5, h*0.91);
+  },
+  // 8 — Águila
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#bfdbfe'); grad.addColorStop(0.3,'#93c5fd');
+    grad.addColorStop(0.6,'#fde68a'); grad.addColorStop(1,'#fcd34d');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🦅', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('ÁGUILA', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Señora de los cielos', w*0.5, h*0.91);
+  },
+  // 9 — Canguro
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fef3c7'); grad.addColorStop(0.5,'#fde68a'); grad.addColorStop(1,'#f59e0b');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.42;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🦘', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('CANGURO', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('El saltador de Oceanía', w*0.5, h*0.91);
+  },
+  // 10 — Mariposa
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fce7f3'); grad.addColorStop(0.5,'#fbcfe8'); grad.addColorStop(1,'#f9a8d4');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.5;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 12;
+    ctx.fillText('🦋', w*0.5, h*0.48); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('MARIPOSA', w*0.5, h*0.85);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Belleza alada de la naturaleza', w*0.5, h*0.91);
+  }
+];
+
+var ANIMAL_SELECCIONADO = -1;
 
 function dibujarAnimales(ctx, w, h) {
-  // ── Fondo degradado sabana vibrante y claro ──
-  const grad = ctx.createLinearGradient(0, 0, 0, h);
-  grad.addColorStop(0, '#fef3c7');
-  grad.addColorStop(0.2, '#fde68a');
-  grad.addColorStop(0.4, '#fcd34d');
-  grad.addColorStop(0.6, '#86efac');
-  grad.addColorStop(0.8, '#4ade80');
-  grad.addColorStop(1, '#22c55e');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, w, h);
-  
-  // ── Silueta de árboles en el horizonte ──
-  ctx.fillStyle = 'rgba(0,0,0,0.08)';
-  const arboles = [
-    [0.05, 0.6, 30], [0.12, 0.58, 45], [0.22, 0.55, 35], 
-    [0.35, 0.57, 40], [0.48, 0.54, 50], [0.6, 0.56, 35],
-    [0.72, 0.53, 45], [0.82, 0.55, 30], [0.92, 0.57, 35]
-  ];
-  arboles.forEach(([ax, ay, aSize]) => {
-    ctx.beginPath();
-    ctx.arc(ax * w, ay * h, aSize * 0.5, Math.PI, 0);
-    ctx.fill();
-    // Tronco
-    ctx.fillRect(ax * w - 2, ay * h, 4, aSize * 0.4);
-  });
-  
-  // ── Sol brillante ──
-  ctx.fillStyle = 'rgba(251, 191, 36, 0.4)';
-  ctx.beginPath();
-  ctx.arc(w * 0.5, h * 0.28, Math.min(w, h) * 0.12, 0, Math.PI * 2);
-  ctx.fill();
-  
-  ctx.fillStyle = 'rgba(251, 191, 36, 0.7)';
-  ctx.beginPath();
-  ctx.arc(w * 0.5, h * 0.28, Math.min(w, h) * 0.06, 0, Math.PI * 2);
-  ctx.fill();
-  
-  // ── Animales como iconos naturales ──
-  const animales = [
-    { emoji: '🦁', x: 0.3, y: 0.52, size: 60, shadow: true },   // León - África
-    { emoji: '🦅', x: 0.42, y: 0.22, size: 45, shadow: false }, // Águila
-    { emoji: '🦘', x: 0.82, y: 0.58, size: 50, shadow: true },  // Canguro
-    { emoji: '🐼', x: 0.68, y: 0.28, size: 48, shadow: false }, // Panda
-    { emoji: '🐧', x: 0.55, y: 0.78, size: 45, shadow: false }, // Pingüino
-    { emoji: '🐘', x: 0.38, y: 0.62, size: 55, shadow: true },  // Elefante
-    { emoji: '🐅', x: 0.58, y: 0.35, size: 52, shadow: false }, // Tigre
-    { emoji: '🐬', x: 0.72, y: 0.68, size: 40, shadow: false }, // Delfín
-    { emoji: '🦋', x: 0.22, y: 0.42, size: 32, shadow: false }, // Mariposa
-    { emoji: '🦜', x: 0.15, y: 0.48, size: 35, shadow: false }, // Loro
-  ];
-  
-  animales.forEach(a => {
-    const ax = a.x * w;
-    const ay = a.y * h;
-    
-    if (a.shadow) {
-      // Sombra en el suelo
-      ctx.fillStyle = 'rgba(0,0,0,0.15)';
-      ctx.beginPath();
-      ctx.ellipse(ax, ay + a.size * 0.45, a.size * 0.3, a.size * 0.06, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    
-    ctx.shadowColor = 'rgba(0,0,0,0.25)';
-    ctx.shadowBlur = 10;
-    ctx.font = `${a.size}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(a.emoji, ax, ay);
-    ctx.shadowBlur = 0;
-  });
-  
-  // ── Etiqueta inferior ──
-  ctx.fillStyle = 'rgba(0,0,0,0.2)';
-  ctx.font = `600 ${Math.round(w * 0.032)}px 'Quicksand', 'Segoe UI', sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('FAUNA MUNDIAL', w * 0.5, h * 0.04);
+  if (ANIMAL_SELECCIONADO < 0) {
+    ANIMAL_SELECCIONADO = Math.floor(Math.random() * ANIMAL_DISENOS.length);
+  }
+  ANIMAL_DISENOS[ANIMAL_SELECCIONADO](ctx, w, h);
 }
 
 
 // =====================================================================
-//  TEMA: MONUMENTOS (collage tipo póster de viajes)
+//  TEMA: MONUMENTOS — un monumento grande al azar por partida
 // =====================================================================
 
+var MONUMENTO_DISENOS = [
+  // 0 — Estatua de la Libertad
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#dbeafe'); grad.addColorStop(0.5,'#bfdbfe'); grad.addColorStop(1,'#93c5fd');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🗽', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('ESTATUA DE LA LIBERTAD', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Nueva York, EE.UU.', w*0.5, h*0.89);
+  },
+  // 1 — Torre Eiffel
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fef3c7'); grad.addColorStop(0.5,'#fde68a'); grad.addColorStop(1,'#fcd34d');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.5;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🗼', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('TORRE EIFFEL', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('París, Francia', w*0.5, h*0.89);
+  },
+  // 2 — Coliseo Romano
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fce7f3'); grad.addColorStop(0.5,'#fbcfe8'); grad.addColorStop(1,'#f9a8d4');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🏛️', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('COLISEO ROMANO', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Roma, Italia', w*0.5, h*0.89);
+  },
+  // 3 — Monte Fuji
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#e0f2fe'); grad.addColorStop(0.4,'#bae6fd'); grad.addColorStop(1,'#7dd3fc');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.5;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🗻', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('MONTE FUJI', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Honshu, Japón', w*0.5, h*0.89);
+  },
+  // 4 — Cristo Redentor
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fef3c7'); grad.addColorStop(0.5,'#fde68a'); grad.addColorStop(1,'#f59e0b');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('⛪', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('CRISTO REDENTOR', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Río de Janeiro, Brasil', w*0.5, h*0.89);
+  },
+  // 5 — Pirámides de Guiza
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fbbf24'); grad.addColorStop(0.5,'#f59e0b'); grad.addColorStop(1,'#d97706');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🔺', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('PIRÁMIDES DE GUIZA', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('El Cairo, Egipto', w*0.5, h*0.89);
+  },
+  // 6 — Gran Muralla China
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#dcfce7'); grad.addColorStop(0.5,'#bbf7d0'); grad.addColorStop(1,'#86efac');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🏯', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('GRAN MURALLA CHINA', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('China', w*0.5, h*0.89);
+  },
+  // 7 — Ópera de Sídney
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#e0f2fe'); grad.addColorStop(0.5,'#bae6fd'); grad.addColorStop(1,'#7dd3fc');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🎭', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('ÓPERA DE SÍDNEY', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Sídney, Australia', w*0.5, h*0.89);
+  },
+  // 8 — Taj Mahal
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fdf2f8'); grad.addColorStop(0.5,'#fce7f3'); grad.addColorStop(1,'#fbcfe8');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🕌', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('TAJ MAHAL', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Agra, India', w*0.5, h*0.89);
+  },
+  // 9 — Machu Picchu
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fef3c7'); grad.addColorStop(0.5,'#d9f99d'); grad.addColorStop(1,'#86efac');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🏔️', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('MACHU PICCHU', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Cusco, Perú', w*0.5, h*0.89);
+  },
+  // 10 — Big Ben
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#f3e8ff'); grad.addColorStop(0.5,'#e9d5ff'); grad.addColorStop(1,'#d8b4fe');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🕰️', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('BIG BEN', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Londres, Reino Unido', w*0.5, h*0.89);
+  },
+  // 11 — Moái de Rapa Nui
+  function(ctx, w, h) {
+    const grad = ctx.createLinearGradient(0,0,0,h);
+    grad.addColorStop(0,'#fef3c7'); grad.addColorStop(0.5,'#fde68a'); grad.addColorStop(1,'#fcd34d');
+    ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
+    const eSize = Math.min(w,h)*0.45;
+    ctx.font = `${eSize}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 15;
+    ctx.fillText('🗿', w*0.5, h*0.46); ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.font = `600 ${Math.round(w*0.035)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('MOÁI DE RAPA NUI', w*0.5, h*0.83);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.font = `${Math.round(w*0.02)}px 'Quicksand','Segoe UI',sans-serif`;
+    ctx.fillText('Isla de Pascua, Chile', w*0.5, h*0.89);
+  }
+];
+
+var MONUMENTO_SELECCIONADO = -1;
+
 function dibujarMonumentos(ctx, w, h) {
-  // ── Fondo degradado vintage/mapa de viaje ──
-  const grad = ctx.createRadialGradient(
-    w * 0.3, h * 0.3, w * 0.1,
-    w * 0.5, h * 0.5, w * 0.75
-  );
-  grad.addColorStop(0, '#fef3c7');
-  grad.addColorStop(0.3, '#fde68a');
-  grad.addColorStop(0.5, '#fcd34d');
-  grad.addColorStop(0.75, '#fbbf24');
-  grad.addColorStop(1, '#f59e0b');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, w, h);
-  
-  // ── Líneas de mapa (meridianos y paralelos decorativos) ──
-  ctx.strokeStyle = 'rgba(180, 120, 60, 0.08)';
-  ctx.lineWidth = 1;
-  for (let i = 0; i < 6; i++) {
-    const y = h * (0.1 + i * 0.16);
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.stroke();
+  if (MONUMENTO_SELECCIONADO < 0) {
+    MONUMENTO_SELECCIONADO = Math.floor(Math.random() * MONUMENTO_DISENOS.length);
   }
-  for (let i = 0; i < 6; i++) {
-    const x = w * (0.1 + i * 0.16);
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, h);
-    ctx.stroke();
-  }
-  
-  // ── Textura de papel añejo ──
-  generarTexturaTerreno(ctx, 0, 0, w, h, [180, 120, 60], 0.03, 17);
-  
-  // ── Monumentos emblemáticos en cuadrícula de tarjetas ──
-  const monumentos = [
-    { emoji: '🗽', nombre: 'Estatua de la Libertad', lugar: 'Nueva York, EE.UU.' },
-    { emoji: '🗼', nombre: 'Torre Eiffel', lugar: 'París, Francia' },
-    { emoji: '🏛️', nombre: 'Coliseo Romano', lugar: 'Roma, Italia' },
-    { emoji: '🗻', nombre: 'Monte Fuji', lugar: 'Honshu, Japón' },
-    { emoji: '⛪', nombre: 'Cristo Redentor', lugar: 'Río de Janeiro, Brasil' },
-    { emoji: '🔺', nombre: 'Pirámides de Guiza', lugar: 'El Cairo, Egipto' },
-    { emoji: '🏯', nombre: 'Gran Muralla China', lugar: 'China' },
-    { emoji: '🎭', nombre: 'Ópera de Sídney', lugar: 'Sídney, Australia' },
-    { emoji: '🕌', nombre: 'Taj Mahal', lugar: 'Agra, India' },
-    { emoji: '🏔️', nombre: 'Machu Picchu', lugar: 'Cusco, Perú' },
-    { emoji: '🕰️', nombre: 'Big Ben', lugar: 'Londres, Reino Unido' },
-    { emoji: '🏰', nombre: 'Neuschwanstein', lugar: 'Baviera, Alemania' },
-    { emoji: '🌉', nombre: 'Puente de Brooklyn', lugar: 'Nueva York, EE.UU.' },
-    { emoji: '🗿', nombre: 'Moái de Rapa Nui', lugar: 'Isla de Pascua, Chile' },
-    { emoji: '🌋', nombre: 'Volcán Yasur', lugar: 'Vanuatu' },
-    { emoji: '🏜️', nombre: 'Gran Cañón', lugar: 'Arizona, EE.UU.' },
-  ];
-  
-  // Disposición: 4 columnas x 4 filas
-  const cols = 4;
-  const filas = 4;
-  const margenX = w * 0.04;
-  const margenY = h * 0.08;
-  const cardW = (w - margenX * 2) / cols;
-  const cardH = (h - margenY * 2) / filas;
-  const emojiSize = Math.round(Math.min(w, h) * 0.055);
-  const fontSize = Math.round(Math.min(w, h) * 0.018);
-  const lugarSize = Math.round(Math.min(w, h) * 0.014);
-  
-  monumentos.forEach((m, i) => {
-    const col = i % cols;
-    const fila = Math.floor(i / cols);
-    const cx = margenX + col * cardW + cardW * 0.5;
-    const cy = margenY + fila * cardH + cardH * 0.5;
-    const r = Math.min(cardW, cardH) * 0.33;
-    
-    // ── Círculo decorativo detrás del emoji ──
-    const hue = (i * 37 + 25) % 360;
-    ctx.save();
-    
-    // Sombra del círculo
-    ctx.shadowColor = 'rgba(0,0,0,0.2)';
-    ctx.shadowBlur = 10;
-    
-    ctx.fillStyle = `hsla(${hue}, 55%, 75%, 0.45)`;
-    ctx.beginPath();
-    ctx.arc(cx, cy - cardH * 0.06, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    
-    // Borde sutil del círculo
-    ctx.strokeStyle = `hsla(${hue}, 50%, 60%, 0.2)`;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(cx, cy - cardH * 0.06, r, 0, Math.PI * 2);
-    ctx.stroke();
-    
-    // ── Emoji del monumento ──
-    ctx.font = `${emojiSize}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(m.emoji, cx, cy - cardH * 0.06);
-    
-    // ── Nombre del monumento ──
-    ctx.fillStyle = 'rgba(0,0,0,0.75)';
-    ctx.font = `700 ${fontSize}px 'Quicksand', 'Segoe UI', sans-serif`;
-    ctx.textBaseline = 'middle';
-    ctx.fillText(m.nombre, cx, cy + cardH * 0.28);
-    
-    // ── Lugar ──
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.font = `${lugarSize}px 'Quicksand', 'Segoe UI', sans-serif`;
-    ctx.fillText(m.lugar, cx, cy + cardH * 0.40);
-    
-    ctx.restore();
-  });
-  
-  // ── Brújula decorativa (esquina inferior derecha) ──
-  const bruX = w - 45;
-  const bruY = h - 45;
-  const bruR = 16;
-  
-  ctx.fillStyle = 'rgba(180, 120, 60, 0.15)';
-  ctx.beginPath();
-  ctx.arc(bruX, bruY, bruR + 4, 0, Math.PI * 2);
-  ctx.fill();
-  
-  ctx.strokeStyle = 'rgba(180, 120, 60, 0.3)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.arc(bruX, bruY, bruR, 0, Math.PI * 2);
-  ctx.stroke();
-  
-  // Flecha norte (roja)
-  ctx.strokeStyle = 'rgba(200, 80, 80, 0.4)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(bruX, bruY - bruR + 2);
-  ctx.lineTo(bruX, bruY + bruR - 2);
-  ctx.stroke();
-  ctx.strokeStyle = 'rgba(80, 80, 80, 0.2)';
-  ctx.beginPath();
-  ctx.moveTo(bruX - bruR + 2, bruY);
-  ctx.lineTo(bruX + bruR - 2, bruY);
-  ctx.stroke();
-  
-  ctx.fillStyle = 'rgba(200, 80, 80, 0.35)';
-  ctx.font = `bold ${Math.round(bruR * 0.8)}px sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('N', bruX, bruY - bruR + 1);
-  
-  // ── Título inferior ──
-  ctx.fillStyle = 'rgba(0,0,0,0.15)';
-  ctx.font = `600 ${Math.round(w * 0.032)}px 'Quicksand', 'Segoe UI', sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('MONUMENTOS DEL MUNDO', w * 0.5, h * 0.04);
+  MONUMENTO_DISENOS[MONUMENTO_SELECCIONADO](ctx, w, h);
 }
 
 

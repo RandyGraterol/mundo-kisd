@@ -12,7 +12,10 @@ const { obtenerDB, buscarUsuarioPorNombre, crearPregunta, guardarConfiguracionTe
 function ejecutarSeed() {
   const db = obtenerDB();
   
-  // Verificar si ya se ejecutó el seed
+  // Siempre ejecutar logros (INSERT OR IGNORE para no duplicar)
+  crearLogrosPorDefecto(db);
+  
+  // Verificar si ya se ejecutó el seed completo
   const seedEjecutado = db.prepare("SELECT valor FROM configuracion_sistema WHERE clave = 'seed_ejecutado'").get();
   if (seedEjecutado) {
     console.log('[SKIP] Seed ya ejecutado anteriormente, saltando...');
@@ -470,21 +473,35 @@ function logrosPorDefecto() {
     { clave: 'explorador_continentes', nombre: 'Explorador', descripcion: 'Completa retos en 3 continentes diferentes', icono: 'globo', categoria: 'progreso', condicion_tipo: 'retos_completados', condicion_valor: 3, puntos_recompensa: 20 },
     { clave: 'cinco_retos', nombre: 'Aprendiz', descripcion: 'Completa 5 retos de continentes', icono: 'libro', categoria: 'progreso', condicion_tipo: 'retos_completados', condicion_valor: 5, puntos_recompensa: 30 },
     { clave: 'diez_retos', nombre: 'Estudioso', descripcion: 'Completa 10 retos de continentes', icono: 'medalla', categoria: 'progreso', condicion_tipo: 'retos_completados', condicion_valor: 10, puntos_recompensa: 50 },
+    { clave: 'veinte_retos', nombre: 'Dedicado', descripcion: 'Completa 20 retos de continentes', icono: 'trofeo', categoria: 'progreso', condicion_tipo: 'retos_completados', condicion_valor: 20, puntos_recompensa: 70 },
+    { clave: 'treinta_retos', nombre: 'Campeón', descripcion: 'Completa 30 retos de continentes', icono: 'corona', categoria: 'progreso', condicion_tipo: 'retos_completados', condicion_valor: 30, puntos_recompensa: 100 },
     { clave: 'coleccionista', nombre: 'Coleccionista', descripcion: 'Visita los 6 continentes', icono: 'mapa', categoria: 'progreso', condicion_tipo: 'continentes_visitados', condicion_valor: 6, puntos_recompensa: 40 },
     { clave: 'nivel_5', nombre: 'Novato Experto', descripcion: 'Alcanza el nivel 5', icono: 'estrella', categoria: 'progreso', condicion_tipo: 'nivel', condicion_valor: 5, puntos_recompensa: 30 },
     { clave: 'nivel_10', nombre: 'Maestro', descripcion: 'Alcanza el nivel 10', icono: 'trofeo', categoria: 'progreso', condicion_tipo: 'nivel', condicion_valor: 10, puntos_recompensa: 60 },
+    { clave: 'nivel_15', nombre: 'Sabio', descripcion: 'Alcanza el nivel 15', icono: 'corona', categoria: 'progreso', condicion_tipo: 'nivel', condicion_valor: 15, puntos_recompensa: 80 },
     { clave: 'nivel_20', nombre: 'Leyenda', descripcion: 'Alcanza el nivel 20', icono: 'corona', categoria: 'progreso', condicion_tipo: 'nivel', condicion_valor: 20, puntos_recompensa: 100 },
+    { clave: 'nivel_30', nombre: 'Inmortal', descripcion: 'Alcanza el nivel 30', icono: 'diamante', categoria: 'progreso', condicion_tipo: 'nivel', condicion_valor: 30, puntos_recompensa: 150 },
     { clave: 'cien_puntos', nombre: 'Centenario', descripcion: 'Acumula 100 puntos totales', icono: 'diamante', categoria: 'progreso', condicion_tipo: 'puntos_totales', condicion_valor: 100, puntos_recompensa: 20 },
     { clave: 'quinientos_puntos', nombre: 'Leyenda de Puntos', descripcion: 'Acumula 500 puntos totales', icono: 'corona', categoria: 'progreso', condicion_tipo: 'puntos_totales', condicion_valor: 500, puntos_recompensa: 80 },
+    { clave: 'mil_puntos', nombre: 'Acumulador', descripcion: 'Acumula 1,000 puntos totales', icono: 'diamante', categoria: 'progreso', condicion_tipo: 'puntos_totales', condicion_valor: 1000, puntos_recompensa: 120 },
+    { clave: 'dosmil_puntos', nombre: 'Multimillonario', descripcion: 'Acumula 2,000 puntos totales', icono: 'corona', categoria: 'progreso', condicion_tipo: 'puntos_totales', condicion_valor: 2000, puntos_recompensa: 200 },
     { clave: 'trivia_inicial', nombre: 'Bandero', descripcion: 'Completa tu primera trivia de banderas', icono: 'bandera', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 1, puntos_recompensa: 10 },
     { clave: 'sopero', nombre: 'Detective de Letras', descripcion: 'Juega 5 partidas de sopa de letras', icono: 'sopa_letras', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 5, puntos_recompensa: 25 },
     { clave: 'memorion', nombre: 'Mente Brillante', descripcion: 'Juega 10 partidas de memoria', icono: 'memoria', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 10, puntos_recompensa: 35 },
     { clave: 'rompecabezas', nombre: 'Arquitecto', descripcion: 'Completa 3 rompecabezas', icono: 'puzzle_pieza', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 3, puntos_recompensa: 20 },
+    { clave: 'cincuenta_actividades', nombre: 'Activo', descripcion: 'Realiza 50 actividades en total', icono: 'diana', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 50, puntos_recompensa: 50 },
     { clave: 'cien_actividades', nombre: 'Veterano', descripcion: 'Realiza 100 actividades en total', icono: 'diana', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 100, puntos_recompensa: 100 },
+    { clave: 'doscientas_actividades', nombre: 'Leyenda Activo', descripcion: 'Realiza 200 actividades en total', icono: 'trofeo', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 200, puntos_recompensa: 150 },
+    { clave: 'trivia_racha', nombre: 'Trivia Experto', descripcion: 'Completa 12 preguntas de trivia', icono: 'bandera', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 12, puntos_recompensa: 40 },
+    { clave: 'memoria_completa', nombre: 'Memoria Total', descripcion: 'Juega 25 partidas de memoria', icono: 'memoria', categoria: 'actividades', condicion_tipo: 'actividades_totales', condicion_valor: 25, puntos_recompensa: 60 },
     { clave: 'diez_seguidas', nombre: 'Racha de Oro', descripcion: 'Juega 3 días consecutivos sin saltarte ninguno', icono: 'fuego', categoria: 'social', condicion_tipo: 'racha_diaria', condicion_valor: 3, puntos_recompensa: 30 },
     { clave: 'semana_completa', nombre: 'Dedicación', descripcion: 'Juega 7 días consecutivos', icono: 'calendario', categoria: 'social', condicion_tipo: 'racha_diaria', condicion_valor: 7, puntos_recompensa: 70 },
+    { clave: 'quince_dias', nombre: 'Constante', descripcion: 'Juega 15 días consecutivos', icono: 'fuego', categoria: 'social', condicion_tipo: 'racha_diaria', condicion_valor: 15, puntos_recompensa: 100 },
+    { clave: 'treinta_dias', nombre: 'Insuperable', descripcion: 'Juega 30 días consecutivos', icono: 'corona', categoria: 'social', condicion_tipo: 'racha_diaria', condicion_valor: 30, puntos_recompensa: 200 },
     { clave: 'perfecto_80', nombre: 'Precisión', descripcion: 'Mantén un 80% o más de respuestas correctas', icono: 'diana', categoria: 'habilidad', condicion_tipo: 'porcentaje_aciertos', condicion_valor: 80, puntos_recompensa: 50 },
     { clave: 'perfecto_95', nombre: 'Impecable', descripcion: 'Mantén un 95% o más de respuestas correctas', icono: 'diamante', categoria: 'habilidad', condicion_tipo: 'porcentaje_aciertos', condicion_valor: 95, puntos_recompensa: 100 },
+    { clave: 'perfecto_100', nombre: 'Perfecto', descripcion: 'Mantén un 100% de respuestas correctas', icono: 'diamante', categoria: 'habilidad', condicion_tipo: 'porcentaje_aciertos', condicion_valor: 100, puntos_recompensa: 150 },
+    { clave: 'veloz', nombre: 'Veloz', descripcion: 'Responde 10 preguntas en modo Contrarreloj', icono: 'reloj', categoria: 'habilidad', condicion_tipo: 'actividades_totales', condicion_valor: 10, puntos_recompensa: 30 },
     { clave: 'bienvenido', nombre: '¡Bienvenido a Mundo Kids!', descripcion: 'Gracias por unirte a nuestra aventura educativa', icono: 'fiesta', categoria: 'especial', condicion_tipo: 'siempre', condicion_valor: 1, puntos_recompensa: 5 },
   ];
 }
@@ -493,25 +510,20 @@ function logrosPorDefecto() {
  * Crea los logros/insignias por defecto
  */
 function crearLogrosPorDefecto(db) {
-  const count = db.prepare('SELECT COUNT(*) as count FROM logros').get();
-  
-  if (count.count > 0) {
-    console.log('  ✓ Logros ya existen, saltando...');
-    return;
-  }
-
   const logros = logrosPorDefecto();
 
   const insert = db.prepare(`
-    INSERT INTO logros (clave, nombre, descripcion, icono, categoria, condicion_tipo, condicion_valor, puntos_recompensa)
+    INSERT OR IGNORE INTO logros (clave, nombre, descripcion, icono, categoria, condicion_tipo, condicion_valor, puntos_recompensa)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
+  let insertados = 0;
   for (const logro of logros) {
-    insert.run(logro.clave, logro.nombre, logro.descripcion, logro.icono, logro.categoria, logro.condicion_tipo, logro.condicion_valor, logro.puntos_recompensa);
+    const result = insert.run(logro.clave, logro.nombre, logro.descripcion, logro.icono, logro.categoria, logro.condicion_tipo, logro.condicion_valor, logro.puntos_recompensa);
+    if (result.changes > 0) insertados++;
   }
 
-  console.log(`  ✓ ${logros.length} logros disponibles creados`);
+  console.log(`  ✓ ${insertados} logros nuevos insertados (${logros.length} totales definidos)`);
 }
 
 // ──────────────────────────────────────────────
@@ -543,3 +555,8 @@ function crearConfiguracionesSistema(db) {
 }
 
 module.exports = { ejecutarSeed };
+
+// Auto-ejecución cuando se corre directamente: node database/seed.js
+if (require.main === module) {
+  ejecutarSeed();
+}

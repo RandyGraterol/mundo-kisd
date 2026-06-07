@@ -1,47 +1,96 @@
 <%- include('partials/confetti') %>
 
-<div class="min-h-screen flex items-center justify-center p-responsive-main animate-fade-in">
+<style>
+  [data-theme="dark"] .pz-main { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-badge { background: rgba(30,41,59,0.8) !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-badge svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-badge h2 { color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-h1 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .pz-theme-label { color: #64748b !important; }
+  [data-theme="dark"] .pz-theme-value { color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-grid-wrapper { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-preview { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-preview-title { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-preview-label { color: #64748b !important; }
+  [data-theme="dark"] .pz-stats { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-stats-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-stats-title svg { color: #64748b !important; }
+  [data-theme="dark"] .pz-stat-item { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-stat-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-stat-value-amber { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-stat-value-green { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-stat-value-slate { color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-mode-box { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-mode-title { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-mode-btn-active { background-color: #475569 !important; border-color: #64748b !important; color: #f1f5f9 !important; }
+  [data-theme="dark"] .pz-mode-btn { background-color: #1e293b !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-mode-btn:hover { background-color: #334155 !important; }
+  [data-theme="dark"] .pz-progress { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-progress-label { color: #64748b !important; }
+  [data-theme="dark"] .pz-progress-value { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-btn-primary { background-color: #475569 !important; }
+  [data-theme="dark"] .pz-btn-primary:hover { background-color: #64748b !important; }
+  [data-theme="dark"] .pz-btn-secondary { background-color: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-btn-secondary:hover { background-color: #1e293b !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-victory { background: #1e293b !important; }
+  [data-theme="dark"] .pz-victory h4 { color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-select-icon { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .pz-select-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] .pz-select-p { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-theme-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-theme-card:hover { border-color: #475569 !important; }
+  [data-theme="dark"] .pz-theme-icon { background-color: #0f172a !important; }
+  [data-theme="dark"] .pz-theme-icon span { color: #64748b !important; }
+  [data-theme="dark"] .pz-theme-name { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-section-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .pz-section-title svg { color: #64748b !important; }
+  [data-theme="dark"] .pz-cont-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-cont-card:hover { border-color: #475569 !important; }
+  [data-theme="dark"] .pz-cont-name { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-cont-desc { color: #64748b !important; }
+  [data-theme="dark"] .pz-diff-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-diff-card:hover { border-color: #475569 !important; }
+  [data-theme="dark"] .pz-diff-name { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-diff-label { color: #64748b !important; }
+  [data-theme="dark"] .pz-back { border-color: #334155 !important; }
+  [data-theme="dark"] .pz-back a { color: #64748b !important; }
+  [data-theme="dark"] .pz-back a:hover { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-timer { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .pz-timer h3 { color: #94a3b8 !important; }
+  [data-theme="dark"] .pz-timer .text-3xl { color: #f1f5f9 !important; }
+</style>
+
+<div class="min-h-screen flex items-center justify-center p-4 sm:p-6 animate-fade-in">
   
-  <div class="bg-white rounded-[3rem] shadow-xl p-responsive card-padding-md max-w-4xl w-full border border-slate-100 md:rounded-[3.5rem]">
+  <div class="pz-main bg-white rounded-[2.5rem] shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-slate-100">
 
     <!-- Encabezado -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-3 bg-amber-50 backdrop-blur-md px-6 py-2 rounded-full border border-amber-100 shadow-sm mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><path d="M19.439 7.85c0-1.57.551-2.483 1.45-3.045l.333-.208-1.222-1.222-.208.333c-.562.899-1.475 1.45-3.045 1.45a2.986 2.986 0 0 1-2.951-2.478l-.07-.48H12.2l-.07.48A2.986 2.986 0 0 1 9.179 4.808c-1.57 0-2.483-.551-3.045-1.45l-.208-.333-1.222 1.222.333.208c.899.562 1.45 1.475 1.45 3.045a2.986 2.986 0 0 1-2.478 2.951l-.48.07V12.2l.48.07A2.986 2.986 0 0 1 4.808 15.179c0 1.57.551 2.483 1.45 3.045l.333.208 1.222 1.222.208-.333c.562-.899 1.475-1.45 3.045-1.45a2.986 2.986 0 0 1 2.951 2.478l.07.48H12.2l.07-.48a2.986 2.986 0 0 1 2.951-2.478c1.57 0 2.483.551 3.045 1.45l.208.333 1.222-1.222-.333-.208c-.899-.562-1.45-1.475-1.45-3.045a2.986 2.986 0 0 1 2.478-2.951l.48-.07V9.179l-.48-.07a2.986 2.986 0 0 1-2.478-2.951Z"/></svg>
-        <h2 class="text-xl font-bold text-slate-800">Rompecabezas</h2>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="pz-badge inline-flex items-center gap-2 bg-amber-50 px-4 py-1.5 rounded-full border border-amber-100 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600 shrink-0"><path d="M19.439 7.85c0-1.57.551-2.483 1.45-3.045l.333-.208-1.222-1.222-.208.333c-.562.899-1.475 1.45-3.045 1.45a2.986 2.986 0 0 1-2.951-2.478l-.07-.48H12.2l-.07.48A2.986 2.986 0 0 1 9.179 4.808c-1.57 0-2.483-.551-3.045-1.45l-.208-.333-1.222 1.222.333.208c.899.562 1.45 1.475 1.45 3.045a2.986 2.986 0 0 1-2.478 2.951l-.48.07V12.2l.48.07A2.986 2.986 0 0 1 4.808 15.179c0 1.57.551 2.483 1.45 3.045l.333.208 1.222 1.222.208-.333c.562-.899 1.475-1.45 3.045-1.45a2.986 2.986 0 0 1 2.951 2.478l.07.48H12.2l.07-.48a2.986 2.986 0 0 1 2.951-2.478c1.57 0 2.483.551 3.045 1.45l.208.333 1.222-1.222-.333-.208c-.899-.562-1.45-1.475-1.45-3.045a2.986 2.986 0 0 1 2.478-2.951l.48-.07V9.179l-.48-.07a2.986 2.986 0 0 1-2.478-2.951Z"/></svg>
+        <h2 class="text-sm font-bold text-slate-800">Rompecabezas</h2>
       </div>
-      <h1 class="text-responsive-4xl font-extrabold text-slate-900 tracking-tight">Ordena las piezas del mundo</h1>
     </div>
 
     <% if (juego) { %>
-      <!-- Juego activo -->
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-responsive gap-responsive-desk-lg">
-        <!-- Tablero del puzzle -->
-        <div class="md:col-span-2 lg:col-span-2">
-          <!-- Información de la partida -->
-          <div class="flex items-center justify-between mb-4 px-2">
-            <div class="flex items-center gap-2">
-              <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Tema:</span>
-              <span class="text-sm font-bold text-slate-800"><%= juego.tema.nombre %></span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Dificultad:</span>
-              <span class="text-sm font-bold text-slate-800"><%= juego.dificultad.nombre %></span>
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <!-- Tablero -->
+        <div class="md:col-span-2">
+          <div class="flex items-center justify-between mb-3">
+            <span class="pz-theme-label text-[11px] font-bold text-slate-500 uppercase tracking-widest">Tema: <span class="pz-theme-value text-slate-800"><%= juego.tema.nombre %></span></span>
+            <span class="pz-theme-label text-[11px] font-bold text-slate-500 uppercase tracking-widest">Dif: <span class="pz-theme-value text-slate-800"><%= juego.dificultad.nombre %></span></span>
           </div>
 
-          <!-- Grid del puzzle con imagen -->
           <div id="puzzle-grid" 
-               class="grid gap-1.5 mx-auto p-4 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm"
-               style="grid-template-columns: repeat(<%= juego.columnas %>, minmax(0, 1fr)); max-width: 450px;"
+               class="pz-grid-wrapper grid gap-1 mx-auto p-3 bg-slate-50 rounded-xl border border-slate-100 shadow-sm"
+               style="grid-template-columns: repeat(<%= juego.columnas %>, minmax(0, 1fr)); max-width: 420px;"
                data-filas="<%= juego.filas %>"
                data-columnas="<%= juego.columnas %>"
                data-tema="<%= juego.tema.id %>"
                data-total="<%= juego.totalPiezas %>">
             <% juego.piezas.forEach((pieza, index) => { %>
-              <div class="puzzle-pieza aspect-square rounded-xl flex items-center justify-center 
-                          select-none 
-                          shadow-md hover:shadow-lg hover:scale-[1.03] hover:z-10 relative overflow-hidden"
+              <div class="puzzle-pieza aspect-square rounded-lg flex items-center justify-center 
+                          select-none shadow-sm hover:shadow-md hover:scale-[1.03] hover:z-10 relative overflow-hidden"
                    data-index="<%= index %>"
                    data-posicion-correcta="<%= pieza.posicionCorrecta %>"
                    style="background-color: #e2e8f0; background-size: cover;">
@@ -51,196 +100,222 @@
         </div>
 
         <!-- Panel lateral -->
-        <div class="space-y-responsive">
-          <!-- Preview de la imagen completa -->
-          <div class="bg-white rounded-2xl p-3 border border-slate-100 shadow-sm">
-            <h3 class="font-bold text-slate-700 text-sm mb-2 text-center flex items-center justify-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <div class="flex flex-col gap-4">
+          <!-- Temporizador -->
+          <div id="pz-temporizador" class="<%= juego.modo === 'contrarreloj' ? '' : 'hidden' %> pz-timer bg-rose-50 rounded-xl p-4 border border-rose-200 shadow-sm">
+            <h3 class="font-bold text-xs mb-2 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Tiempo
+            </h3>
+            <div class="text-center">
+              <div id="pz-display-tiempo" class="text-3xl font-black tabular-nums tracking-tight transition-colors duration-500" style="color: #0f172a;">
+                <%= Math.floor(juego.tiempoLimite / 60) %>:<% if (juego.tiempoLimite % 60 < 10) { %>0<% } %><%= juego.tiempoLimite % 60 %>
+              </div>
+              <div class="w-full bg-white/60 rounded-full h-2 mt-2 overflow-hidden border border-rose-100">
+                <div id="pz-barra-tiempo" class="h-full rounded-full transition-all duration-1000" style="width: 100%; background: linear-gradient(90deg, #f43f5e, #f97316);"></div>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-1 flex items-center justify-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Contrarreloj
+              </p>
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="pz-preview bg-white rounded-xl p-3 border border-slate-100 shadow-sm">
+            <h3 class="pz-preview-title font-bold text-slate-700 text-xs mb-2 text-center flex items-center justify-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               Referencia
             </h3>
             <img id="preview-imagen" 
                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect fill='%23f1f5f9' width='150' height='150'/%3E%3Ctext x='75' y='75' text-anchor='middle' fill='%2394a3b8' font-size='12' font-family='sans-serif' dy='.3em'%3ECargando...%3C/text%3E%3C/svg%3E"
-                 alt="Vista previa del puzzle"
-                 class="w-full rounded-xl border border-slate-100 opacity-80 hover:opacity-100 transition-opacity">
-            <p class="text-xs text-slate-400 text-center mt-2 flex items-center justify-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="14" x="3" y="3" rx="2"/></svg>
-              Imagen completa
-            </p>
+                 alt="Vista previa"
+                 class="w-full rounded-lg border border-slate-100 opacity-80 hover:opacity-100 transition-opacity">
+            <p class="pz-preview-label text-[10px] text-slate-400 text-center mt-1">Imagen completa</p>
           </div>
 
           <!-- Estadísticas -->
-          <div class="bg-amber-50 rounded-2xl p-4 sm:p-5 border border-amber-100">
-            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          <div class="pz-stats bg-amber-50 rounded-xl p-4 border border-amber-100">
+            <h3 class="pz-stats-title font-bold text-slate-800 text-xs mb-3 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
               Progreso
             </h3>
-            <div class="space-y-3">
-              <div class="flex justify-between items-center bg-white rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 border border-amber-50">
-                <span class="text-sm text-slate-500">Movimientos</span>
-                <span class="text-xl font-black text-amber-600" id="movimientos">0</span>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="pz-stat-item bg-white rounded-lg px-2 py-2 border border-amber-50 text-center">
+                <p class="pz-stat-label text-[10px] text-slate-500">Movimientos</p>
+                <p class="pz-stat-value-amber text-sm font-black text-amber-600" id="movimientos">0</p>
               </div>
-              <div class="flex justify-between items-center bg-white rounded-xl px-responsive-main py-2.5 sm:py-3 border border-amber-50">
-                <span class="text-sm text-slate-500">Piezas ordenadas</span>
-                <span class="text-xl font-black text-green-600" id="piezas-ordenadas">0 / <%= juego.totalPiezas %></span>
+              <div class="pz-stat-item bg-white rounded-lg px-2 py-2 border border-amber-50 text-center">
+                <p class="pz-stat-label text-[10px] text-slate-500">Ordenadas</p>
+                <p class="pz-stat-value-green text-xs font-black text-green-600 break-all" id="piezas-ordenadas">0 / <%= juego.totalPiezas %></p>
               </div>
-              <div class="flex justify-between items-center bg-white rounded-xl px-responsive-main py-2.5 sm:py-3 border border-amber-50">
-                <span class="text-sm text-slate-500">Total piezas</span>
-                <span class="text-xl font-black text-slate-800"><%= juego.totalPiezas %></span>
+              <div class="pz-stat-item bg-white rounded-lg px-2 py-2 border border-amber-50 text-center">
+                <p class="pz-stat-label text-[10px] text-slate-500">Total</p>
+                <p class="pz-stat-value-slate text-sm font-black text-slate-800"><%= juego.totalPiezas %></p>
               </div>
             </div>
           </div>
 
-          <!-- Selector de modo de juego -->
-          <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
-            <h3 class="font-bold text-slate-700 text-sm mb-3 text-center flex items-center justify-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4"/><path d="M14 12h4"/></svg>
-              Modo de juego
-            </h3>
+          <!-- Modo de juego -->
+          <div class="pz-mode-box bg-white rounded-xl p-3 border border-slate-100 shadow-sm">
+            <h3 class="pz-mode-title font-bold text-slate-700 text-xs mb-2 text-center">Modo de juego</h3>
             <div class="flex gap-2">
               <button onclick="cambiarModoPuzzle('arrastre')" 
                       data-modo="arrastre"
-                      class="modo-puzzle-btn flex-1 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-amber-500 text-white shadow-md ring-2 ring-amber-300">
-                <span class="block flex items-center justify-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                      class="pz-mode-btn-active modo-puzzle-btn flex-1 px-2 py-2 rounded-lg text-xs font-bold transition-all bg-amber-500 text-white shadow-sm ring-2 ring-amber-300">
+                <span class="flex items-center justify-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                   Arrastrar
                 </span>
-                <span class="block text-[10px] opacity-80 mt-0.5">Arrastra la pieza</span>
               </button>
               <button onclick="cambiarModoPuzzle('intercambio')" 
                       data-modo="intercambio"
-                      class="modo-puzzle-btn flex-1 px-3 py-2.5 rounded-xl text-sm font-bold transition-all bg-white text-slate-600 border border-slate-200">
-                <span class="block flex items-center justify-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2v4h4"/><path d="M21 2l-5 5"/><path d="M3 10h4V6"/><path d="M7 10l-4-4"/><path d="M7 22v-4h4"/><path d="M11 18l-4 4"/><path d="M21 14h-4v4"/><path d="M17 14l4 4"/></svg>
+                      class="pz-mode-btn modo-puzzle-btn flex-1 px-2 py-2 rounded-lg text-xs font-bold transition-all bg-white text-slate-600 border border-slate-200">
+                <span class="flex items-center justify-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2v4h4"/><path d="M21 2l-5 5"/><path d="M3 10h4V6"/><path d="M7 10l-4-4"/><path d="M7 22v-4h4"/><path d="M11 18l-4 4"/><path d="M21 14h-4v4"/><path d="M17 14l4 4"/></svg>
                   Intercambiar
                 </span>
-                <span class="block text-[10px] opacity-80 mt-0.5">Toca dos piezas</span>
               </button>
             </div>
           </div>
 
-          <!-- Progreso del usuario -->
-          <div class="bg-sky-50 rounded-2xl p-4 sm:p-5 border border-sky-100">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-xs text-slate-400">Nivel</p>
-                <p class="text-xl font-black text-sky-600 flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
-                  <%= progreso.nivel %>
-                </p>
+          <!-- Progreso usuario -->
+          <div class="pz-progress bg-sky-50 rounded-xl p-3 border border-sky-100">
+            <div class="flex items-center justify-around">
+              <div class="text-center">
+                <p class="pz-progress-label text-[10px] text-slate-400">Nivel</p>
+                <p class="pz-progress-value text-sm font-black text-sky-600"><%= progreso.nivel %></p>
               </div>
-              <div>
-                <p class="text-xs text-slate-400">Puntos</p>
-                <p class="text-xl font-black text-sky-600 flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <%= progreso.puntosTotal %>
-                </p>
+              <div class="text-center">
+                <p class="pz-progress-label text-[10px] text-slate-400">Puntos</p>
+                <p class="pz-progress-value text-sm font-black text-sky-600"><%= progreso.puntosTotal %></p>
               </div>
             </div>
           </div>
 
-          <!-- Botones de acción -->
-          <div class="space-y-3">
-            <button onclick="reiniciarPuzzle()"
-                    class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-responsive-main px-responsive-md rounded-2xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
-              Mezclar Piezas
-            </button>
+          <!-- Acciones -->
+          <button onclick="reiniciarPuzzle()" id="pz-btn-mezclar"
+                  class="pz-btn-primary w-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+            Mezclar Piezas
+          </button>
 
-            <a href="/puzzle/jugar?tema=<%= juego.tema.id %>&dificultad=<%= juego.dificultad.id %>"
-               class="block text-center w-full bg-white hover:bg-slate-50 text-slate-600 font-bold py-responsive-main px-responsive-md rounded-2xl transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
-              Nuevo Puzzle
-            </a>
+          <a href="/puzzle/jugar?tema=<%= juego.tema.id %>&dificultad=<%= juego.dificultad.id %>&modo=<%= juego.modo %>"
+             class="pz-btn-secondary w-full bg-white hover:bg-slate-50 text-slate-600 font-bold text-xs py-3 px-4 rounded-xl transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+            Nuevo Puzzle
+          </a>
 
-            <a href="/puzzle"
-               class="block text-center w-full bg-white hover:bg-slate-50 text-slate-600 font-bold py-responsive-main px-responsive-md rounded-2xl transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              Cambiar Tema
-            </a>
-          </div>
+          <a href="/puzzle"
+             class="pz-btn-secondary w-full bg-white hover:bg-slate-50 text-slate-600 font-bold text-xs py-3 px-4 rounded-xl transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            Cambiar Tema
+          </a>
 
-          <!-- Mensaje de victoria -->
-          <div id="mensaje-victoria" class="hidden bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-6 text-center text-white shadow-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
-            <h4 class="text-xl font-black mb-1">¡Puzzle Completado!</h4>
-            <p class="text-sm opacity-90" id="puntos-victoria"></p>
+          <div id="mensaje-victoria" class="pz-victory hidden bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl p-4 text-center text-white shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-1"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
+            <h4 class="text-base font-black">¡Puzzle Completado!</h4>
+            <p class="text-xs opacity-90" id="puntos-victoria"></p>
           </div>
         </div>
       </div>
 
     <% } else { %>
-      <!-- Selección de tema y dificultad -->
-      <div class="text-center mb-10">
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-amber-100 text-amber-600 mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M19.5 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H14a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/></svg>
+      <!-- Selección -->
+      <div class="text-center mb-6">
+        <div class="pz-select-icon inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M19.5 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H14a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/></svg>
         </div>
-        <h2 class="text-3xl font-black text-slate-900 mb-4">¡Arma el rompecabezas!</h2>
-        <p class="text-slate-500 text-lg">Ordena las piezas para formar la imagen completa. Elige un tema y dificultad.</p>
+        <h2 class="pz-select-title text-2xl font-black text-slate-900 mb-2">Arma el rompecabezas!</h2>
+        <p class="pz-select-p text-slate-500 text-sm">Ordena las piezas para formar la imagen completa.</p>
       </div>
 
-      <!-- Selector de tema -->
-      <h3 class="text-lg font-bold text-slate-800 text-center mb-4 flex items-center justify-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <!-- Modo -->
+      <div class="max-w-sm mx-auto mb-6">
+        <h3 class="text-sm font-bold text-slate-800 text-center mb-3 flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4"/><path d="M14 12h4"/></svg>
+          Modo:
+        </h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div id="pz-modo-libre"
+               class="cursor-pointer flex flex-col items-center gap-1.5 p-4 bg-white rounded-xl border-2 border-amber-400 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md selected-modo"
+               data-modo="libre"
+               onclick="seleccionarModoPZ('libre')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <p class="text-sm font-bold text-slate-700">Libre</p>
+            <p class="text-[10px] text-slate-400 text-center">Sin límite de tiempo</p>
+          </div>
+          <div id="pz-modo-contrarreloj"
+               class="cursor-pointer flex flex-col items-center gap-1.5 p-4 bg-white rounded-xl border-2 border-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-md"
+               data-modo="contrarreloj"
+               onclick="seleccionarModoPZ('contrarreloj')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <p class="text-sm font-bold text-slate-700">Contrarreloj</p>
+            <p class="text-[10px] text-slate-400 text-center">Según dificultad</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="pz-section-title text-sm font-bold text-slate-800 text-center mb-3 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Elige un tema:
       </h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-responsive-main mb-8 md:mb-10">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <% (typeof temas !== 'undefined' ? temas : []).forEach(tema => { %>
-          <a href="/puzzle/jugar?tema=<%= tema.id %>&dificultad=facil"
-             class="group flex flex-col items-center gap-3 p-responsive-card bg-white rounded-2xl border border-slate-200 hover:border-amber-300 hover:shadow-lg transition-all hover:-translate-y-1">
-            <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-2xl">
-              <span class="icono-render" data-icono="<%= tema.icono %>" data-clases="w-8 h-8 text-amber-600" data-titulo="<%= tema.nombre %>"></span>
+          <div onclick="seleccionarTemaPZ('<%= tema.id %>')"
+               class="pz-theme-card cursor-pointer flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-slate-200 hover:border-amber-300 hover:shadow-md transition-all hover:-translate-y-0.5"
+               data-tema="<%= tema.id %>">
+            <div class="pz-theme-icon w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center">
+              <span class="icono-render" data-icono="<%= tema.icono %>" data-clases="w-7 h-7 text-amber-600" data-titulo="<%= tema.nombre %>"></span>
             </div>
-            <p class="text-sm font-bold text-slate-600 text-center"><%= tema.nombre %></p>
-          </a>
+            <p class="pz-theme-name text-xs font-bold text-slate-600 text-center"><%= tema.nombre %></p>
+          </div>
         <% }); %>
       </div>
 
-      <!-- Selector de Puzzle por Continente -->
-      <div class="mt-12 mb-8">
-        <h3 class="text-lg font-bold text-slate-800 text-center mb-2 flex items-center justify-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          Puzzle por Continente
-        </h3>
-        <p class="text-sm text-slate-400 text-center mb-6">Arma el rompecabezas de un continente específico con mapa realista en zoom</p>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-responsive-main max-w-2xl mx-auto">
-          <% (typeof temasContinentes !== 'undefined' ? temasContinentes : []).forEach(tc => { %>
-            <a href="/puzzle/jugar?tema=<%= tc.id %>&dificultad=facil"
-               class="group flex flex-col items-center gap-2 p-responsive-card bg-white rounded-2xl border-2 hover:shadow-lg transition-all hover:-translate-y-1"
-               style="border-color: <%= tc.colores[0] %>;">
-              <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold text-white shadow-sm"
-                   style="background: <%= tc.colores[0] %>;">
-                <span class="icono-render" data-icono="<%= tc.icono %>" data-clases="w-7 h-7 text-white" data-titulo="<%= tc.nombre %>"></span>
-              </div>
-              <p class="text-sm font-bold text-slate-600 text-center"><%= tc.nombre %></p>
-              <p class="text-xs text-slate-400"><%= tc.descripcion %></p>
-            </a>
-          <% }); %>
-        </div>
-      </div>
-
-      <!-- Selector de dificultad -->
-      <h3 class="text-lg font-bold text-slate-800 text-center mb-4 flex items-center justify-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        Selecciona la dificultad:
+      <h3 class="pz-section-title text-sm font-bold text-slate-800 text-center mb-3 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        Dificultad:
       </h3>
-      <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto">
+      <div class="grid grid-cols-4 gap-2 max-w-md mx-auto mb-6">
         <% (typeof dificultades !== 'undefined' ? dificultades : []).forEach(d => { %>
-          <a href="/puzzle/jugar?tema=mapa&dificultad=<%= d.id %>"
-             class="group flex flex-col items-center gap-2 p-6 bg-white rounded-2xl border-2 hover:shadow-lg transition-all hover:-translate-y-1"
-             style="border-color: <% if (d.id === 'facil') { %>#22c55e<% } else if (d.id === 'medio') { %>#eab308<% } else { %>#ef4444<% } %>;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: <% if (d.id === 'facil') { %>#22c55e<% } else if (d.id === 'medio') { %>#eab308<% } else { %>#ef4444<% } %>;"><circle cx="12" cy="12" r="10"/></svg>
-            <p class="text-sm font-bold text-slate-600"><%= d.nombre %></p>
-            <p class="text-xs text-slate-400"><%= d.piezas %> piezas</p>
-          </a>
+          <% var colorD = d.id === 'facil' ? '#22c55e' : d.id === 'medio' ? '#eab308' : d.id === 'dificil' ? '#ef4444' : d.id === 'experto' ? '#8b5cf6' : d.id === 'ultra' ? '#f97316' : d.id === 'extremo' ? '#ec4899' : '#14b8a6'; %>
+          <% if (d.desbloqueado) { %>
+          <div onclick="seleccionarDificultadPZ('<%= d.id %>')"
+               class="pz-diff-card cursor-pointer flex flex-col items-center gap-1.5 p-3 bg-white rounded-xl border-2 hover:shadow-md transition-all hover:-translate-y-0.5"
+               style="border-color: <%= colorD %>;"
+               data-dificultad="<%= d.id %>">
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: <%= colorD %>;"><circle cx="12" cy="12" r="10"/></svg>
+            <p class="pz-diff-name text-sm font-bold text-slate-600"><%= d.nombre %></p>
+            <p class="pz-diff-label text-[10px] text-slate-400"><%= d.piezas %> piezas</p>
+          </div>
+          <% } else { %>
+           <div class="flex flex-col items-center gap-1.5 p-3 bg-slate-100 rounded-xl border-2 border-slate-200 opacity-60 cursor-not-allowed"
+               title="Se desbloquea en nivel <%= d.nivelRequerido %>">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p class="text-sm font-bold text-slate-400"><%= d.nombre %></p>
+            <p class="text-[10px] text-slate-400">Nivel <%= d.nivelRequerido %>+</p>
+          </div>
+          <% } %>
         <% }); %>
+      </div>
+
+      <!-- Botón Comenzar -->
+      <div class="text-center pt-2 pb-4">
+        <a id="pz-btn-comenzar" href="/puzzle/jugar?tema=mapa&dificultad=facil&modo=libre"
+           onclick="return validarSeleccionPZ()"
+           class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          ¡Comenzar!
+        </a>
       </div>
     <% } %>
 
     <!-- Volver -->
-    <div class="text-center pt-6 border-t border-slate-100 mt-8">
-      <a href="/menu" class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 font-bold transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-        Volver al Menú
+    <div class="pz-back text-center pt-4 border-t border-slate-100 mt-6">
+      <a href="/menu" class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-slate-600 font-bold transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Volver al Menu
       </a>
     </div>
 

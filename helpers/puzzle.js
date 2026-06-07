@@ -66,7 +66,11 @@ function obtenerTemasContinentes() {
 const DIFICULTADES = [
   { id: 'facil', nombre: 'Fácil', filas: 3, columnas: 3, piezas: 9 },
   { id: 'medio', nombre: 'Medio', filas: 4, columnas: 4, piezas: 16 },
-  { id: 'dificil', nombre: 'Difícil', filas: 5, columnas: 5, piezas: 25 }
+  { id: 'dificil', nombre: 'Difícil', filas: 5, columnas: 5, piezas: 25 },
+  { id: 'experto', nombre: 'Experto', filas: 6, columnas: 6, piezas: 36 },
+  { id: 'ultra', nombre: 'Ultra', filas: 7, columnas: 7, piezas: 49 },
+  { id: 'extremo', nombre: 'Extremo', filas: 8, columnas: 8, piezas: 64 },
+  { id: 'legendario', nombre: 'Legendario', filas: 9, columnas: 9, piezas: 81 }
 ];
 
 /**

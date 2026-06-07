@@ -1,42 +1,100 @@
-<div class="min-h-screen bg-white p-4 sm:p-6 animate-fade-in">
+<style>
+  [data-theme="dark"] .per-header { background: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .per-header h1 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .per-header p { color: #64748b !important; }
+  [data-theme="dark"] .per-badge-amber { background: rgba(251,191,36,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .per-badge-sky { background: rgba(56,189,248,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .per-badge-purple { background: rgba(168,85,247,0.15) !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .per-avatar-ring { border-color: #475569 !important; ring-color: #334155 !important; }
+  [data-theme="dark"] .per-member-label { color: #64748b !important; }
+  [data-theme="dark"] .per-member-date { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .per-card-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-card-icon-box { background: #0f172a !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .per-stat-border { border-color: #1e293b !important; }
+  [data-theme="dark"] .per-stat-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-stat-value { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-stat-value-green { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-stat-value-red { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-cont-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-cont-pts { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-cont-bar { background-color: #0f172a !important; }
+  [data-theme="dark"] .per-cont-fill { background-image: none !important; background-color: #475569 !important; }
+  [data-theme="dark"] .per-cont-retos { color: #64748b !important; }
+  [data-theme="dark"] .per-achievement-item:hover { background-color: #0f172a !important; }
+  [data-theme="dark"] .per-achievement-icon { background: #0f172a !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .per-achievement-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-achievement-date { color: #64748b !important; }
+  [data-theme="dark"] .per-achievement-arrow { color: #475569 !important; }
+  [data-theme="dark"] .per-activity-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-activity-count { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-activity-bar { background-color: #0f172a !important; }
+  [data-theme="dark"] .per-hist-item:hover { background-color: #0f172a !important; }
+  [data-theme="dark"] .per-hist-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-hist-date { color: #64748b !important; }
+  [data-theme="dark"] .per-hist-score { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-hist-none { color: #475569 !important; }
+  [data-theme="dark"] .per-hist-ratio { color: #64748b !important; }
+  [data-theme="dark"] .per-pass-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .per-pass-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-pass-title-icon { background: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .per-pass-divider { border-color: #334155 !important; }
+  [data-theme="dark"] .per-pass-label { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-pass-input { background-color: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-pass-input:focus { border-color: #64748b !important; background-color: #1e293b !important; }
+  [data-theme="dark"] .per-pass-input-icon { color: #475569 !important; }
+  [data-theme="dark"] .per-pass-btn { background: #475569 !important; }
+  [data-theme="dark"] .per-pass-btn:hover { background: #64748b !important; }
+  [data-theme="dark"] .per-pass-btn svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-back-btn { background-color: #1e293b !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .per-back-btn:hover { background-color: #0f172a !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .per-empty-icon { color: #475569 !important; }
+  [data-theme="dark"] .per-empty-text { color: #64748b !important; }
+  [data-theme="dark"] .per-empty-sub { color: #475569 !important; }
+  [data-theme="dark"] .per-hist-header-count { color: #64748b !important; }
+  [data-theme="dark"] .per-view-all { color: #94a3b8 !important; }
+  [data-theme="dark"] .per-view-all:hover { color: #e2e8f0 !important; }
+</style>
+
+<div class="min-h-screen p-4 sm:p-6 animate-fade-in">
   <div class="max-w-4xl mx-auto">
 
-    <!-- Encabezado del perfil mejorado -->
-    <div class="bg-gradient-to-r from-sky-50 to-indigo-50 rounded-[1.75rem] p-6 sm:p-8 mb-8 border border-sky-100 shadow-xl animate-slide-in">
+    <!-- Encabezado -->
+    <div class="per-header bg-gradient-to-r from-sky-50 to-indigo-50 rounded-[1.75rem] p-6 sm:p-8 mb-8 border border-sky-100 shadow-xl animate-slide-in">
       <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
         <div class="relative shrink-0">
-          <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-md border-4 border-white ring-2 ring-sky-200 overflow-hidden">
+          <div class="per-avatar-ring w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md border-4 border-white ring-2 ring-sky-200 overflow-hidden">
             <% if (alumno.genero === 'masculino') { %>
-              <img src="/images/avatar-nino.svg" alt="Avatar" class="w-20 h-20 object-contain">
+              <img src="/images/avatar-nino.svg" alt="Avatar" class="w-16 h-16 object-contain">
             <% } else { %>
-              <img src="/images/avatar-nina.svg" alt="Avatar" class="w-20 h-20 object-contain">
+              <img src="/images/avatar-nina.svg" alt="Avatar" class="w-16 h-16 object-contain">
             <% } %>
           </div>
-          <div class="absolute -bottom-1 -right-1 w-7 h-7 bg-emerald-400 rounded-full border-2 border-white flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-emerald-400 rounded-full border-2 border-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
         </div>
         <div class="flex-1">
-          <h1 class="text-responsive-2xl sm:text-3xl font-bold text-slate-800"><%= alumno.nombre_completo %></h1>
-          <p class="text-slate-400 text-sm">@<%= alumno.nombre_usuario %></p>
-          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">
-            <span class="inline-flex items-center gap-1 bg-amber-100 text-amber-700 font-bold px-3 py-1 rounded-full text-xs sm:text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
+          <h1 class="text-xl sm:text-2xl font-bold text-slate-800"><%= alumno.nombre_completo %></h1>
+          <p class="text-slate-400 text-xs">@<%= alumno.nombre_usuario %></p>
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2">
+            <span class="per-badge-amber inline-flex items-center gap-1 bg-amber-100 text-amber-700 font-bold px-2.5 py-0.5 rounded-full text-[11px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
               Nivel <%= alumno.nivel %>
             </span>
-            <span class="inline-flex items-center gap-1 bg-sky-100 text-sky-700 font-bold px-3 py-1 rounded-full text-xs sm:text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="per-badge-sky inline-flex items-center gap-1 bg-sky-100 text-sky-700 font-bold px-2.5 py-0.5 rounded-full text-[11px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               <%= alumno.puntos_total %> pts
             </span>
-            <span class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-full text-xs sm:text-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+            <span class="per-badge-purple inline-flex items-center gap-1 bg-purple-100 text-purple-700 font-bold px-2.5 py-0.5 rounded-full text-[11px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
               <%= logrosDesbloqueados %>/<%= logrosTotales %> logros
             </span>
           </div>
         </div>
         <div class="sm:text-right shrink-0">
-          <p class="text-xs sm:text-sm text-slate-400">Miembro desde</p>
-          <p class="font-semibold text-slate-600 text-sm sm:text-base"><%= new Date(alumno.fecha_registro).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
+          <p class="per-member-label text-[11px] text-slate-400">Miembro desde</p>
+          <p class="per-member-date font-semibold text-slate-600 text-sm"><%= new Date(alumno.fecha_registro).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) %></p>
         </div>
       </div>
     </div>
@@ -45,61 +103,61 @@
     <div class="grid md:grid-cols-3 gap-4 sm:gap-6 mb-8">
 
       <!-- Tarjeta: Estadísticas Rápidas -->
-      <div class="bg-white rounded-[1.75rem] p-5 sm:p-6 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.1s">
-        <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm sm:text-base">
-          <div class="p-1.5 bg-sky-100 rounded-lg text-sky-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+      <div class="per-card bg-white rounded-[1.75rem] p-5 sm:p-6 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.1s">
+        <h3 class="per-card-title font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm">
+          <div class="per-card-icon-box p-1.5 bg-sky-100 rounded-lg text-sky-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
           </div>
           Estadísticas Rápidas
         </h3>
-        <div class="space-y-3">
-          <div class="flex justify-between items-center py-1.5 border-b border-gray-50">
-            <span class="text-slate-500 text-sm">Actividades</span>
-            <span class="font-bold text-slate-700"><%= totalActividades %></span>
+        <div class="space-y-2">
+          <div class="per-stat-border flex justify-between items-center py-1.5 border-b border-gray-50">
+            <span class="per-stat-label text-slate-500 text-xs">Actividades</span>
+            <span class="per-stat-value font-bold text-slate-700 text-sm"><%= totalActividades %></span>
           </div>
-          <div class="flex justify-between items-center py-1.5 border-b border-gray-50">
-            <span class="text-slate-500 text-sm">Correctas</span>
-            <span class="font-bold text-green-600"><%= totalCorrectas %></span>
+          <div class="per-stat-border flex justify-between items-center py-1.5 border-b border-gray-50">
+            <span class="per-stat-label text-slate-500 text-xs">Correctas</span>
+            <span class="per-stat-value-green font-bold text-green-600 text-sm"><%= totalCorrectas %></span>
           </div>
-          <div class="flex justify-between items-center py-1.5 border-b border-gray-50">
-            <span class="text-slate-500 text-sm">Incorrectas</span>
-            <span class="font-bold text-red-500"><%= totalRespuestas - totalCorrectas %></span>
+          <div class="per-stat-border flex justify-between items-center py-1.5 border-b border-gray-50">
+            <span class="per-stat-label text-slate-500 text-xs">Incorrectas</span>
+            <span class="per-stat-value-red font-bold text-red-500 text-sm"><%= totalRespuestas - totalCorrectas %></span>
           </div>
-          <div class="flex justify-between items-center py-1.5 border-b border-gray-50">
-            <span class="text-slate-500 text-sm">Precisión</span>
-            <span class="font-bold text-indigo-600"><%= porcentajeAciertos %>%</span>
+          <div class="per-stat-border flex justify-between items-center py-1.5 border-b border-gray-50">
+            <span class="per-stat-label text-slate-500 text-xs">Precisión</span>
+            <span class="per-stat-value font-bold text-indigo-600 text-sm"><%= porcentajeAciertos %>%</span>
           </div>
           <div class="flex justify-between items-center py-1.5">
-            <span class="text-slate-500 text-sm">Continentes</span>
-            <span class="font-bold text-sky-600"><%= progreso.length %>/6</span>
+            <span class="per-stat-label text-slate-500 text-xs">Continentes</span>
+            <span class="per-stat-value font-bold text-sky-600 text-sm"><%= progreso.length %>/6</span>
           </div>
         </div>
       </div>
 
       <!-- Tarjeta: Progreso por Continente -->
-      <div class="bg-white rounded-[1.75rem] p-5 sm:p-6 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.15s">
-        <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm sm:text-base">
-          <div class="p-1.5 bg-teal-100 rounded-lg text-teal-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <div class="per-card bg-white rounded-[1.75rem] p-5 sm:p-6 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.15s">
+        <h3 class="per-card-title font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm">
+          <div class="per-card-icon-box p-1.5 bg-teal-100 rounded-lg text-teal-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           </div>
           Progreso por Continente
         </h3>
         <div class="space-y-3">
           <% if (progreso.length === 0) { %>
-            <p class="text-slate-400 text-center py-6 text-sm">Aún no has explorado ningún continente</p>
+            <p class="per-empty-text text-slate-400 text-center py-6 text-xs">Aún no has explorado ningún continente</p>
           <% } else { %>
             <% progreso.forEach(p => { %>
             <div class="flex items-center gap-3">
-              <span class="icono-render" data-icono="<%= p.svgIconContinente %>" data-clases="w-6 h-6 sm:w-7 sm:h-7" data-titulo="<%= p.nombreContinente %>"></span>
+              <span class="icono-render" data-icono="<%= p.svgIconContinente %>" data-clases="w-5 h-5" data-titulo="<%= p.nombreContinente %>"></span>
               <div class="flex-1 min-w-0">
-                <div class="flex justify-between text-xs sm:text-sm mb-1">
-                  <span class="font-medium text-slate-700 truncate"><%= p.nombreContinente %></span>
-                  <span class="text-slate-500 shrink-0 ml-2"><%= p.puntaje_continente %> pts</span>
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="per-cont-name font-medium text-slate-700 truncate"><%= p.nombreContinente %></span>
+                  <span class="per-cont-pts text-slate-500 shrink-0 ml-2"><%= p.puntaje_continente %> pts</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                  <div class="bg-gradient-to-r from-sky-400 to-sky-500 h-2 rounded-full transition-all duration-700" style="width: <%= Math.min(100, (p.retos_completados / Math.max(1, p.retos_totales)) * 100) %>%"></div>
+                <div class="per-cont-bar w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                  <div class="per-cont-fill bg-gradient-to-r from-sky-400 to-sky-500 h-1.5 rounded-full transition-all duration-700" style="width: <%= Math.min(100, (p.retos_completados / Math.max(1, p.retos_totales)) * 100) %>%"></div>
                 </div>
-                <p class="text-xs text-slate-400 mt-0.5"><%= p.retos_completados %>/<%= p.retos_totales %> retos</p>
+                <p class="per-cont-retos text-[10px] text-slate-400 mt-0.5"><%= p.retos_completados %>/<%= p.retos_totales %> retos</p>
               </div>
             </div>
             <% }); %>
@@ -108,69 +166,68 @@
       </div>
 
       <!-- Tarjeta: Últimos Logros -->
-      <div class="bg-white rounded-[1.75rem] p-5 sm:p-6 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.2s">
-        <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm sm:text-base">
-          <div class="p-1.5 bg-amber-100 rounded-lg text-amber-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+      <div class="per-card bg-white rounded-[1.75rem] p-5 sm:p-6 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.2s">
+        <h3 class="per-card-title font-bold text-slate-700 mb-4 flex items-center gap-2 text-sm">
+          <div class="per-card-icon-box p-1.5 bg-amber-100 rounded-lg text-amber-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
           </div>
           Últimos Logros
         </h3>
-        <div class="space-y-2">
+        <div class="space-y-1">
           <% if (logrosRecientes.length === 0) { %>
-            <p class="text-slate-400 text-center py-6 text-sm">Completa actividades para ganar logros</p>
+            <p class="per-empty-text text-slate-400 text-center py-6 text-xs">Completa actividades para ganar logros</p>
           <% } else { %>
             <% logrosRecientes.slice(0, 4).forEach(l => { %>
-            <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors">
-              <div class="w-9 h-9 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500 text-lg shrink-0">
-                <span class="icono-render" data-icono="<%= l.icono %>"></span>
+            <div class="per-achievement-item flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors">
+              <div class="per-achievement-icon w-8 h-8 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500 shrink-0">
+                <span class="icono-render text-base" data-icono="<%= l.icono %>"></span>
               </div>
               <div class="flex-1 min-w-0">
-                <p class="font-semibold text-slate-700 text-sm truncate"><%= l.nombre %></p>
-                <p class="text-xs text-slate-400"><%= new Date(l.fecha_desbloqueado).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) %></p>
+                <p class="per-achievement-name font-semibold text-slate-700 text-xs truncate"><%= l.nombre %></p>
+                <p class="per-achievement-date text-[10px] text-slate-400"><%= new Date(l.fecha_desbloqueado).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) %></p>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-300"><polyline points="9 18 15 12 9 6"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="per-achievement-arrow text-slate-300"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
             <% }); %>
           <% } %>
-          <a href="/logros" class="block text-center text-sky-600 hover:text-sky-700 font-medium text-sm mt-3 transition-colors hover:underline">
+          <a href="/logros" class="per-view-all block text-center text-sky-600 hover:text-sky-700 font-medium text-xs mt-3 transition-colors hover:underline">
             Ver todos los logros →
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Actividad por Tipo (gráfico de barras) -->
-    <div class="bg-white rounded-[1.75rem] p-5 sm:p-6 mb-8 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.25s">
-      <h3 class="font-bold text-slate-700 mb-4 sm:mb-5 flex items-center gap-2 text-sm sm:text-base">
-        <div class="p-1.5 bg-emerald-100 rounded-lg text-emerald-600">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    <!-- Actividad por Tipo -->
+    <div class="per-card bg-white rounded-[1.75rem] p-5 sm:p-6 mb-8 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.25s">
+      <h3 class="per-card-title font-bold text-slate-700 mb-4 sm:mb-5 flex items-center gap-2 text-sm">
+        <div class="per-card-icon-box p-1.5 bg-emerald-100 rounded-lg text-emerald-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         </div>
         Actividad por Tipo
       </h3>
-      <div class="space-y-3">
+      <div class="space-y-2">
         <% if (Object.keys(actividadesPorTipo).length === 0) { %>
-          <p class="text-slate-400 text-center py-6 text-sm">Aún no hay actividad registrada</p>
+          <p class="per-empty-text text-slate-400 text-center py-6 text-xs">Aún no hay actividad registrada</p>
         <% } else { %>
           <% 
           const maxActividades = Math.max(...Object.values(actividadesPorTipo), 1);
           const nombresTipo = {  reto: 'Reto', trivia: 'Trivia', sopa_letras: 'Sopa de Letras', memoria: 'Memoria', puzzle: 'Rompecabezas' };
-          const coloresTipo = { reto: 'bg-sky-500', trivia: 'bg-orange-500', sopa_letras: 'bg-teal-500', memoria: 'bg-purple-500', puzzle: 'bg-amber-500' };
           const iconosTipo = {
-            reto: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-500"><path d="m22 2-1 3"/><path d="m2 2 1 3"/><path d="M12 2v12"/><path d="M8 10c2 2 4 0 6 2s4 0 6-2"/><path d="M2 6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M4 8v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/></svg>',
-            trivia: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>',
-            sopa_letras: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-500"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/><path d="M11 8v6"/></svg>',
-            memoria: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/><path d="M12 9v6"/><path d="M16 9v6"/></svg>',
-            puzzle: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.611a2.404 2.404 0 0 1-1.705.706 2.404 2.404 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.404 2.404 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.315 8.73a.979.979 0 0 1 .837-.276c.47.07.802.48.968.925a2.501 2.501 0 1 0 3.214-3.214c-.446-.166-.855-.497-.925-.968a.979.979 0 0 1 .276-.837l1.611-1.611a2.404 2.404 0 0 1 1.704-.706c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.969a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/></svg>'
+            reto: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-500 shrink-0"><path d="m22 2-1 3"/><path d="m2 2 1 3"/><path d="M12 2v12"/><path d="M8 10c2 2 4 0 6 2s4 0 6-2"/><path d="M2 6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M4 8v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/></svg>',
+            trivia: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500 shrink-0"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>',
+            sopa_letras: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-500 shrink-0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M8 11h6"/><path d="M11 8v6"/></svg>',
+            memoria: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-500 shrink-0"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/><path d="M12 9v6"/><path d="M16 9v6"/></svg>',
+            puzzle: '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500 shrink-0"><path d="M19.439 7.85c.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.611a2.404 2.404 0 0 1-1.705.706 2.404 2.404 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.404 2.404 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.315 8.73a.979.979 0 0 1 .837-.276c.47.07.802.48.968.925a2.501 2.501 0 1 0 3.214-3.214c-.446-.166-.855-.497-.925-.968a.979.979 0 0 1 .276-.837l1.611-1.611a2.404 2.404 0 0 1 1.704-.706c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.969a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/></svg>'
           };
           %>
           <% Object.entries(actividadesPorTipo).forEach(([tipo, cantidad]) => { %>
           <div class="flex items-center gap-3">
-            <span class="flex items-center justify-center w-8 shrink-0"><%- iconosTipo[tipo] || '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' %></span>
-            <span class="text-xs sm:text-sm text-slate-600 w-24 sm:w-32"><%= nombresTipo[tipo] || tipo %></span>
-            <div class="flex-1 bg-slate-100 rounded-full h-3 sm:h-4 overflow-hidden">
-              <div class="<%= coloresTipo[tipo] || 'bg-sky-500' %> h-3 sm:h-4 rounded-full transition-all duration-700" style="width: <%= Math.round((cantidad / maxActividades) * 100) %>%"></div>
+            <span class="flex items-center justify-center w-7 shrink-0"><%- iconosTipo[tipo] || '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 shrink-0"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' %></span>
+            <span class="per-activity-label text-xs text-slate-600 w-24"><%= nombresTipo[tipo] || tipo %></span>
+            <div class="per-activity-bar flex-1 bg-slate-100 rounded-full h-2.5 overflow-hidden">
+              <div class="h-2.5 rounded-full transition-all duration-700" style="width: <%= Math.round((cantidad / maxActividades) * 100) %>%; background-color: #64748b;"></div>
             </div>
-            <span class="text-sm font-bold text-slate-600 w-8 text-right"><%= cantidad %></span>
+            <span class="per-activity-count text-xs font-bold text-slate-600 w-7 text-right"><%= cantidad %></span>
           </div>
           <% }); %>
         <% } %>
@@ -178,54 +235,54 @@
     </div>
 
     <!-- Historial Reciente -->
-    <div class="bg-white rounded-[1.75rem] border border-gray-100 shadow-xl overflow-hidden animate-fade-in" style="animation-delay: 0.3s">
+    <div class="per-card bg-white rounded-[1.75rem] border border-gray-100 shadow-xl overflow-hidden animate-fade-in" style="animation-delay: 0.3s">
       <div class="px-5 sm:px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm sm:text-base">
-          <div class="p-1.5 bg-slate-100 rounded-lg text-slate-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <h3 class="per-card-title font-bold text-slate-700 flex items-center gap-2 text-sm">
+          <div class="per-card-icon-box p-1.5 bg-slate-100 rounded-lg text-slate-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
           Actividad Reciente
         </h3>
         <% if (historial.length > 0) { %>
-          <span class="text-xs text-slate-400"><%= Math.min(10, historial.length) %> de <%= historial.length %></span>
+          <span class="per-hist-header-count text-xs text-slate-400"><%= Math.min(10, historial.length) %> de <%= historial.length %></span>
         <% } %>
       </div>
 
       <% if (historial.length === 0) { %>
-        <div class="text-center py-12 text-slate-400">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-3 text-slate-300"><path d="M22 12h-6l-2 3H10l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
-          <p class="text-base font-medium">Aún no hay actividad registrada</p>
-          <p class="text-sm mt-1">¡Empieza a jugar para ver tu historial aquí!</p>
+        <div class="text-center py-10">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="per-empty-icon mx-auto mb-3 text-slate-300"><path d="M22 12h-6l-2 3H10l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+          <p class="per-empty-text text-base font-medium text-slate-400">Aún no hay actividad registrada</p>
+          <p class="per-empty-sub text-sm text-slate-300 mt-1">¡Empieza a jugar para ver tu historial aquí!</p>
         </div>
       <% } else { %>
         <div class="divide-y divide-gray-50">
           <% historial.slice(0, 10).forEach(h => { %>
-          <div class="px-5 sm:px-6 py-3.5 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+          <div class="per-hist-item px-5 sm:px-6 py-3 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
             <div class="flex items-center gap-3 min-w-0">
               <% 
               const iconosHistorial = {
-                reto: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-600 shrink-0"><path d="m22 2-1 3"/><path d="m2 2 1 3"/><path d="M12 2v12"/><path d="M8 10c2 2 4 0 6 2s4 0 6-2"/><path d="M2 6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M4 8v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/></svg>',
-                trivia: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-600 shrink-0"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>',
-                sopa_letras: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600 shrink-0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
-                memoria: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600 shrink-0"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/><path d="M12 9v6"/><path d="M16 9v6"/></svg>',
-                puzzle: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600 shrink-0"><path d="M19.439 7.85c0-1.57.551-2.483 1.45-3.045l.333-.208-1.222-1.222-.208.333c-.562.899-1.475 1.45-3.045 1.45a2.986 2.986 0 0 1-2.951-2.478l-.07-.48H12.2l-.07.48A2.986 2.986 0 0 1 9.179 4.808c-1.57 0-2.483-.551-3.045-1.45l-.208-.333-1.222 1.222.333.208c.899.562 1.45 1.475 1.45 3.045a2.986 2.986 0 0 1-2.478 2.951l-.48.07V12.2l.48.07A2.986 2.986 0 0 1 4.808 15.179c0 1.57.551 2.483 1.45 3.045l.333.208 1.222 1.222.208-.333c.562-.899 1.475-1.45 3.045-1.45a2.986 2.986 0 0 1 2.951 2.478l.07.48H12.2l.07-.48a2.986 2.986 0 0 1 2.951-2.478c1.57 0 2.483.551 3.045 1.45l.208.333 1.222-1.222-.333-.208c-.899-.562-1.45-1.475-1.45-3.045a2.986 2.986 0 0 1 2.478-2.951l.48-.07V9.179l-.48-.07a2.986 2.986 0 0 1-2.478-2.951Z"/></svg>'
+                reto: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-600 shrink-0"><path d="m22 2-1 3"/><path d="m2 2 1 3"/><path d="M12 2v12"/><path d="M8 10c2 2 4 0 6 2s4 0 6-2"/><path d="M2 6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M4 8v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/></svg>',
+                trivia: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-600 shrink-0"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>',
+                sopa_letras: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600 shrink-0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+                memoria: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600 shrink-0"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/><path d="M12 9v6"/><path d="M16 9v6"/></svg>',
+                puzzle: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600 shrink-0"><path d="M19.439 7.85c0-1.57.551-2.483 1.45-3.045l.333-.208-1.222-1.222-.208.333c-.562.899-1.475 1.45-3.045 1.45a2.986 2.986 0 0 1-2.951-2.478l-.07-.48H12.2l-.07.48A2.986 2.986 0 0 1 9.179 4.808c-1.57 0-2.483-.551-3.045-1.45l-.208-.333-1.222 1.222.333.208c.899.562 1.45 1.475 1.45 3.045a2.986 2.986 0 0 1-2.478 2.951l-.48.07V12.2l.48.07A2.986 2.986 0 0 1 4.808 15.179c0 1.57.551 2.483 1.45 3.045l.333.208 1.222 1.222.208-.333c.562-.899 1.475-1.45 3.045-1.45a2.986 2.986 0 0 1 2.951 2.478l.07.48H12.2l.07-.48a2.986 2.986 0 0 1 2.951-2.478c1.57 0 2.483.551 3.045 1.45l.208.333 1.222-1.222-.333-.208c-.899-.562-1.45-1.475-1.45-3.045a2.986 2.986 0 0 1 2.478-2.951l.48-.07V9.179l-.48-.07a2.986 2.986 0 0 1-2.478-2.951Z"/></svg>'
               };
   const nombres = { reto: 'Reto', trivia: 'Trivia', sopa_letras: 'Sopa de Letras', memoria: 'Memoria', puzzle: 'Rompecabezas' };
           %>
-              <span class="flex items-center justify-center w-8 shrink-0"><%- iconosHistorial[h.tipo_actividad] || '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 shrink-0"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' %></span>
+              <span class="flex items-center justify-center w-7 shrink-0"><%- iconosHistorial[h.tipo_actividad] || '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 shrink-0"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>' %></span>
               <div class="min-w-0">
-                <p class="font-medium text-slate-700 text-sm truncate"><%= nombres[h.tipo_actividad] || h.tipo_actividad %></p>
-                <p class="text-xs text-slate-400"><%= new Date(h.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></p>
+                <p class="per-hist-name font-medium text-slate-700 text-xs truncate"><%= nombres[h.tipo_actividad] || h.tipo_actividad %></p>
+                <p class="per-hist-date text-[10px] text-slate-400"><%= new Date(h.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) %></p>
               </div>
             </div>
             <div class="text-right shrink-0 ml-3">
               <% if (h.puntaje_obtenido > 0) { %>
-                <span class="font-bold text-green-600 text-sm">+<%= h.puntaje_obtenido %></span>
+                <span class="per-hist-score font-bold text-green-600 text-xs">+<%= h.puntaje_obtenido %></span>
               <% } else { %>
-                <span class="text-slate-300">—</span>
+                <span class="per-hist-none text-slate-300">—</span>
               <% } %>
               <% if (h.respuestas_totales > 0) { %>
-                <p class="text-xs text-slate-400"><%= h.respuestas_correctas %>/<%= h.respuestas_totales %></p>
+                <p class="per-hist-ratio text-[10px] text-slate-400"><%= h.respuestas_correctas %>/<%= h.respuestas_totales %></p>
               <% } %>
             </div>
           </div>
@@ -234,89 +291,89 @@
       <% } %>
     </div>
 
-    <!-- ⚙️ Cambiar Contraseña -->
-    <div class="bg-white rounded-[1.75rem] p-5 sm:p-6 mt-8 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.35s">
-      <button type="button" id="btnTogglePasswordForm" class="w-full flex items-center justify-between text-left cursor-pointer group">
-        <h3 class="font-bold text-slate-700 flex items-center gap-2 text-sm sm:text-base">
-          <div class="p-1.5 bg-slate-100 rounded-lg text-slate-600 group-hover:bg-sky-100 group-hover:text-sky-600 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <!-- Cambiar Contraseña -->
+    <div class="per-pass-card bg-white rounded-[1.75rem] p-5 sm:p-6 mt-8 border border-gray-100 shadow-xl animate-fade-in" style="animation-delay: 0.35s">
+      <button type="button" id="btnTogglePasswordForm" class="w-full flex items-center justify-between text-left cursor-pointer">
+        <h3 class="per-pass-title font-bold text-slate-700 flex items-center gap-2 text-sm">
+          <div class="per-pass-title-icon p-1.5 bg-slate-100 rounded-lg text-slate-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
           Cambiar Contraseña
         </h3>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 transition-transform duration-300" id="chevronPass"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 transition-transform duration-300" id="chevronPass"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       
-      <div id="passwordFormContainer" class="hidden mt-5 pt-5 border-t border-gray-100">
+      <div id="passwordFormContainer" class="hidden mt-5 pt-5 per-pass-divider border-t border-gray-100">
         <form id="passwordForm" class="space-y-4 max-w-md mx-auto" novalidate>
           
           <!-- Contraseña actual -->
           <div>
-            <label for="passActual" class="block text-sm font-semibold text-gray-700 mb-1.5">Contraseña actual</label>
+            <label for="passActual" class="per-pass-label block text-xs font-semibold text-gray-700 mb-1.5">Contraseña actual</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="per-pass-input-icon text-gray-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
               <input type="password" id="passActual" name="passActual" required placeholder="Tu contraseña actual"
-                class="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100 outline-none transition-all text-gray-700 placeholder:text-gray-400 text-sm">
+                class="per-pass-input w-full pl-10 pr-10 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100 outline-none transition-all text-gray-700 placeholder:text-gray-400 text-xs">
               <button type="button" id="toggleActual" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors" tabindex="-1" aria-label="Mostrar u ocultar contraseña actual">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-actual-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-actual-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-actual-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-actual-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
               </button>
             </div>
-            <p class="text-red-500 text-xs mt-1 hidden" id="passActual-error">Por favor ingresa tu contraseña actual</p>
+            <p class="text-red-500 text-[10px] mt-1 hidden" id="passActual-error">Por favor ingresa tu contraseña actual</p>
           </div>
 
           <!-- Nueva contraseña -->
           <div>
-            <label for="passNueva" class="block text-sm font-semibold text-gray-700 mb-1.5">Nueva contraseña</label>
+            <label for="passNueva" class="per-pass-label block text-xs font-semibold text-gray-700 mb-1.5">Nueva contraseña</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="per-pass-input-icon text-gray-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
               <input type="password" id="passNueva" name="passNueva" required minlength="4" placeholder="Mínimo 4 caracteres"
-                class="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100 outline-none transition-all text-gray-700 placeholder:text-gray-400 text-sm">
+                class="per-pass-input w-full pl-10 pr-10 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100 outline-none transition-all text-gray-700 placeholder:text-gray-400 text-xs">
               <button type="button" id="toggleNueva" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors" tabindex="-1" aria-label="Mostrar u ocultar contraseña">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-nueva-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-nueva-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-nueva-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-nueva-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
               </button>
             </div>
-            <p class="text-red-500 text-xs mt-1 hidden" id="passNueva-error">La contraseña debe tener al menos 4 caracteres</p>
+            <p class="text-red-500 text-[10px] mt-1 hidden" id="passNueva-error">La contraseña debe tener al menos 4 caracteres</p>
           </div>
 
           <!-- Confirmar nueva contraseña -->
           <div>
-            <label for="passConfirmar" class="block text-sm font-semibold text-gray-700 mb-1.5">Confirmar nueva contraseña</label>
+            <label for="passConfirmar" class="per-pass-label block text-xs font-semibold text-gray-700 mb-1.5">Confirmar nueva contraseña</label>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="per-pass-input-icon text-gray-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               </div>
               <input type="password" id="passConfirmar" name="passConfirmar" required placeholder="Repite la nueva contraseña"
-                class="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100 outline-none transition-all text-gray-700 placeholder:text-gray-400 text-sm">
+                class="per-pass-input w-full pl-10 pr-10 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-100 outline-none transition-all text-gray-700 placeholder:text-gray-400 text-xs">
               <button type="button" id="toggleConfirmar" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors" tabindex="-1" aria-label="Mostrar u ocultar confirmación">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-confirm-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-confirm-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-confirm-open" class="hidden"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="eye-confirm-closed"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
               </button>
             </div>
-            <p class="text-red-500 text-xs mt-1 hidden" id="passConfirmar-error">Las contraseñas no coinciden</p>
+            <p class="text-red-500 text-[10px] mt-1 hidden" id="passConfirmar-error">Las contraseñas no coinciden</p>
           </div>
 
           <!-- Botón guardar -->
-          <button type="submit" class="w-full py-3 px-6 bg-gradient-to-r from-sky-500 to-sky-600 text-white font-bold text-sm rounded-xl hover:from-sky-600 hover:to-sky-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2" id="btnGuardarPass">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 16 8"/></svg>
+          <button type="submit" class="per-pass-btn w-full py-2.5 px-6 bg-gradient-to-r from-sky-500 to-sky-600 text-white font-bold text-xs rounded-xl hover:from-sky-600 hover:to-sky-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2" id="btnGuardarPass">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 16 8"/></svg>
             Guardar contraseña
           </button>
 
           <!-- Mensaje de feedback -->
-          <div id="passFeedback" class="hidden text-center text-sm font-medium py-2 rounded-xl"></div>
+          <div id="passFeedback" class="hidden text-center text-xs font-medium py-2 rounded-xl"></div>
         </form>
       </div>
     </div>
 
-    <!-- Botón volver mejorado -->
+    <!-- Botón volver -->
     <div class="text-center mt-8 animate-fade-in" style="animation-delay: 0.4s">
       <a href="/menu" 
-         class="inline-flex items-center gap-2 py-3.5 px-8 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm sm:text-base rounded-[1.25rem] transition-all duration-200 border border-gray-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] group">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-0.5 transition-transform"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+         class="per-back-btn inline-flex items-center gap-2 py-2.5 px-8 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs rounded-[1.25rem] transition-all duration-200 border border-gray-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] group">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-0.5 transition-transform"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
         Volver al Menú
       </a>
     </div>
@@ -418,9 +475,9 @@
     feedback.classList.remove('hidden', 'bg-green-50', 'text-green-700', 'border', 'border-green-200', 'bg-red-50', 'text-red-600', 'border-red-100');
     
     if (tipo === 'success') {
-      feedback.className = 'text-center text-sm font-medium py-2 rounded-xl bg-green-50 text-green-700 border border-green-200';
+      feedback.className = 'text-center text-xs font-medium py-2 rounded-xl bg-green-50 text-green-700 border border-green-200';
     } else {
-      feedback.className = 'text-center text-sm font-medium py-2 rounded-xl bg-red-50 text-red-600 border border-red-100';
+      feedback.className = 'text-center text-xs font-medium py-2 rounded-xl bg-red-50 text-red-600 border border-red-100';
     }
     feedback.textContent = mensaje;
     
@@ -458,23 +515,22 @@
         return;
       }
 
-      // Simular envío (placeholder — el backend debe implementar POST /perfil/cambiar-contrasena)
+      // Simular envío
       const btn = document.getElementById('btnGuardarPass');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Guardando...';
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Guardando...';
       }
 
-      // Simular delay
       setTimeout(function() {
         passFields.forEach(function(f) {
           if (f.input) f.input.value = '';
           limpiarError(f.input, f.error);
         });
-        mostrarFeedback('✅ Contraseña actualizada correctamente', 'success');
+        mostrarFeedback('Contraseña actualizada correctamente', 'success');
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 16 8"/></svg> Guardar contraseña';
+          btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 11 12 14 16 8"/></svg> Guardar contraseña';
         }
       }, 1200);
     });

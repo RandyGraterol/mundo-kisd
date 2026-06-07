@@ -1,31 +1,91 @@
 <%- include('partials/confetti') %>
 
-<div class="min-h-screen flex items-center justify-center p-responsive-main animate-fade-in">
+<style>
+  [data-theme="dark"] .sl-main { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-badge { background: rgba(30,41,59,0.8) !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-badge-icon { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-badge-text { color: #e2e8f0 !important; }
+  [data-theme="dark"] .sl-grid-wrapper { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sopa-celda { background-color: #1e293b !important; border-color: #334155 !important; color: #cbd5e1 !important; }
+  [data-theme="dark"] .sopa-celda:hover { background-color: #334155 !important; border-color: #475569 !important; }
+  [data-theme="dark"] .sopa-celda.bg-teal-200,
+  [data-theme="dark"] .sopa-celda.border-teal-400 {
+    background-color: #0d9488 !important;
+    border-color: #2dd4bf !important;
+    color: #f0fdfa !important;
+  }
+  [data-theme="dark"] .sopa-celda.bg-green-200,
+  [data-theme="dark"] .sopa-celda.border-green-400 {
+    background-color: #15803d !important;
+    border-color: #22c55e !important;
+    color: #bbf7d0 !important;
+  }
+  [data-theme="dark"] .sopa-celda.bg-red-100,
+  [data-theme="dark"] .sopa-celda.border-red-300 {
+    background-color: #7f1d1d !important;
+    border-color: #ef4444 !important;
+  }
+  [data-theme="dark"] .sl-hint { color: #64748b !important; }
+  [data-theme="dark"] .sl-word-title { color: #e2e8f0 !important; }
+  [data-theme="dark"] .sl-word-title svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-word-item { background-color: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-word-dot { background-color: #475569 !important; }
+  [data-theme="dark"] .sl-progress { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-progress-label { color: #64748b !important; }
+  [data-theme="dark"] .sl-progress-value { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-progress-value svg { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-btn-primary { background-color: #334155 !important; }
+  [data-theme="dark"] .sl-btn-primary:hover { background-color: #475569 !important; }
+  [data-theme="dark"] .sl-btn-secondary { background-color: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-btn-secondary:hover { background-color: #1e293b !important; color: #e2e8f0 !important; }
+  [data-theme="dark"] .sl-back { border-color: #334155 !important; }
+  [data-theme="dark"] .sl-select-icon { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .sl-select-title { color: #f1f5f9 !important; }
+  [data-theme="dark"] .sl-select-p { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-mode-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-mode-name { color: #e2e8f0 !important; }
+  [data-theme="dark"] .sl-mode-desc { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-nivel-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-nivel-card svg { color: #64748b !important; }
+  [data-theme="dark"] .sl-nivel-card p { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-theme-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-theme-card:hover { border-color: #475569 !important; }
+  [data-theme="dark"] .sl-theme-icon { background-color: #0f172a !important; }
+  [data-theme="dark"] .sl-theme-icon span { color: #64748b !important; }
+  [data-theme="dark"] .sl-theme-name { color: #94a3b8 !important; }
+  [data-theme="dark"] .sl-theme-card.selected { border-color: #0d9488 !important; }
+  [data-theme="dark"] .sl-timer { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-timer-number { color: #f1f5f9 !important; }
+  [data-theme="dark"] .sl-timer-label { color: #64748b !important; }
+  [data-theme="dark"] .sl-timeout { background: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .sl-timeout h4 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .sl-timeout p { color: #94a3b8 !important; }
+</style>
+
+<div class="min-h-screen flex items-center justify-center p-4 sm:p-6 animate-fade-in">
   
-  <div class="bg-white rounded-[3rem] shadow-xl p-responsive card-padding-md max-w-4xl w-full border border-slate-100 md:rounded-[3.5rem]">
+  <div class="sl-main bg-white rounded-[2.5rem] shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-slate-100">
 
     <!-- Encabezado -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-3 bg-teal-50 backdrop-blur-md px-6 py-2 rounded-full border border-teal-100 shadow-sm mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <h2 class="text-xl font-bold text-slate-800">Sopa de Letras</h2>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="sl-badge inline-flex items-center gap-2 bg-teal-50 px-4 py-1.5 rounded-full border border-teal-100 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sl-badge-icon text-teal-600 shrink-0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <h2 class="sl-badge-text text-sm font-bold text-slate-800">Sopa de Letras</h2>
       </div>
-      <h1 class="text-responsive-4xl font-extrabold text-slate-900 tracking-tight">Encuentra las palabras escondidas</h1>
     </div>
 
     <% if (juego) { %>
-      <!-- Juego activo -->
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-responsive gap-responsive-desk-lg">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <!-- Cuadrícula -->
-        <div class="md:col-span-2 lg:col-span-2">
-          <div class="bg-slate-50 rounded-2xl p-4 sm:p-6 border border-slate-100 shadow-sm">
+        <div class="md:col-span-2">
+          <div class="sl-grid-wrapper bg-slate-50 rounded-xl p-3 sm:p-4 border border-slate-100 shadow-sm">
             <div id="sopa-grid" 
-                 class="grid gap-1 mx-auto" 
-                 style="grid-template-columns: repeat(<%= juego.tamano %>, minmax(0, 1fr)); max-width: 500px;">
+                 class="grid gap-0.5 mx-auto" 
+                 style="grid-template-columns: repeat(<%= juego.tamano %>, minmax(0, 1fr)); max-width: 480px;">
               <% juego.grid.forEach((fila, fIndex) => { %>
                 <% fila.forEach((letra, cIndex) => { %>
                   <div class="sopa-celda aspect-square flex items-center justify-center 
-                              bg-white rounded-lg border border-slate-200 text-sm font-bold 
+                              bg-white rounded border border-slate-200 text-xs sm:text-sm font-bold 
                               text-slate-700 cursor-pointer select-none hover:bg-teal-50 
                               hover:border-teal-300 transition-all"
                        data-fila="<%= fIndex %>" 
@@ -37,26 +97,51 @@
               <% }); %>
             </div>
           </div>
-
-          <!-- Instrucciones -->
-          <div class="flex items-center gap-3 mt-4 text-sm text-slate-400 justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <div class="sl-hint flex items-center gap-2 mt-3 text-xs text-slate-400 justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
             <span>Selecciona las letras en orden para formar una palabra</span>
           </div>
         </div>
 
         <!-- Panel lateral -->
-        <div class="space-y-responsive">
+        <div class="flex flex-col gap-4">
+          <!-- Temporizador -->
+          <div id="sl-temporizador" class="<%= juego.modo === 'contrarreloj' ? '' : 'hidden' %> sl-timer bg-rose-50 rounded-xl p-4 border border-rose-200 shadow-sm">
+            <h3 class="sl-timer-label font-bold text-xs mb-2 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Tiempo
+            </h3>
+            <div class="text-center">
+              <div id="sl-display-tiempo" class="sl-timer-number text-3xl font-black tabular-nums tracking-tight transition-colors duration-500" style="color: #0f172a;">
+                <%= Math.floor(juego.tiempoLimite / 60) %>:<% if (juego.tiempoLimite % 60 < 10) { %>0<% } %><%= juego.tiempoLimite % 60 %>
+              </div>
+              <div class="w-full bg-white/60 rounded-full h-2 mt-2 overflow-hidden border border-rose-100">
+                <div id="sl-barra-tiempo" class="h-full rounded-full transition-all duration-1000" style="width: 100%; background: linear-gradient(90deg, #f43f5e, #f97316);"></div>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-1 flex items-center justify-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Contrarreloj
+              </p>
+            </div>
+          </div>
+
+          <!-- Tiempo agotado -->
+          <div id="sl-tiempo-agotado" class="hidden sl-timeout bg-rose-50 rounded-xl p-4 border border-rose-200 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <h4 class="font-black text-rose-700 text-sm">¡Tiempo agotado!</h4>
+            <p class="text-rose-600 text-xs mt-1">Palabras encontradas: <span id="sl-palabras-tiempo">0</span></p>
+          </div>
+
           <!-- Palabras a encontrar -->
           <div>
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600"><path d="M9 12h6"/><path d="M9 16h6"/><path d="M9 20h6"/><path d="M3 4h18"/><path d="M3 8h18"/><path d="M3 12h1"/><path d="M3 16h1"/><path d="M3 20h1"/></svg>
-              Palabras a encontrar:
+            <h3 class="sl-word-title text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6"/><path d="M9 16h6"/><path d="M9 20h6"/><path d="M3 4h18"/><path d="M3 8h18"/><path d="M3 12h1"/><path d="M3 16h1"/><path d="M3 20h1"/></svg>
+              Palabras:
             </h3>
-            <div class="space-y-2" id="lista-palabras">
+            <div class="space-y-1.5" id="lista-palabras">
               <% juego.palabras.forEach(palabra => { %>
-                <div class="palabra-item flex items-center gap-3 px-responsive-main py-2.5 sm:py-3 bg-white rounded-xl border border-slate-200 text-sm font-bold text-slate-600" data-palabra="<%= palabra %>">
-                  <div class="w-2 h-2 rounded-full bg-teal-400"></div>
+                <div class="sl-word-item flex items-center gap-2.5 px-3 py-2 bg-white rounded-lg border border-slate-200 text-xs font-bold text-slate-600" data-palabra="<%= palabra %>">
+                  <div class="sl-word-dot w-2 h-2 rounded-full bg-teal-400 shrink-0"></div>
                   <%= palabra %>
                 </div>
               <% }); %>
@@ -64,91 +149,137 @@
           </div>
 
           <!-- Progreso -->
-          <div class="bg-sky-50 rounded-2xl p-4 sm:p-5 border border-sky-100">
-            <p class="text-sm text-slate-500 mb-2 font-bold uppercase tracking-widest">Tu Progreso</p>
-            <div class="flex items-center justify-between">
+          <div class="sl-progress bg-sky-50 rounded-xl p-4 border border-sky-100">
+            <p class="sl-progress-label text-[10px] text-slate-500 mb-2 font-bold uppercase tracking-widest">Progreso</p>
+            <div class="grid grid-cols-3 gap-2 text-center">
               <div>
-                <p class="text-xs text-slate-400">Nivel</p>
-                <p class="text-xl font-black text-sky-600 flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
-                  <%= progreso.nivel %>
-                </p>
+                <p class="sl-progress-label text-[10px] text-slate-400">Nivel</p>
+                <p class="sl-progress-value text-sm font-black text-sky-600"><%= progreso.nivel %></p>
               </div>
               <div>
-                <p class="text-xs text-slate-400">Puntos</p>
-                <p class="text-xl font-black text-sky-600 flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  <%= progreso.puntosTotal %>
-                </p>
+                <p class="sl-progress-label text-[10px] text-slate-400">Puntos</p>
+                <p class="sl-progress-value text-sm font-black text-sky-600"><%= progreso.puntosTotal %></p>
               </div>
               <div>
-                <p class="text-xs text-slate-400">Encontradas</p>
-                <p class="text-xl font-black text-teal-600" id="contador-encontradas">0</p>
+                <p class="sl-progress-label text-[10px] text-slate-400">Encontradas</p>
+                <p class="sl-progress-value text-sm font-black text-teal-600" id="contador-encontradas">0</p>
               </div>
             </div>
           </div>
 
           <!-- Acciones -->
-          <button onclick="verificarPalabraSeleccionada()"
-                  class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-responsive-main px-responsive-md rounded-2xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <button onclick="verificarPalabraSeleccionada()" id="sl-btn-verificar"
+                  class="sl-btn-primary w-full bg-teal-500 hover:bg-teal-600 text-white font-bold text-sm py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             Verificar Palabra
           </button>
 
-          <a href="/sopa-letras/jugar?tema=<%= juego.tema.id %>&tamano=<%= juego.tamano %>"
-             class="block text-center w-full bg-white hover:bg-slate-50 text-slate-600 font-bold py-responsive-main px-responsive-md rounded-2xl transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+          <a href="/sopa-letras/jugar?tema=<%= juego.tema.id %>&nivel=<%= juego.nivel.id %>&modo=<%= juego.modo %>"
+             class="sl-btn-secondary w-full bg-white hover:bg-slate-50 text-slate-600 font-bold text-sm py-3 px-4 rounded-xl transition-all border border-slate-200 shadow-sm flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
             Nueva Partida
           </a>
 
-          <div id="mensaje-resultado" class="hidden text-center font-bold py-4 px-6 rounded-2xl transition-all"></div>
+          <div id="mensaje-resultado" class="hidden text-center font-bold py-3 px-4 rounded-xl text-sm transition-all"></div>
         </div>
       </div>
 
     <% } else { %>
-      <!-- Selección de tema -->
-      <div class="text-center mb-10">
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-teal-100 text-teal-600 mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <!-- Selección -->
+      <div class="text-center mb-6">
+        <div class="sl-select-icon inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-teal-100 text-teal-600 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
-        <h2 class="text-3xl font-black text-slate-900 mb-4">¡Elige un tema y juega!</h2>
-        <p class="text-slate-500 text-lg">Encuentra palabras relacionadas con geografía en la cuadrícula.</p>
+        <h2 class="sl-select-title text-2xl font-black text-slate-900 mb-2">¡Elige y juega!</h2>
+        <p class="sl-select-p text-slate-500 text-sm">Encuentra palabras relacionadas con geografía.</p>
       </div>
 
-      <!-- Selector de tema -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-responsive-main mb-8 md:mb-10">
-        <% (typeof temas !== 'undefined' ? temas : []).forEach(tema => { %>
-          <a href="/sopa-letras/jugar?tema=<%= tema.id %>&tamano=12"
-             class="group flex flex-col items-center gap-3 p-responsive-card bg-white rounded-2xl border border-slate-200 hover:border-teal-300 hover:shadow-lg transition-all hover:-translate-y-1">
-            <div class="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center text-2xl group-hover:bg-teal-100 transition-colors">
-              <span class="icono-render" data-icono="<%= tema.icono %>" data-clases="w-8 h-8 text-teal-600" data-titulo="<%= tema.nombre %>"></span>
+      <!-- Modo -->
+      <div class="max-w-sm mx-auto mb-6">
+        <h3 class="text-sm font-bold text-slate-800 text-center mb-3 flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4"/><path d="M14 12h4"/></svg>
+          Modo:
+        </h3>
+        <div class="grid grid-cols-2 gap-3">
+          <div id="sl-modo-libre"
+               class="sl-mode-card cursor-pointer flex flex-col items-center gap-1.5 p-4 bg-white rounded-xl border-2 border-teal-400 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md selected-modo"
+               data-modo="libre"
+               onclick="seleccionarModoSL('libre')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            <p class="sl-mode-name text-sm font-bold text-slate-700">Libre</p>
+            <p class="sl-mode-desc text-[10px] text-slate-400 text-center">Sin límite de tiempo</p>
+          </div>
+          <div id="sl-modo-contrarreloj"
+               class="sl-mode-card cursor-pointer flex flex-col items-center gap-1.5 p-4 bg-white rounded-xl border-2 border-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-md"
+               data-modo="contrarreloj"
+               onclick="seleccionarModoSL('contrarreloj')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <p class="sl-mode-name text-sm font-bold text-slate-700">Contrarreloj</p>
+            <p class="sl-mode-desc text-[10px] text-slate-400 text-center">120 segundos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nivel -->
+      <div class="max-w-sm mx-auto mb-6">
+        <h3 class="text-sm font-bold text-slate-800 text-center mb-3 flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Nivel:
+        </h3>
+        <div class="grid grid-cols-4 gap-2">
+          <% (typeof niveles !== 'undefined' ? niveles : []).forEach(n => { %>
+            <% if (n.desbloqueado) { %>
+            <div onclick="seleccionarNivelSL('<%= n.id %>')"
+                 class="sl-nivel-card cursor-pointer flex flex-col items-center gap-1 p-2.5 bg-white rounded-xl border-2 border-slate-200 transition-all hover:-translate-y-0.5 hover:shadow-sm"
+                 data-nivel="<%= n.id %>"
+                 tabindex="0" role="button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><circle cx="12" cy="12" r="10"/></svg>
+              <p class="text-[10px] font-bold text-slate-600"><%= n.nombre %></p>
+              <p class="text-[8px] text-slate-400 text-center leading-tight"><%= n.tamano %>×<%= n.tamano %></p>
             </div>
-            <p class="text-sm font-bold text-slate-600 text-center"><%= tema.nombre %></p>
-          </a>
+            <% } else { %>
+            <div class="flex flex-col items-center gap-1 p-2.5 bg-slate-100 rounded-xl border-2 border-slate-200 opacity-60 cursor-not-allowed"
+                 title="Completa <%= n.nivelRequerido %> primero">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <p class="text-[10px] font-bold text-slate-400"><%= n.nombre %></p>
+              <p class="text-[8px] text-slate-400"><%= n.nivelRequerido %>+</p>
+            </div>
+            <% } %>
+          <% }); %>
+        </div>
+      </div>
+
+      <!-- Temas -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-6">
+        <% (typeof temas !== 'undefined' ? temas : []).forEach(tema => { %>
+          <div onclick="seleccionarTemaSL('<%= tema.id %>')"
+               class="sl-theme-card cursor-pointer flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-slate-200 hover:border-teal-300 hover:shadow-md transition-all hover:-translate-y-0.5"
+               data-tema="<%= tema.id %>">
+            <div class="sl-theme-icon w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center group-hover:bg-teal-100 transition-colors">
+              <span class="icono-render" data-icono="<%= tema.icono %>" data-clases="w-7 h-7 text-teal-600" data-titulo="<%= tema.nombre %>"></span>
+            </div>
+            <p class="sl-theme-name text-xs font-bold text-slate-600 text-center"><%= tema.nombre %></p>
+          </div>
         <% }); %>
       </div>
 
-      <!-- Selector de continente -->
-      <h3 class="text-lg font-bold text-slate-800 text-center mb-4 flex items-center justify-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        O elige por continente:
-      </h3>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-responsive-main mb-8 md:mb-10">
-        <% (typeof continentes !== 'undefined' ? continentes : []).forEach(c => { %>
-          <a href="/sopa-letras/jugar?tema=<%= c.id %>&tamano=12"
-             class="group flex flex-col items-center gap-3 p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 hover:shadow-lg transition-all hover:-translate-y-1"
-             style="border-color: <%= c.color %>33; hover:border-color: <%= c.color %>">
-            <span class="icono-render" data-icono="<%= c.svgIcon %>" data-clases="w-8 h-8" data-titulo="<%= c.nombre %>"></span>
-            <p class="text-xs font-bold text-slate-600"><%= c.nombre %></p>
-          </a>
-        <% }); %>
+      <% /* "Por continente" section removed — themes already cover all continents */ %>
+
+      <!-- Botón Comenzar -->
+      <div class="text-center pt-2 pb-4">
+        <a id="sl-btn-comenzar" href="/sopa-letras/jugar?tema=global&nivel=facil&modo=libre"
+           onclick="return validarSeleccionSL()"
+           class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          ¡Comenzar!
+        </a>
       </div>
     <% } %>
 
     <!-- Volver -->
-    <div class="text-center pt-6 border-t border-slate-100 mt-8">
-      <a href="/menu" class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 font-bold transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    <div class="sl-back text-center pt-4 border-t border-slate-100 mt-6">
+      <a href="/menu" class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-slate-600 font-bold transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         Volver al Menú
       </a>
     </div>

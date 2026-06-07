@@ -11,6 +11,7 @@ const { redirigirSiSesionActiva } = require('../middleware/auth');
  * GET /auth/login - Formulario de inicio de sesión
  */
 router.get('/login', redirigirSiSesionActiva, (req, res) => {
+  res.locals.esPaginaAuth = true;
   res.render('auth/login', { error: null });
 });
 
@@ -22,35 +23,35 @@ router.post('/login', (req, res) => {
   
   // Validar campos requeridos
   if (!nombreUsuario || !nombreUsuario.trim()) {
-    return res.render('auth/login', { error: 'Por favor ingresa tu nombre de usuario.' });
+    return res.render('auth/login', { error: 'Por favor ingresa tu nombre de usuario.', esPaginaAuth: true });
   }
   
   if (!contrasena || !contrasena.trim()) {
-    return res.render('auth/login', { error: 'Por favor ingresa tu contraseña.' });
+    return res.render('auth/login', { error: 'Por favor ingresa tu contraseña.', esPaginaAuth: true });
   }
   
   // Validar rol
   if (!rol || (rol !== 'alumno' && rol !== 'profesor')) {
-    return res.render('auth/login', { error: 'Por favor selecciona si eres Alumno o Profesor.' });
+    return res.render('auth/login', { error: 'Por favor selecciona si eres Estudiante o Profesor.', esPaginaAuth: true });
   }
   
   // Buscar usuario en la base de datos
   const usuario = buscarUsuarioPorNombre(nombreUsuario.trim());
   
   if (!usuario) {
-    return res.render('auth/login', { error: 'Usuario o contraseña incorrectos.' });
+    return res.render('auth/login', { error: 'Usuario o contraseña incorrectos.', esPaginaAuth: true });
   }
   
   // Verificar contraseña
   const contrasenaValida = bcrypt.compareSync(contrasena, usuario.contrasena_hash);
   
   if (!contrasenaValida) {
-    return res.render('auth/login', { error: 'Usuario o contraseña incorrectos.' });
+    return res.render('auth/login', { error: 'Usuario o contraseña incorrectos.', esPaginaAuth: true });
   }
   
   // Verificar que el rol coincida con el del usuario
   if (usuario.rol !== rol) {
-    return res.render('auth/login', { error: 'Esta cuenta no corresponde al rol seleccionado. Verifica que elegiste correctamente entre Alumno o Profesor.' });
+    return res.render('auth/login', { error: 'Esta cuenta no corresponde al rol seleccionado. Verifica que elegiste correctamente entre Estudiante o Profesor.', esPaginaAuth: true });
   }
   
   // Crear sesión con regeneración para seguridad
@@ -61,7 +62,7 @@ router.post('/login', (req, res) => {
     }
     req.session.usuarioId = usuario.id;
     actualizarUltimoAcceso(usuario.id);
-    res.redirect('/menu');
+    res.redirect(usuario.rol === 'profesor' ? '/admin' : '/menu');
   });
 });
 
@@ -69,6 +70,7 @@ router.post('/login', (req, res) => {
  * GET /auth/registro - Formulario de registro
  */
 router.get('/registro', redirigirSiSesionActiva, (req, res) => {
+  res.locals.esPaginaAuth = true;
   res.render('auth/registro', { error: null });
 });
 
@@ -80,27 +82,27 @@ router.post('/registro', (req, res) => {
   
   // Validar campos requeridos
   if (!nombreCompleto || !nombreCompleto.trim()) {
-    return res.render('auth/registro', { error: 'Por favor ingresa tu nombre completo.' });
+    return res.render('auth/registro', { error: 'Por favor ingresa tu nombre completo.', esPaginaAuth: true });
   }
   
   if (!nombreUsuario || !nombreUsuario.trim()) {
-    return res.render('auth/registro', { error: 'Por favor ingresa un nombre de usuario.' });
+    return res.render('auth/registro', { error: 'Por favor ingresa un nombre de usuario.', esPaginaAuth: true });
   }
   
   if (!contrasena || contrasena.length < 4) {
-    return res.render('auth/registro', { error: 'La contraseña debe tener al menos 4 caracteres.' });
+    return res.render('auth/registro', { error: 'La contraseña debe tener al menos 4 caracteres.', esPaginaAuth: true });
   }
   
   if (contrasena !== confirmarContrasena) {
-    return res.render('auth/registro', { error: 'Las contraseñas no coinciden.' });
+    return res.render('auth/registro', { error: 'Las contraseñas no coinciden.', esPaginaAuth: true });
   }
   
   if (!rol || (rol !== 'alumno' && rol !== 'profesor')) {
-    return res.render('auth/registro', { error: 'Por favor selecciona un rol (Alumno o Profesor).' });
+    return res.render('auth/registro', { error: 'Por favor selecciona un rol (Estudiante o Profesor).', esPaginaAuth: true });
   }
   
   if (!genero || (genero !== 'masculino' && genero !== 'femenino')) {
-    return res.render('auth/registro', { error: 'Por favor selecciona un género.' });
+    return res.render('auth/registro', { error: 'Por favor selecciona un género.', esPaginaAuth: true });
   }
   
   // Verificar que el nombre de usuario no esté en uso
@@ -127,6 +129,7 @@ router.post('/registro', (req, res) => {
     // Iniciar sesión automáticamente después del registro
     req.session.usuarioId = usuarioId;
     actualizarUltimoAcceso(usuarioId);
+    if (rol === 'profesor') { return res.redirect('/admin'); }
     
     // Migrar progreso de sesión anónima (quick play) a la nueva cuenta
     if (req.session.progreso) {
@@ -141,6 +144,11 @@ router.post('/registro', (req, res) => {
             db.actualizarProgresoContinente(usuarioId, continenteId, 0);
           }
         }
+        // Migrar niveles completados de sesión anónima
+        if (req.session.progreso.nivelesCompletados && Object.keys(req.session.progreso.nivelesCompletados).length > 0) {
+          const { guardarNivelesCompletados } = require('../database/db');
+          guardarNivelesCompletados(usuarioId, req.session.progreso.nivelesCompletados);
+        }
       } catch (e) {
         console.error('Error migrando progreso anónimo:', e.message);
       }
@@ -149,7 +157,7 @@ router.post('/registro', (req, res) => {
     res.redirect('/menu');
   } catch (error) {
     console.error('Error al crear usuario:', error);
-    return res.render('auth/registro', { error: 'Ocurrió un error al crear tu cuenta. Intenta de nuevo.' });
+    return res.render('auth/registro', { error: 'Ocurrió un error al crear tu cuenta. Intenta de nuevo.', esPaginaAuth: true });
   }
 });
 
