@@ -6,6 +6,8 @@ const { obtenerContinentes } = require('../data/continentes');
 const { registrarActividad, actualizarPuntosYNivel } = require('../database/db');
 const { verificarYDesbloquearLogros } = require('../helpers/logros');
 const { enriquecerConDesbloqueo, estaDesbloqueado, marcarCompletado, PROGRESION } = require('../helpers/desbloqueos');
+const { calcularNivel, multiplicadorDificultad } = require('../helpers/niveles');
+const { estrellasSopaLetras } = require('../helpers/estrellas');
 
 // Middleware de verificación de sesión
 function verificarSesion(req, res, next) {
@@ -69,7 +71,8 @@ router.get('/jugar', verificarSesion, (req, res) => {
     posiciones: juego.posiciones,
     nivelId: nivelId,
     tema: temaId,
-    modo: modo
+    modo: modo,
+    totalXpAcumulado: 0
   };
 
   res.render('sopa-letras', {
@@ -109,38 +112,50 @@ router.post('/verificar', express.json(), verificarSesion, (req, res) => {
     if (!req.session.palabrasEncontradas.includes(palabraUpper)) {
       req.session.palabrasEncontradas.push(palabraUpper);
       
-      // Sumar puntos en el progreso
+      // Sumar puntos en el progreso (multiplicados por dificultad)
+      const mult = multiplicadorDificultad(juegoGuardado.nivelId);
+      const puntosPalabra = Math.round(5 * mult);
+      juegoGuardado.totalXpAcumulado += puntosPalabra;
       if (req.session.progreso) {
-        req.session.progreso.puntosTotal += 5;
+        req.session.progreso.puntosTotal += puntosPalabra;
         const nivelAnterior = req.session.progreso.nivel;
-        const nuevoNivel = Math.floor(req.session.progreso.puntosTotal / 30) + 1;
+        const nuevoNivel = calcularNivel(req.session.progreso.puntosTotal);
         if (nuevoNivel > nivelAnterior) {
           req.session.progreso.nivel = nuevoNivel;
         }
-      }
-      
-      // Registrar actividad en BD si el usuario está autenticado
-      if (req.session.usuarioId) {
-        registrarActividad({
-          usuarioId: req.session.usuarioId,
-          tipoActividad: 'sopa_letras',
-          puntajeObtenido: 5,
-          respuestasCorrectas: 1,
-          respuestasTotales: 1,
-          tiempoSegundos: null
-        });
-        actualizarPuntosYNivel(req.session.usuarioId, 5);
-        try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
       }
     }
   }
 
   const juegoCompletado = esCorrecta && (req.session.palabrasEncontradas?.length || 0) >= juegoGuardado.palabras.length;
 
-  // Registrar nivel completado
+  // Registrar nivel completado con estrellas y score
   var siguienteNivel = null;
+  var estrellas = 0;
   if (juegoCompletado && juegoGuardado.nivelId) {
-    req.session.progreso.nivelesCompletados = marcarCompletado('sopa', juegoGuardado.nivelId, req.session.progreso.nivelesCompletados);
+    // Batch: una sola llamada a BD al completar
+    if (req.session.usuarioId && juegoGuardado.totalXpAcumulado > 0) {
+      registrarActividad({
+        usuarioId: req.session.usuarioId,
+        tipoActividad: 'sopa_letras',
+        puntajeObtenido: juegoGuardado.totalXpAcumulado,
+        respuestasCorrectas: juegoGuardado.palabras.length,
+        respuestasTotales: juegoGuardado.palabras.length,
+        tiempoSegundos: null
+      });
+      actualizarPuntosYNivel(req.session.usuarioId, juegoGuardado.totalXpAcumulado);
+      try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
+    }
+    const mult = multiplicadorDificultad(juegoGuardado.nivelId);
+    const xpPorPalabra = Math.round(5 * mult);
+    const score = juegoGuardado.palabras.length * xpPorPalabra;
+    estrellas = estrellasSopaLetras(
+      juegoGuardado.palabras.length,
+      req.session.palabrasEncontradas?.length || 0,
+      null,
+      juegoGuardado.modo === 'contrarreloj' ? (obtenerNivelPorId(juegoGuardado.nivelId)?.tiempoSegundos) : null
+    );
+    req.session.progreso.nivelesCompletados = marcarCompletado('sopa', juegoGuardado.nivelId, req.session.progreso.nivelesCompletados, score, estrellas);
     if (req.session.usuarioId) {
       const { guardarNivelesCompletados } = require('../database/db');
       guardarNivelesCompletados(req.session.usuarioId, req.session.progreso.nivelesCompletados);
@@ -155,11 +170,12 @@ router.post('/verificar', express.json(), verificarSesion, (req, res) => {
 
   res.json({
     correcta: esCorrecta,
-    puntosGanados: esCorrecta ? 5 : 0,
+    puntosGanados: esCorrecta ? Math.round(5 * multiplicadorDificultad(juegoGuardado.nivelId)) : 0,
     totalPalabras: juegoGuardado.palabras.length,
     palabrasEncontradas: req.session.palabrasEncontradas?.length || 0,
     juegoCompletado,
-    siguienteNivel
+    siguienteNivel,
+    estrellas
   });
 });
 

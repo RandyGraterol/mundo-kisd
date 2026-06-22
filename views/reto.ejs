@@ -6,102 +6,147 @@
   }
 %>
 
+<style>
+  /* Estado seleccionado vía CSS explícito (no depende de peer-checked: de Tailwind) */
+  .rt-option-group .peer:checked ~ .rt-option {
+    border-color: #94a3b8 !important;
+    background-color: #f8fafc !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  }
+  .rt-option-group .peer:checked ~ .rt-option .rt-option-letter {
+    background-color: #475569 !important;
+    color: #fff !important;
+  }
+  .rt-option-group .peer:checked ~ .rt-option .rt-option-text {
+    color: #0f172a !important;
+  }
+  .rt-option-group .peer:checked ~ .rt-option .rt-option-check {
+    opacity: 1 !important;
+  }
+
+  [data-theme="dark"] .rt-card { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .rt-badge { background: rgba(30,41,59,0.8) !important; border-color: #334155 !important; }
+  [data-theme="dark"] .rt-badge svg { color: #64748b !important; }
+  [data-theme="dark"] .rt-badge-text { color: #e2e8f0 !important; }
+  [data-theme="dark"] .rt-h1 { color: #f1f5f9 !important; }
+  [data-theme="dark"] .rt-stat { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .rt-stat-label { color: #64748b !important; }
+  [data-theme="dark"] .rt-stat-value { color: #94a3b8 !important; }
+  [data-theme="dark"] .rt-stat-value svg { color: #64748b !important; }
+  [data-theme="dark"] .rt-question-card { background-color: #0f172a !important; border-color: #334155 !important; }
+  [data-theme="dark"] .rt-question-text { color: #f1f5f9 !important; }
+  [data-theme="dark"] .rt-option { background-color: #1e293b !important; border-color: #334155 !important; }
+  [data-theme="dark"] .rt-option:hover { border-color: #475569 !important; background-color: #334155 !important; }
+  [data-theme="dark"] .rt-option-group .peer:checked ~ .rt-option { border-color: #64748b !important; background-color: #334155 !important; }
+  [data-theme="dark"] .rt-option-group .peer:checked ~ .rt-option .rt-option-letter { background-color: #475569 !important; color: #f1f5f9 !important; }
+  [data-theme="dark"] .rt-option-group .peer:checked ~ .rt-option .rt-option-text { color: #f1f5f9 !important; }
+  [data-theme="dark"] .rt-option-letter { background-color: #0f172a !important; color: #64748b !important; }
+  [data-theme="dark"] .rt-option-text { color: #cbd5e1 !important; }
+  [data-theme="dark"] .rt-option-check { color: #64748b !important; }
+  [data-theme="dark"] .rt-btn-primary { background-color: #475569 !important; }
+  [data-theme="dark"] .rt-btn-primary:hover { background-color: #64748b !important; }
+  [data-theme="dark"] .rt-btn-back { color: #64748b !important; }
+  [data-theme="dark"] .rt-btn-back:hover { color: #94a3b8 !important; }
+  [data-theme="dark"] .rt-divider { border-color: #334155 !important; }
+  [data-theme="dark"] #cronometro-container .text-slate-200 { color: #334155 !important; }
+  [data-theme="dark"] #timer-texto { color: #f1f5f9 !important; }
+  [data-theme="dark"] #cronometro-container .text-slate-500 { color: #94a3b8 !important; }
+  [data-theme="dark"] #timeout-overlay .bg-white { background-color: #1e293b !important; }
+  [data-theme="dark"] #timeout-overlay h3 { color: #f1f5f9 !important; }
+  [data-theme="dark"] #timeout-overlay p { color: #94a3b8 !important; }
+</style>
+
 <%- include('partials/modal-atencion') %>
-<%- include('partials/cronometro') %>
 
-<div class="min-h-screen flex items-center justify-center p-responsive-main animate-fade-in">
-  
-  <div class="bg-white rounded-[3rem] shadow-xl p-responsive card-padding-md max-w-3xl w-full border border-slate-100 relative overflow-hidden md:rounded-[3.5rem]">
-    
-    <!-- Encabezado con emoji del continente -->
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-3 bg-sky-50 backdrop-blur-md px-6 py-2 rounded-full border border-sky-100 shadow-sm mb-6">
-        <svg class="w-7 h-7 text-sky-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>
-        <h2 class="text-xl font-bold text-slate-800">
-          Reto: <%= continente.nombre %>
-        </h2>
-      </div>
-      <h1 class="text-responsive-4xl font-extrabold text-slate-900 tracking-tight">¡Demuestra lo que sabes!</h1>
-    </div>
+<div class="min-h-screen flex items-center justify-center p-4 sm:p-6 animate-fade-in">
 
-    <!-- Información de progreso -->
-    <div class="grid grid-cols-3 gap-responsive gap-responsive-desk mb-8 md:mb-12">
-      <div class="bg-sky-50/60 rounded-2xl p-4 border border-sky-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Nivel</p>
-        <p class="text-xl font-black text-sky-600 flex items-center justify-center gap-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C7 4 7 7 5 8.6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C17 4 17 7 19 8.6"/><path d="M4 14h16"/><path d="M10 12v4"/><path d="M12 12v4"/><path d="M14 12v4"/><path d="M8 18h8"/></svg>
-          <%= progreso.nivel %>
-        </p>
-      </div>
-      <div class="bg-sky-50/60 rounded-2xl p-4 border border-sky-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Puntos</p>
-        <p class="text-xl font-black text-sky-600 flex items-center justify-center gap-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <%= progreso.puntosTotal %>
-        </p>
-      </div>
-      <div class="bg-sky-50/60 rounded-2xl p-4 border border-sky-100/60 text-center shadow-sm">
-        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">Pregunta</p>
-        <p class="text-xl font-black text-sky-600"><%= preguntaActual + 1 %> / <%= totalPreguntas %></p>
+  <div class="rt-card bg-white rounded-[2.5rem] shadow-xl p-6 sm:p-8 max-w-4xl w-full border border-slate-100">
+
+    <!-- Header: badge + title -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="rt-badge w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-sm shrink-0">
+          <svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>
+        </div>
+        <div>
+          <h2 class="rt-badge-text text-base sm:text-lg font-bold text-slate-800">Reto: <%= continente.nombre %></h2>
+          <p class="text-xs text-slate-400 font-medium mt-0.5">¡Demuestra lo que sabes!</p>
+        </div>
       </div>
     </div>
 
     <!-- Contenido de la actividad (oculto hasta que se confirme el modal) -->
     <div id="contenido-actividad">
 
-      <!-- Pregunta actual -->
-      <div class="mb-10">
-        <div class="bg-slate-900 rounded-[2rem] p-6 sm:p-8 md:p-10 mb-6 md:mb-10 shadow-xl relative overflow-hidden">
-          <div class="absolute top-0 right-0 p-4 opacity-10">
-            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+      <!-- Timer + Stats en fila (como trivia-banderas) -->
+      <div class="mb-5">
+        <div class="flex items-center gap-3">
+          <div class="shrink-0">
+            <%- include('partials/cronometro') %>
           </div>
-          <h3 class="text-2xl font-bold text-white text-center leading-tight relative z-10">
-            <%= pregunta.pregunta %>
-          </h3>
+          <div class="flex gap-2 ml-auto shrink-0">
+            <div class="rt-stat bg-slate-50 rounded-lg px-3 py-2 border border-slate-100 text-center shadow-sm min-w-[60px]">
+              <p class="rt-stat-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Nivel</p>
+              <p class="rt-stat-value text-[11px] font-black text-slate-700"><%= progreso.nivel %></p>
+            </div>
+            <div class="rt-stat bg-slate-50 rounded-lg px-3 py-2 border border-slate-100 text-center shadow-sm min-w-[60px]">
+              <p class="rt-stat-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Puntos</p>
+              <p class="rt-stat-value text-[11px] font-black text-slate-700"><%= progreso.puntosTotal %></p>
+            </div>
+            <div class="rt-stat bg-slate-50 rounded-lg px-3 py-2 border border-slate-100 text-center shadow-sm min-w-[60px]">
+              <p class="rt-stat-label text-[9px] text-slate-400 font-bold uppercase tracking-wider">Pregunta</p>
+              <p class="rt-stat-value text-[11px] font-black text-slate-700"><%= preguntaActual + 1 %> / <%= totalPreguntas %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pregunta -->
+      <div class="rt-question-card bg-slate-900 rounded-2xl p-5 sm:p-6 mb-5 shadow-md border border-slate-700">
+        <h3 class="rt-question-text text-base sm:text-lg font-bold text-white text-center leading-snug">
+          <%= pregunta.pregunta %>
+        </h3>
+      </div>
+
+      <!-- Opciones -->
+      <form method="POST" action="/reto/<%= continente.id %>/responder" id="form-actividad" onsubmit="detenerCronometro()">
+        <input type="hidden" name="preguntaIndex" value="<%= preguntaActual %>">
+        <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
+
+        <div class="rt-option-group grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+          <% pregunta.opciones.forEach((opcion, index) => { %>
+            <label class="group cursor-pointer">
+              <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
+              <div class="rt-option flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-white border border-slate-200 transition-all group-hover:border-slate-300">
+                <div class="rt-option-letter w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-sm shrink-0 transition-colors">
+                  <%= String.fromCharCode(65 + index) %>
+                </div>
+                <p class="rt-option-text text-sm sm:text-base font-bold text-slate-700 leading-snug">
+                  <%= opcion %>
+                </p>
+                <svg class="rt-option-check ml-auto shrink-0 opacity-0 text-slate-400 transition-opacity" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+              </div>
+            </label>
+          <% }); %>
         </div>
 
-        <!-- Opciones de respuesta -->
-        <form method="POST" action="/reto/<%= continente.id %>/responder" id="form-actividad" onsubmit="detenerCronometro()">
-          <input type="hidden" name="preguntaIndex" value="<%= preguntaActual %>">
-          <input type="hidden" name="preguntaId" value="<%= pregunta.id %>">
-          
-          <div class="grid gap-4 md:gap-5">
-            <% pregunta.opciones.forEach((opcion, index) => { %>
-              <label class="group cursor-pointer">
-                <input type="radio" name="respuesta" value="<%= index %>" class="hidden peer" required>
-                <div class="flex items-center gap-4 p-responsive-card rounded-2xl bg-white border border-slate-200 peer-checked:border-sky-400 peer-checked:shadow-md peer-checked:bg-sky-50 transition-all group-hover:border-sky-200 group-hover:bg-sky-50/50">
-                  <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 font-bold peer-checked:bg-sky-500 peer-checked:text-white group-hover:bg-sky-100 group-hover:text-sky-600 transition-colors">
-                    <%= String.fromCharCode(65 + index) %>
-                  </div>
-                  <p class="text-lg font-bold text-slate-700 peer-checked:text-slate-900">
-                    <%= opcion %>
-                  </p>
-                  <div class="ml-auto opacity-0 peer-checked:opacity-100 text-sky-500 transition-opacity">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                  </div>
-                </div>
-              </label>
-            <% }); %>
-          </div>
-
-          <!-- Botón enviar -->
-          <div class="text-center mt-12">
-            <button type="submit" 
-                    class="inline-flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-responsive-subtitle py-4 sm:py-5 md:py-6 px-8 sm:px-12 md:px-16 rounded-2xl shadow-xl hover:shadow-sky-100 transition-all transform hover:-translate-y-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Enviar Respuesta
-            </button>
-          </div>
-        </form>
-      </div>
+        <!-- Botón enviar -->
+        <div class="text-center">
+          <button type="submit"
+                  class="rt-btn-primary inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm py-3 px-8 rounded-xl shadow-md transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Enviar Respuesta
+          </button>
+        </div>
+      </form>
 
     </div>
 
-    <!-- Botón volver -->
-    <div class="text-center pt-6 border-t border-slate-100">
-      <a href="/continente/<%= continente.id %>" 
-         class="inline-flex items-center gap-2 text-slate-400 hover:text-slate-600 font-bold transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    <!-- Abandonar -->
+    <div class="text-center pt-4 border-t border-slate-100 rt-divider mt-2">
+      <a href="/continente/<%= continente.id %>"
+         class="rt-btn-back inline-flex items-center gap-1.5 text-slate-400 hover:text-slate-600 font-semibold text-xs transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         Abandonar reto
       </a>
     </div>
@@ -111,6 +156,5 @@
 </div>
 
 <script>
-  // Limpiar flag de sesión al cargar página nueva de reto (para que el modal aparezca)
   sessionStorage.removeItem('actividad_iniciada');
 </script>

@@ -173,6 +173,57 @@ let paisesPorContinente = {};
 let campoEstelar = null; // Para limpiar animación si es necesario
 
 /**
+ * Convierte un código ISO de 2 letras a emoji de bandera.
+ * @param {string} iso - Código ISO_A2 (ej. 'FI', 'VE', 'BR')
+ * @returns {string} Emoji de bandera o 🏳️ si no es válido
+ */
+function isoToFlag(iso) {
+  if (!iso || iso === '-99' || iso.length !== 2) return '🏳️';
+  return String.fromCodePoint(...[...iso.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+}
+
+/**
+ * Formatea una población numérica a string legible (millones/miles).
+ * @param {number} pop - Población estimada
+ * @returns {string} Población formateada (ej. "331M", "1,440M", "97K")
+ */
+function formatearPoblacion(pop) {
+  if (!pop || pop < 0 || pop === -99) return '—';
+  if (pop >= 1e6) return Math.round(pop / 1e6) + 'M';
+  if (pop >= 1e3) return Math.round(pop / 1e3) + 'K';
+  return String(pop);
+}
+
+/**
+ * Genera información básica de un país desde los datos del GeoJSON
+ * cuando no está en PAISES_INFO.
+ * @param {Object} props - properties del feature del GeoJSON
+ * @param {string} continenteId - ID del continente (america, europa, etc.)
+ * @param {string} nombreEspanol - Nombre del país en español (si se conoce)
+ * @returns {Object} Info básica { bandera, capital, continente, poblacion, moneda, dato, generado }
+ */
+function generarInfoPaisDesdeGeoJSON(props, continenteId, nombreEspanol) {
+  const iso = props.ISO_A2 || props.FIPS_10_ || '';
+  const bandera = isoToFlag(iso);
+  const popEst = props.POP_EST || 0;
+  const nombreContinente = NOMBRES_ES[continenteId] || continenteId;
+  const nombre = nombreEspanol || props.NAME_LONG || props.ADMIN || props.NAME || '';
+
+  // Datos básicos disponibles en el GeoJSON
+  const info = {
+    bandera: bandera,
+    capital: '—', // No está en el GeoJSON
+    continente: continenteId,
+    poblacion: formatearPoblacion(popEst),
+    moneda: '—', // No está en el GeoJSON
+    dato: `${nombre} es un país del continente de ${nombreContinente}.`,
+    generado: true // Flag: info generada automáticamente, no manual
+  };
+
+  return info;
+}
+
+/**
  * 🌟 Campo estelar animado con canvas 2D
  * Crea un fondo de estrellas con parpadeo suave detrás del globo 3D
  */
@@ -628,15 +679,21 @@ function crearGlobo(container) {
     
     // ── EVENTOS ──
     world.onPolygonClick(d => {
-      const nombreIngles = d.properties.name || d.properties.ADMIN || '';
-      var nombrePais = d.properties.nombrePais || nombreIngles;
+      // El GeoJSON usa mayúsculas: NAME, ADMIN, ISO_A2
+      const nombreIngles = d.properties.NAME || d.properties.ADMIN || d.properties.name || '';
       // Convertir a español si existe en el mapping
-      var nombreEspanol = NOMBRES_PAISES_ES[nombreIngles] || nombrePais;
+      var nombreEspanol = NOMBRES_PAISES_ES[nombreIngles] || nombreIngles;
       var paisesInfo = window.PAISES_INFO || {};
       var paisInfo = paisesInfo[nombreEspanol] || null;
       var cId = d.properties.continenteId;
+      var iso = d.properties.ISO_A2 || '';
+
+      // Si el país no está en PAISES_INFO, generar info básica desde el GeoJSON
+      if (!paisInfo) {
+        paisInfo = generarInfoPaisDesdeGeoJSON(d.properties, cId, nombreEspanol);
+      }
       
-      mostrarModalPais(nombreEspanol, paisInfo, cId);
+      mostrarModalPais(nombreEspanol, paisInfo, cId, iso);
     });
     
     world.onPolygonHover(hoverD => {
@@ -708,7 +765,7 @@ function cargarDesdeCDN(container) {
 /**
  * Muestra un modal con información del país seleccionado
  */
-function mostrarModalPais(nombre, info, continenteId) {
+function mostrarModalPais(nombre, info, continenteId, isoCode) {
   var modal = document.getElementById('modal-pais');
   if (!modal) return;
   
@@ -724,19 +781,32 @@ function mostrarModalPais(nombre, info, continenteId) {
   
   if (nombreEl) nombreEl.textContent = nombre;
   
+  // Bandera: usar imagen SVG de flagcdn, con emoji como fallback
+  if (banderaEl) {
+    if (isoCode && isoCode.length === 2) {
+      banderaEl.innerHTML = '<img src="https://flagcdn.com/' + isoCode.toLowerCase() + '.svg" alt="' + nombre + '" class="flag-img" onerror="this.style.display=\'none\'">';
+    } else if (info && info.bandera) {
+      banderaEl.innerHTML = info.bandera;
+    } else {
+      banderaEl.innerHTML = '';
+    }
+  }
+  
   if (info) {
+    // Hay info (completa de PAISES_INFO o básica generada desde GeoJSON)
     if (infoSection) infoSection.classList.remove('hidden');
     if (noInfoSection) noInfoSection.classList.add('hidden');
-    if (banderaEl) banderaEl.textContent = info.bandera || '';
     if (capitalEl) capitalEl.textContent = info.capital || '—';
     if (poblacionEl) poblacionEl.textContent = info.poblacion || '—';
     if (monedaEl) monedaEl.textContent = info.moneda || '—';
-    if (datoEl) datoEl.textContent = info.dato || '';
-    if (datoEl) datoEl.classList.remove('hidden');
+    if (datoEl) {
+      datoEl.textContent = info.dato || '';
+      datoEl.classList.remove('hidden');
+    }
   } else {
+    // Sin info: mostrar mensaje (caso muy raro: ni ISO code tenía)
     if (infoSection) infoSection.classList.add('hidden');
     if (noInfoSection) noInfoSection.classList.remove('hidden');
-    if (banderaEl) banderaEl.textContent = '';
     if (datoEl) datoEl.classList.add('hidden');
   }
   

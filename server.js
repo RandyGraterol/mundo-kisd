@@ -45,13 +45,25 @@ app.use((req, res, next) => {
 });
 
 // Inicializar base de datos y ejecutar seed
-const { inicializarBaseDeDatos } = require('./database/db');
+const { inicializarBaseDeDatos, recalcularNivelesUsuarios, obtenerConfigSistema, guardarConfigSistema } = require('./database/db');
 const { ejecutarSeed } = require('./database/seed');
 
 try {
   inicializarBaseDeDatos();
   ejecutarSeed();
   console.log('[DB] Base de datos lista');
+  
+  // Migración única: recalcular niveles de usuarios existentes con la nueva curva lenta
+  const migracionNiveles = obtenerConfigSistema('migracion_niveles_v2');
+  if (!migracionNiveles) {
+    try {
+      const resultado = recalcularNivelesUsuarios();
+      guardarConfigSistema('migracion_niveles_v2', '1', 'Recálculo de niveles con curva lenta 200*n*(n-1)');
+      console.log(`[DB] Migración de niveles aplicada: ${resultado.actualizados}/${resultado.total} usuarios actualizados.`);
+    } catch (e) {
+      console.error('[DB] Error en migración de niveles:', e.message);
+    }
+  }
 } catch (err) {
   console.error('[ERROR] Error al inicializar base de datos:', err.message);
 }

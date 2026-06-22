@@ -26,7 +26,7 @@ const continentes = [
       },
       {
         id: 'america-2',
-        pregunta: '¿En qué país de América está Venezuela?',
+        pregunta: '¿En qué región de América está Venezuela?',
         opciones: ['América del Norte', 'América Central', 'América del Sur', 'América Antártica'],
         respuestaCorrecta: 2,
         puntos: 10
@@ -37,6 +37,27 @@ const continentes = [
         opciones: ['Egipcios y Griegos', 'Mayas, Aztecas e Incas', 'Romanos y Vikingos', 'Samurais y Ninjas'],
         respuestaCorrecta: 1,
         puntos: 10
+      },
+      {
+        id: 'america-4',
+        pregunta: '¿Cuál es el desierto más seco del mundo y en qué país está?',
+        opciones: ['Desierto de Sonora (México)', 'Desierto de Atacama (Chile)', 'Desierto de Mojave (EE.UU.)', 'Desierto de Patagonia (Argentina)'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'america-5',
+        pregunta: '¿Qué país americano tiene más lagos que el resto del mundo juntos?',
+        opciones: ['Estados Unidos', 'Brasil', 'Canadá', 'Argentina'],
+        respuestaCorrecta: 2,
+        puntos: 12
+      },
+      {
+        id: 'america-6',
+        pregunta: '¿Cuál es la catarata más alta del mundo y dónde está?',
+        opciones: ['Cataratas del Niágara (Canadá)', 'Salto Ángel (Venezuela)', 'Cataratas de Iguazú (Argentina)', 'Cataratas Victoria (Brasil)'],
+        respuestaCorrecta: 1,
+        puntos: 15
       }
     ]
   },
@@ -75,6 +96,27 @@ const continentes = [
         opciones: ['50 idiomas', '100 idiomas', 'Más de 200 idiomas', '500 idiomas'],
         respuestaCorrecta: 2,
         puntos: 10
+      },
+      {
+        id: 'europa-4',
+        pregunta: '¿En qué ciudad comenzaron los Juegos Olímpicos modernos en 1896?',
+        opciones: ['Roma', 'Atenas', 'París', 'Londres'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'europa-5',
+        pregunta: '¿Qué país europeo no tiene ejército y es uno de los más seguros del mundo?',
+        opciones: ['Suiza', 'Islandia', 'Suecia', 'Austria'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'europa-6',
+        pregunta: '¿Cuál es el tren más rápido del mundo y en qué país está?',
+        opciones: ['TGV (Francia)', 'Shinkansen (Japón)', 'ICE (Alemania)', 'AVE (España)'],
+        respuestaCorrecta: 0,
+        puntos: 15
       }
     ]
   },
@@ -113,6 +155,27 @@ const continentes = [
         opciones: ['5,000 metros', '6,500 metros', '8,848 metros', '10,000 metros'],
         respuestaCorrecta: 2,
         puntos: 10
+      },
+      {
+        id: 'asia-4',
+        pregunta: '¿Cuál es la muralla más larga del mundo y en qué país está?',
+        opciones: ['Muralla de Adriano (Inglaterra)', 'Gran Muralla China (China)', 'Muro de Berlín (Alemania)', 'Muralla de Constantinopla (Turquía)'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'asia-5',
+        pregunta: '¿Qué idioma es el más hablado del mundo y proviene de Asia?',
+        opciones: ['Inglés', 'Chino mandarín', 'Hindi', 'Árabe'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'asia-6',
+        pregunta: '¿Cuántas islas tiene Japón aproximadamente?',
+        opciones: ['100 islas', '1,000 islas', 'Más de 6,800 islas', '10,000 islas'],
+        respuestaCorrecta: 2,
+        puntos: 15
       }
     ]
   },
@@ -151,6 +214,27 @@ const continentes = [
         opciones: ['Desierto de Gobi', 'Desierto de Atacama', 'Desierto del Sahara', 'Desierto de Arabia'],
         respuestaCorrecta: 2,
         puntos: 10
+      },
+      {
+        id: 'africa-4',
+        pregunta: '¿Cuántos grupos étnicos diferentes tiene África aproximadamente?',
+        opciones: ['100 grupos', '500 grupos', 'Más de 3,000 grupos', '10,000 grupos'],
+        respuestaCorrecta: 2,
+        puntos: 12
+      },
+      {
+        id: 'africa-5',
+        pregunta: '¿En qué país africano están las pirámides más antiguas del mundo?',
+        opciones: ['Sudán', 'Egipto', 'Etiopía', 'Marruecos'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'africa-6',
+        pregunta: '¿Cuál es la montaña más alta de África y en qué país está?',
+        opciones: ['Monte Kenia (Kenia)', 'Monte Kilimanjaro (Tanzania)', 'Monte Atlas (Marruecos)', 'Monte Drakensberg (Sudáfrica)'],
+        respuestaCorrecta: 1,
+        puntos: 15
       }
     ]
   },
@@ -189,6 +273,27 @@ const continentes = [
         opciones: ['Una montaña', 'El arrecife de coral más grande del mundo', 'Un río', 'Un desierto'],
         respuestaCorrecta: 1,
         puntos: 10
+      },
+      {
+        id: 'oceania-4',
+        pregunta: '¿Qué país fue el primero en darle el voto a la mujer en 1893?',
+        opciones: ['Australia', 'Nueva Zelanda', 'Fiyi', 'Samoa'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'oceania-5',
+        pregunta: '¿Cuál es la capital más pequeña del mundo, ubicada en Oceanía?',
+        opciones: ['Funafuti (Tuvalu)', 'Yaren (Nauru)', 'Apia (Samoa)', 'Suva (Fiyi)'],
+        respuestaCorrecta: 0,
+        puntos: 15
+      },
+      {
+        id: 'oceania-6',
+        pregunta: '¿Qué país de Oceanía tiene más de 800 idiomas nativos?',
+        opciones: ['Australia', 'Papúa Nueva Guinea', 'Nueva Zelanda', 'Islas Salomón'],
+        respuestaCorrecta: 1,
+        puntos: 15
       }
     ]
   },
@@ -227,6 +332,27 @@ const continentes = [
         opciones: ['Porque es muy pequeña', 'Porque es muy fría y difícil vivir ahí', 'Porque no hay agua', 'Porque está prohibido'],
         respuestaCorrecta: 1,
         puntos: 10
+      },
+      {
+        id: 'antartida-4',
+        pregunta: '¿Cuál fue la temperatura más baja registrada en la Tierra en la Antártida?',
+        opciones: ['-50°C', '-89.2°C', '-100°C', '-120°C'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'antartida-5',
+        pregunta: '¿Qué pasa con la luz solar en la Antártida durante el verano?',
+        opciones: ['Nieva todo el día', 'Hay 24 horas de luz solar', 'Está siempre oscuro', 'Solo hay 2 horas de luz'],
+        respuestaCorrecta: 1,
+        puntos: 12
+      },
+      {
+        id: 'antartida-6',
+        pregunta: '¿Dónde viven los osos polares: en la Antártida o en el Ártico?',
+        opciones: ['En la Antártida', 'En el Ártico (Polo Norte)', 'En ambos', 'En ninguno'],
+        respuestaCorrecta: 1,
+        puntos: 15
       }
     ]
   }

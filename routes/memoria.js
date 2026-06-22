@@ -5,7 +5,9 @@ const { generarJuegoMemoria, obtenerTemasMemoria, obtenerNivelesMemoria, obtener
 const { obtenerContinentes } = require('../data/continentes');
 const { registrarActividad, actualizarPuntosYNivel } = require('../database/db');
 const { verificarYDesbloquearLogros } = require('../helpers/logros');
-const { enriquecerConDesbloqueo, estaDesbloqueado, PROGRESION } = require('../helpers/desbloqueos');
+const { enriquecerConDesbloqueo, estaDesbloqueado, marcarCompletado, PROGRESION } = require('../helpers/desbloqueos');
+const { calcularNivel, multiplicadorDificultad } = require('../helpers/niveles');
+const { estrellasMemoria } = require('../helpers/estrellas');
 
 // Middleware de verificación de sesión
 function verificarSesion(req, res, next) {
@@ -25,9 +27,9 @@ function verificarSesion(req, res, next) {
 // Funciones de Utilidad
 // ──────────────────────────────────────────────
 
-function registrarCompletado(req, juego, nivelId) {
-  req.session.progreso.nivelesCompletados = require('../helpers/desbloqueos').marcarCompletado(
-    juego, nivelId, req.session.progreso.nivelesCompletados
+function registrarCompletado(req, juego, nivelId, score, estrellas) {
+  req.session.progreso.nivelesCompletados = marcarCompletado(
+    juego, nivelId, req.session.progreso.nivelesCompletados, score, estrellas
   );
   if (req.session.usuarioId) {
     const { guardarNivelesCompletados } = require('../database/db');
@@ -88,7 +90,8 @@ router.get('/jugar', verificarSesion, (req, res) => {
     nivelId: nivelId,
     tema: temaId,
     modo: juego.modo,
-    tiempoLimite: juego.tiempoLimite
+    tiempoLimite: juego.tiempoLimite,
+    totalXpAcumulado: 0
   };
 
   res.render('memoria', {
@@ -133,37 +136,43 @@ router.post('/verificar', express.json(), verificarSesion, (req, res) => {
   if (esPar) {
     juegoGuardado.paresEncontrados++;
     
-    // Puntos por cada par encontrado
+    // Puntos por cada par encontrado (multiplicados por dificultad)
+    const mult = multiplicadorDificultad(juegoGuardado.nivelId);
+    const puntosPar = Math.round(10 * mult);
+    juegoGuardado.totalXpAcumulado += puntosPar;
     if (req.session.progreso) {
-      req.session.progreso.puntosTotal += 10;
+      req.session.progreso.puntosTotal += puntosPar;
       const nivelAnterior = req.session.progreso.nivel;
-      const nuevoNivel = Math.floor(req.session.progreso.puntosTotal / 30) + 1;
+      const nuevoNivel = calcularNivel(req.session.progreso.puntosTotal);
       if (nuevoNivel > nivelAnterior) {
         req.session.progreso.nivel = nuevoNivel;
       }
-    }
-    
-    // Registrar actividad en BD si el usuario está autenticado
-    if (req.session.usuarioId) {
-      registrarActividad({
-        usuarioId: req.session.usuarioId,
-        tipoActividad: 'memoria',
-        puntajeObtenido: 10,
-        respuestasCorrectas: 1,
-        respuestasTotales: 1,
-        tiempoSegundos: null
-      });
-      actualizarPuntosYNivel(req.session.usuarioId, 10);
-      try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
     }
   }
 
   const juegoCompletado = juegoGuardado.paresEncontrados >= juegoGuardado.totalPares;
 
-  // Registrar nivel completado
+  // Registrar nivel completado con estrellas y score
   var siguienteNivel = null;
   if (juegoCompletado && juegoGuardado.nivelId) {
-    registrarCompletado(req, 'memoria', juegoGuardado.nivelId);
+    const mult = multiplicadorDificultad(juegoGuardado.nivelId);
+    const xpPorPar = Math.round(10 * mult);
+    const score = juegoGuardado.totalPares * xpPorPar;
+    // Batch: una sola llamada a BD al completar
+    if (req.session.usuarioId && juegoGuardado.totalXpAcumulado > 0) {
+      registrarActividad({
+        usuarioId: req.session.usuarioId,
+        tipoActividad: 'memoria',
+        puntajeObtenido: juegoGuardado.totalXpAcumulado,
+        respuestasCorrectas: juegoGuardado.totalPares,
+        respuestasTotales: juegoGuardado.totalPares,
+        tiempoSegundos: null
+      });
+      actualizarPuntosYNivel(req.session.usuarioId, juegoGuardado.totalXpAcumulado);
+      try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
+    }
+    const estrellas = estrellasMemoria(juegoGuardado.paresEncontrados, juegoGuardado.totalPares, juegoGuardado.intentos);
+    registrarCompletado(req, 'memoria', juegoGuardado.nivelId, Math.max(0, score), estrellas);
     var progresion = PROGRESION.memoria;
     var idx = progresion.indexOf(juegoGuardado.nivelId);
     if (idx >= 0 && idx < progresion.length - 1) {
@@ -179,7 +188,8 @@ router.post('/verificar', express.json(), verificarSesion, (req, res) => {
     totalPares: juegoGuardado.totalPares,
     intentos: juegoGuardado.intentos,
     juegoCompletado,
-    siguienteNivel
+    siguienteNivel,
+    estrellas: juegoCompletado ? estrellasMemoria(juegoGuardado.paresEncontrados, juegoGuardado.totalPares, juegoGuardado.intentos) : 0
   });
 });
 

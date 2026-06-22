@@ -6,10 +6,8 @@ const { obtenerPreguntasBanderas, obtenerPreguntaAleatoria, obtenerPreguntaPorId
 const { mezclarArray, mezclarOpciones } = require('../helpers/aleatorizacion');
 const { calcularNivel } = require('../helpers/niveles');
 const { 
-  obtenerDB,
   actualizarProgresoContinente, 
   actualizarPuntosYNivel,
-  incrementarNivel,
   obtenerTodoProgreso,
   registrarActividad,
   obtenerPreguntasPersonalizadas,
@@ -22,6 +20,8 @@ const {
 } = require('../database/db');
 const { verificarSesion: verificarSesionBD } = require('../middleware/auth');
 const { verificarYDesbloquearLogros } = require('../helpers/logros');
+
+
 
 /**
  * Middleware para verificar sesión
@@ -110,7 +110,7 @@ router.get('/continentes', verificarSesion, (req, res) => {
 });
 
 /**
- * GET /continente/:id - Vista de Continente Individual
+ * GET /continente/:id - Vista de detalle de un continente
  * Muestra información detallada de un continente específico (requiere sesión)
  */
 router.get('/continente/:id', verificarSesion, (req, res) => {
@@ -126,13 +126,26 @@ router.get('/continente/:id', verificarSesion, (req, res) => {
     req.session.progreso.continentesVisitados.push(req.params.id);
   }
   
+  // Contar preguntas personalizadas del profesor para este continente
+  let totalPreguntasReto = continente.preguntas ? continente.preguntas.length : 0;
+  if (req.session.usuarioId) {
+    try {
+      const dbPreguntas = obtenerPreguntasPersonalizadas(['reto', 'continente'], req.params.id);
+      if (dbPreguntas && dbPreguntas.length > 0) {
+        totalPreguntasReto += dbPreguntas.length;
+      }
+    } catch (e) {
+      console.error('Error contando preguntas personalizadas:', e.message);
+    }
+  }
+  
   // Seleccionar un dato curioso aleatorio
   const datosCuriososArray = continente.datosCuriosos;
   const datoCurioso = Array.isArray(datosCuriososArray)
     ? datosCuriososArray[Math.floor(Math.random() * datosCuriososArray.length)]
     : datosCuriososArray;
   
-  res.render('continente', { continente, datoCurioso });
+  res.render('continente', { continente, datoCurioso, totalPreguntasReto });
 });
 
 /**
@@ -159,15 +172,19 @@ router.get('/reto/:id', verificarSesion, (req, res) => {
   
   const claveReto = `reto-${req.params.id}`;
   
-  // Si no hay preguntas mezcladas para este reto, generarlas
-  if (!req.session.preguntasMezcladas[claveReto]) {
+  // Detectar inicio fresco: cuando se accede SIN ?pregunta= (desde "Acepta el Reto")
+  // En ese caso, re-barajar para variar el orden cada intento.
+  // Cuando se navega con ?pregunta=N (desde resultado-reto), usar el orden ya cacheado.
+  const esInicioFresco = req.query.pregunta === undefined;
+  
+  if (esInicioFresco || !req.session.preguntasMezcladas[claveReto]) {
     // Combinar preguntas del continente con preguntas personalizadas del profesor
     let todasLasPreguntas = [...continente.preguntas];
     
     // Agregar preguntas personalizadas del profesor (si existen en BD)
     if (req.session.usuarioId) {
       try {
-        const preguntasPersonalizadas = obtenerPreguntasPersonalizadas('reto', req.params.id);
+        const preguntasPersonalizadas = obtenerPreguntasPersonalizadas(['reto', 'continente'], req.params.id);
         if (preguntasPersonalizadas && preguntasPersonalizadas.length > 0) {
           const preguntasMapeadas = preguntasPersonalizadas.map(p => ({
             id: `personalizada-${p.id}`,
@@ -183,10 +200,12 @@ router.get('/reto/:id', verificarSesion, (req, res) => {
       }
     }
     
-    // Mezclar las preguntas
+    // Mezclar todas las preguntas (sin límite — se muestran todas)
     const preguntasMezcladas = mezclarArray(todasLasPreguntas);
+    const subconjunto = preguntasMezcladas;
+    
     // Mezclar opciones de cada pregunta y guardar nuevo índice correcto
-    const preguntasConOpcionesMezcladas = preguntasMezcladas.map(p => {
+    const preguntasConOpcionesMezcladas = subconjunto.map(p => {
       const { opciones, nuevoIndiceCorrecto } = mezclarOpciones(p.opciones, p.respuestaCorrecta);
       return {
         ...p,
@@ -288,12 +307,20 @@ router.post('/reto/:id/responder', verificarSesion, (req, res) => {
     }
   }
   
+  const hayMasPreguntas = preguntaIndex + 1 < preguntasActuales.length;
+  
+  // Si se completaron todas las preguntas del reto, limpiar el cache para que
+  // la próxima vez que se acepte el reto se genere un nuevo subconjunto aleatorio.
+  if (!hayMasPreguntas && req.session.preguntasMezcladas) {
+    delete req.session.preguntasMezcladas[`reto-${req.params.id}`];
+  }
+  
   res.render('resultado-reto', {
     continente,
     esCorrecta,
     puntosGanados,
     respuestaCorrecta: pregunta.opciones[pregunta.respuestaCorrecta],
-    hayMasPreguntas: preguntaIndex + 1 < preguntasActuales.length,
+    hayMasPreguntas,
     siguientePregunta: preguntaIndex + 1,
     subisteNivel
   });
@@ -443,14 +470,18 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
   }
   
   if (esCorrecta) {
-    // Correcta: marcar como respondida y dar puntos + nivel
+    // Correcta: marcar como respondida y dar puntos + recalcular nivel
     if (!req.session.banderasRespondidas.includes(preguntaId)) {
       req.session.banderasRespondidas.push(preguntaId);
       puntosGanados = preguntaReal.puntos;
       req.session.progreso.puntosTotal += puntosGanados;
-      // Trivia: cada respuesta correcta = +1 nivel
-      req.session.progreso.nivel += 1;
-      subisteNivel = true;
+      // Recalcular nivel con la curva unificada (lenta)
+      const nivelAnterior = req.session.progreso.nivel;
+      const nuevoNivel = calcularNivel(req.session.progreso.puntosTotal);
+      if (nuevoNivel > nivelAnterior) {
+        req.session.progreso.nivel = nuevoNivel;
+        subisteNivel = true;
+      }
     }
     delete req.session.triviaPreguntaPendiente;
   } else {
@@ -469,10 +500,9 @@ router.post('/trivia-banderas/responder', verificarSesion, (req, res) => {
       tiempoSegundos: parseInt(req.body.tiempo) || null
     });
     
-    // Persistir puntos y nivel en BD (trivia: nivel se incrementa directamente)
+    // Persistir puntos y nivel en BD (recalcula nivel con curva unificada)
     if (puntosGanados > 0) {
-      obtenerDB().prepare('UPDATE usuarios SET puntos_total = puntos_total + ? WHERE id = ?').run(puntosGanados, req.session.usuarioId);
-      incrementarNivel(req.session.usuarioId);
+      actualizarPuntosYNivel(req.session.usuarioId, puntosGanados);
     }
     
     // Verificar logros después de la actividad

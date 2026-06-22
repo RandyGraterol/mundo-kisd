@@ -83,7 +83,7 @@ router.get('/contenido', (req, res) => {
 router.get('/contenido/nueva', (req, res) => {
   const continentes = obtenerContinentes();
   const tipos = [
-    { valor: 'continente', etiqueta: 'Pregunta de Continente' },
+    { valor: 'reto', etiqueta: 'Pregunta de Reto' },
     { valor: 'banderas', etiqueta: 'Pregunta de Banderas' }
   ];
   res.render('admin/contenido-form', {
@@ -104,7 +104,7 @@ router.post('/contenido/nueva', (req, res) => {
   if (!pregunta || !pregunta.trim()) {
     const continentes = obtenerContinentes();
     const tipos = [
-      { valor: 'continente', etiqueta: 'Pregunta de Continente' },
+      { valor: 'reto', etiqueta: 'Pregunta de Reto' },
       { valor: 'banderas', etiqueta: 'Pregunta de Banderas' }
     ];
     return res.render('admin/contenido-form', {
@@ -119,7 +119,7 @@ router.post('/contenido/nueva', (req, res) => {
   if (opciones.some(o => !o || !o.trim())) {
     const continentes = obtenerContinentes();
     const tipos = [
-      { valor: 'continente', etiqueta: 'Pregunta de Continente' },
+      { valor: 'reto', etiqueta: 'Pregunta de Reto' },
       { valor: 'banderas', etiqueta: 'Pregunta de Banderas' }
     ];
     return res.render('admin/contenido-form', {
@@ -148,7 +148,7 @@ router.post('/contenido/nueva', (req, res) => {
     console.error('Error al crear pregunta:', error);
     const continentes = obtenerContinentes();
     const tipos = [
-      { valor: 'continente', etiqueta: 'Pregunta de Continente' },
+      { valor: 'reto', etiqueta: 'Pregunta de Reto' },
       { valor: 'banderas', etiqueta: 'Pregunta de Banderas' }
     ];
     res.render('admin/contenido-form', {
@@ -173,7 +173,7 @@ router.get('/contenido/editar/:id', (req, res) => {
 
   const continentes = obtenerContinentes();
   const tipos = [
-    { valor: 'continente', etiqueta: 'Pregunta de Continente' },
+    { valor: 'reto', etiqueta: 'Pregunta de Reto' },
     { valor: 'banderas', etiqueta: 'Pregunta de Banderas' }
   ];
 
