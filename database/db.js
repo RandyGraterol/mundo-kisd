@@ -177,11 +177,32 @@ function actualizarPuntosYNivel(usuarioId, puntosGanados) {
 }
 
 /**
- * Incrementa el nivel del usuario en +1 (usado por trivia de banderas)
+ * @deprecated Usar actualizarPuntosYNivel() que recalcula el nivel con la curva unificada.
+ * Se mantiene por compatibilidad pero no debe usarse en código nuevo.
  */
 function incrementarNivel(usuarioId) {
   const database = obtenerDB();
   database.prepare('UPDATE usuarios SET nivel = nivel + 1 WHERE id = ?').run(usuarioId);
+}
+
+/**
+ * Recalcula el nivel de todos los usuarios según la curva de niveles actual.
+ * Útil tras cambiar la fórmula de cálculo de niveles. Se ejecuta una sola vez
+ * mediante un flag en configuracion_sistema.
+ */
+function recalcularNivelesUsuarios() {
+  const database = obtenerDB();
+  const usuarios = database.prepare('SELECT id, puntos_total, nivel FROM usuarios').all();
+  let actualizados = 0;
+  for (const u of usuarios) {
+    const nuevoNivel = calcularNivel(u.puntos_total);
+    if (nuevoNivel !== u.nivel) {
+      database.prepare('UPDATE usuarios SET nivel = ? WHERE id = ?').run(nuevoNivel, u.id);
+      actualizados++;
+    }
+  }
+  console.log(`✅ Niveles recalculados para ${actualizados} de ${usuarios.length} usuarios.`);
+  return { total: usuarios.length, actualizados };
 }
 
 /**
@@ -245,8 +266,10 @@ function obtenerHistorialCompleto(usuarioId) {
  */
 function obtenerPreguntasPersonalizadas(tipo, continenteId = null) {
   const database = obtenerDB();
-  let sql = 'SELECT * FROM preguntas_personalizadas WHERE activa = 1 AND tipo = ?';
-  const params = [tipo];
+  const tipos = Array.isArray(tipo) ? tipo : [tipo];
+  const placeholders = tipos.map(() => '?').join(',');
+  let sql = `SELECT * FROM preguntas_personalizadas WHERE activa = 1 AND tipo IN (${placeholders})`;
+  const params = [...tipos];
   
   if (continenteId) {
     sql += ' AND continente_id = ?';
@@ -502,6 +525,7 @@ module.exports = {
   actualizarProgresoContinente,
   actualizarPuntosYNivel,
   incrementarNivel,
+  recalcularNivelesUsuarios,
   guardarNivelesCompletados,
   
   // Historial

@@ -3,6 +3,38 @@
 - No ejecutar comandos bash. El usuario los ejecuta manualmente.
 - Delegar al usuario cualquier ejecución de comandos.
 
+# Progreso de Juego y Niveles
+
+## Curva de Niveles Unificada
+- **Curva muy lenta**: `200 * n * (n-1)` XP acumulados para nivel n
+  - Nivel 1: 0 XP, Nivel 2: 400 XP, Nivel 3: 1,200 XP, Nivel 4: 2,400 XP, Nivel 5: 4,000 XP
+  - Fórmula inversa: `n = (1 + sqrt(1 + 0.01 * XP)) / 2`
+- TODAS las actividades (trivia, retos, memoria, puzzle, sopa) usan `calcularNivel()` de `helpers/niveles.js`
+- **NO** usar `incrementarNivel()` (deprecated) — usar `actualizarPuntosYNivel()` que recalcula con la curva
+- **Multiplicador de dificultad**: actividades difíciles dan más XP (fácil=1x, medio=1.5x, difícil=2x, experto=2.5x, ultra=3x, extremo=3.5x, legendario=4x)
+- Migración automática al arrancar: `recalcularNivelesUsuarios()` recalcula niveles de usuarios existentes (flag `migracion_niveles_v2` en `configuracion_sistema`)
+
+## Sistema de Desbloqueo Progresivo
+- Formato de `nivelesCompletados` (NUEVO): `{ memoria: { facil: { count, bestScore, estrellas } } }`
+- Formato antiguo (`['facil', 'medio']`) se migra automáticamente vía `migrarFormato()`
+- **Requisitos escalables**: facil=0, medio=2, difícil=3, experto=3, ultra=4, extremo=4, legendario=5 completaciones
+- **Estrellas (1-3)**: basadas en desempeño (eficiencia en memoria, movimientos en puzzle, tiempo en sopa)
+- `helpers/estrellas.js`: `estrellasMemoria()`, `estrellasPuzzle()`, `estrellasSopaLetras()`
+- `marcarCompletado(juego, nivelId, completados, score, estrellas)` — siempre pasar score y estrellas
+- Vistas muestran: estrellas obtenidas (★★★), contador de completaciones, y barra de progreso hacia desbloqueo
+
+## Variedad de Preguntas en Retos
+- `MAX_PREGUNTAS_RETO = 5` en `routes/index.js` — subconjunto aleatorio de todas las preguntas disponibles
+- Cada continente tiene ahora **6 preguntas predeterminadas** (antes 3) en `data/continentes.js`
+- Re-barajar al iniciar reto fresco (sin `?pregunta=` en URL); cache se limpia al completar todas
+- Preguntas del docente (BD) se combinan con las del continente para usuarios autenticados
+
+## Mapa Interactivo — Banderas e Info de Países
+- `isoToFlag(iso)` en `mapa-continentes.js`: convierte ISO_A2 a emoji de bandera
+- `generarInfoPaisDesdeGeoJSON(props, continenteId, nombreEspanol)`: genera info básica (bandera, población, dato) para países no en `PAISES_INFO`
+- TODOS los países ahora muestran al menos: bandera, población, continente, y un dato
+- El GeoJSON usa mayúsculas: `d.properties.NAME`, `d.properties.ISO_A2`, `d.properties.POP_EST`
+
 # Summary
 
 ## Goal

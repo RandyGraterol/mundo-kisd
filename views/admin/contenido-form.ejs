@@ -74,7 +74,7 @@
       </div>
 
       <!-- Continente -->
-      <div id="continenteGroup" class="<%= pregunta && pregunta.tipo === 'continente' ? '' : 'hidden' %>">
+      <div id="continenteGroup" class="<%= pregunta && pregunta.tipo === 'reto' ? '' : 'hidden' %>">
         <label class="cf-label block text-sm font-bold text-slate-700 mb-1.5">Continente</label>
         <select name="continenteId"
                 class="cf-select w-full p-2.5 rounded-lg border border-slate-200 bg-white text-slate-800 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all text-sm">
@@ -160,6 +160,7 @@
 <script>
 function toggleContinente() {
   var tipo = document.getElementById('tipoSelect').value;
-  document.getElementById('continenteGroup').classList.toggle('hidden', tipo !== 'continente');
+  document.getElementById('continenteGroup').classList.toggle('hidden', tipo !== 'reto');
 }
+toggleContinente();
 </script>

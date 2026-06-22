@@ -297,6 +297,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: <%= colorNivel %>;"><circle cx="12" cy="12" r="10"/></svg>
                 <p class="text-[11px] font-bold text-slate-700"><%= n.nombre %></p>
                 <p class="text-[9px] text-slate-400 text-center leading-tight"><%= n.descripcion %></p>
+                <% if (n.completadoCount > 0) { %>
+                  <p class="text-[8px] font-bold" style="color: <%= colorNivel %>;"><%= '★'.repeat(n.estrellas) %><%= '☆'.repeat(3 - n.estrellas) %></p>
+                  <p class="text-[7px] text-slate-400">Completado <%= n.completadoCount %>x</p>
+                <% } %>
+                <% if (n.progresoDesbloqueoSiguiente) { %>
+                  <p class="text-[7px] text-slate-400 mt-0.5">Para desbloquear sig.: <%= n.progresoDesbloqueoSiguiente.completadoActual %>/<%= n.progresoDesbloqueoSiguiente.requerido %></p>
+                <% } %>
                 <span class="tiempito text-[8px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5" style="display:none;">
                   <svg xmlns="http://www.w3.org/2000/svg" width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                   <%= n.tiempoSegundos %>s
@@ -304,10 +311,17 @@
               </div>
               <% } else { %>
               <div class="flex flex-col items-center gap-1 p-3 bg-slate-100 rounded-xl border-2 border-slate-200 opacity-60 cursor-not-allowed"
-                   title="Se desbloquea en nivel <%= n.nivelRequerido %>">
+                   title="Completa <%= n.progresoHaciaDesbloqueo?.requerido || 1 %> veces el nivel <%= n.nivelRequerido %> para desbloquear">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 <p class="text-[11px] font-bold text-slate-400"><%= n.nombre %></p>
-                <p class="text-[8px] text-slate-400 text-center leading-tight">Nivel <%= n.nivelRequerido %>+</p>
+                <% if (n.progresoHaciaDesbloqueo) { %>
+                  <p class="text-[8px] text-slate-400 text-center leading-tight"><%= n.progresoHaciaDesbloqueo.completadoActual %>/<%= n.progresoHaciaDesbloqueo.requerido %> de <%= n.nivelRequerido %></p>
+                  <div class="w-full bg-slate-200 rounded-full h-1 mt-1">
+                    <div class="bg-slate-400 rounded-full h-1" style="width: <%= Math.round((n.progresoHaciaDesbloqueo.completadoActual / n.progresoHaciaDesbloqueo.requerido) * 100) %>%;"></div>
+                  </div>
+                <% } else { %>
+                  <p class="text-[8px] text-slate-400 text-center leading-tight">Nivel <%= n.nivelRequerido %>+</p>
+                <% } %>
               </div>
               <% } %>
             <% }); %>

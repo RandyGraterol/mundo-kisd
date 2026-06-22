@@ -5,6 +5,8 @@ const { generarPuzzle, obtenerTemas, obtenerTemasContinentes, obtenerDificultade
 const { registrarActividad, actualizarPuntosYNivel } = require('../database/db');
 const { verificarYDesbloquearLogros } = require('../helpers/logros');
 const { enriquecerConDesbloqueo, estaDesbloqueado, marcarCompletado, PROGRESION } = require('../helpers/desbloqueos');
+const { calcularNivel, multiplicadorDificultad } = require('../helpers/niveles');
+const { estrellasPuzzle } = require('../helpers/estrellas');
 
 // Middleware de verificación de sesión
 function verificarSesion(req, res, next) {
@@ -113,15 +115,16 @@ router.post('/mover', express.json(), verificarSesion, (req, res) => {
 
   const completado = verificarPuzzleCompletado(juegoGuardado.piezas);
 
-  // Puntos por completar el puzzle
+  // Puntos por completar el puzzle (multiplicados por dificultad)
   if (completado && req.session.progreso) {
+    const mult = multiplicadorDificultad(juegoGuardado.dificultadId);
     const puntosBase = juegoGuardado.filas * juegoGuardado.columnas * 2;
     const bonificacionMovimientos = Math.max(0, Math.floor((50 - juegoGuardado.movimientos) / 5));
-    const puntosTotales = puntosBase + bonificacionMovimientos;
+    const puntosTotales = Math.round((puntosBase + bonificacionMovimientos) * mult);
     
     req.session.progreso.puntosTotal += puntosTotales;
     const nivelAnterior = req.session.progreso.nivel;
-    const nuevoNivel = Math.floor(req.session.progreso.puntosTotal / 30) + 1;
+    const nuevoNivel = calcularNivel(req.session.progreso.puntosTotal);
     if (nuevoNivel > nivelAnterior) {
       req.session.progreso.nivel = nuevoNivel;
     }
@@ -140,10 +143,13 @@ router.post('/mover', express.json(), verificarSesion, (req, res) => {
       try { verificarYDesbloquearLogros(req.session.usuarioId); } catch (e) { console.error('Error verificando logros:', e.message); }
     }
 
-    // Registrar nivel completado
+    // Registrar nivel completado con estrellas y score
     var siguienteNivel = null;
+    var estrellas = 0;
     if (juegoGuardado.dificultadId) {
-      req.session.progreso.nivelesCompletados = marcarCompletado('puzzle', juegoGuardado.dificultadId, req.session.progreso.nivelesCompletados);
+      const totalPiezas = juegoGuardado.filas * juegoGuardado.columnas;
+      estrellas = estrellasPuzzle(totalPiezas, juegoGuardado.movimientos);
+      req.session.progreso.nivelesCompletados = marcarCompletado('puzzle', juegoGuardado.dificultadId, req.session.progreso.nivelesCompletados, puntosTotales, estrellas);
       if (req.session.usuarioId) {
         const { guardarNivelesCompletados } = require('../database/db');
         guardarNivelesCompletados(req.session.usuarioId, req.session.progreso.nivelesCompletados);
@@ -160,7 +166,8 @@ router.post('/mover', express.json(), verificarSesion, (req, res) => {
       movimientos: juegoGuardado.movimientos,
       completado: true,
       puntosGanados: puntosTotales,
-      siguienteNivel
+      siguienteNivel,
+      estrellas
     });
   }
 
